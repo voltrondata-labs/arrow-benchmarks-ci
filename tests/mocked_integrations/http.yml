@@ -1,0 +1,112 @@
+- key: get_commits
+  kind: Behavior
+  expect:
+    condition: '{{.HTTPQueryString | contains "per_page=5" }}'
+    http:
+      method: GET
+      path: /github/repos/apache/arrow/commits
+  actions:
+    - reply_http:
+        status_code: 200
+        body_from_file: './github/get_commits.json'
+- key: create_pipeline
+  kind: Behavior
+  expect:
+    http:
+      method: POST
+      path: /buildkite/v2/organizations/apache-arrow/pipelines
+  actions:
+    - reply_http:
+        status_code: 201
+        body_from_file: './buildkite/create_pipeline.json'
+- key: get_scheduled_builds_for_ursa_i9_9960x
+  kind: Behavior
+  expect:
+    http:
+      method: GET
+      path: /buildkite/v2/organizations/apache-arrow/pipelines/arrow-bci-benchmark-on-ursa-i9-9960x/builds
+  actions:
+    - reply_http:
+        status_code: 200
+        body_from_file: './buildkite/get_scheduled_builds.json'
+- key: get_scheduled_builds_for_ursa_thinkcentre_m75q
+  kind: Behavior
+  expect:
+    http:
+      method: GET
+      path: /buildkite/v2/organizations/apache-arrow/pipelines/arrow-bci-benchmark-on-ursa-thinkcentre-m75q/builds
+  actions:
+    - reply_http:
+        status_code: 200
+        body_from_file: './buildkite/get_scheduled_builds.json'
+- key: create_build_for_ursa_i9_9960x
+  kind: Behavior
+  expect:
+    http:
+      method: POST
+      path: /buildkite/v2/organizations/apache-arrow/pipelines/arrow-bci-benchmark-on-ursa-i9-9960x/builds
+  actions:
+    - reply_http:
+        status_code: 201
+        body_from_file: './buildkite/create_build_for_ursa_i9_9960x.json'
+- key: create_build_for_ursa_thinkcentre_m75q
+  kind: Behavior
+  expect:
+    http:
+      method: POST
+      path: /buildkite/v2/organizations/apache-arrow/pipelines/arrow-bci-benchmark-on-ursa-thinkcentre-m75q/builds
+  actions:
+    - reply_http:
+        status_code: 201
+        body_from_file: './buildkite/create_build_for_ursa_thinkcentre_m75q.json'
+- key: get_build_for_ursa_i9_9960x
+  kind: Behavior
+  expect:
+    http:
+      method: GET
+      path: /buildkite/v2/organizations/apache-arrow/pipelines/arrow-bci-benchmark-on-ursa-i9-9960x/builds/1
+  actions:
+    - reply_http:
+        status_code: 200
+        body_from_file: './buildkite/get_build_for_ursa_i9_9960x.json'
+- key: get_build_for_ursa_thinkcentre_m75q
+  kind: Behavior
+  expect:
+    http:
+      method: GET
+      path: /buildkite/v2/organizations/apache-arrow/pipelines/arrow-bci-benchmark-on-ursa-thinkcentre-m75q/builds/1
+  actions:
+    - reply_http:
+        status_code: 200
+        body_from_file: './buildkite/get_build_for_ursa_thinkcentre_m75q.json'
+- key: get_pyarrow_project
+  kind: Behavior
+  expect:
+    http:
+      method: GET
+      path: /pipy/pyarrow/json
+  actions:
+    - reply_http:
+        status_code: 200
+        body_from_file: './pipy/get_pyarrow_project.json'
+- key: get_compare_runs_api
+  kind: Behavior
+  expect:
+    http:
+      method: GET
+      path: /conbench/api/compare/runs/*
+  actions:
+    - reply_http:
+        status_code: 200
+        body_from_file: './conbench/get_compare_runs.json'
+- key: get_compare_runs_ui
+  kind: Behavior
+  expect:
+    http:
+      method: GET
+      path: /conbench/compare/runs/*
+  actions:
+    - reply_http:
+        status_code: 200
+        body_from_file: './conbench/get_compare_runs.json'
+

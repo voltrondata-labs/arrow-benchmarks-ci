@@ -1,0 +1,53 @@
+[
+  {
+    "baseline": "10.459 s",
+    "baseline_batch_id": "batch1",
+    "baseline_id": "sha1",
+    "baseline_run_id": 1,
+    "batch": "file-write",
+    "benchmark": "benchmark 1",
+    "change": "0.659%",
+    "contender": "10.528 s",
+    "contender_batch_id": "batch2",
+    "contender_id": "sha2",
+    "contender_run_id": 2,
+    "contender_z_improvement": true,
+    "less_is_better": true,
+    "contender_z_regression": false,
+    "unit": "s"
+  },
+  {
+    "baseline": "10.459 s",
+    "baseline_batch_id": "batch1",
+    "baseline_id": "sha1",
+    "baseline_run_id": 1,
+    "batch": "file-write",
+    "benchmark": "benchmark 2",
+    "change": "0.659%",
+    "contender": "10.528 s",
+    "contender_batch_id": "batch2",
+    "contender_id": "sha2",
+    "contender_run_id": 2,
+    "contender_z_improvement": false,
+    "less_is_better": true,
+    "contender_z_regression": true,
+    "unit": "s"
+  },
+  {
+    "baseline": "10.459 s",
+    "baseline_batch_id": "batch1",
+    "baseline_id": "sha1",
+    "baseline_run_id": 1,
+    "batch": "file-write",
+    "benchmark": "benchmark 3",
+    "change": "0.659%",
+    "contender": "10.528 s",
+    "contender_batch_id": "batch2",
+    "contender_id": "sha2",
+    "contender_run_id": 2,
+    "contender_z_improvement": false,
+    "less_is_better": true,
+    "contender_z_regression": false,
+    "unit": "s"
+  }
+]

@@ -1,0 +1,18 @@
+steps:
+  - label: "Pull Docker Image"
+    key: "pull"
+    concurrency: 1
+    concurrency_group: "arrow-bci-schedule-and-publish"
+    command:
+      - aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin ${DOCKER_REGISTRY}
+      - docker pull ${DOCKER_REGISTRY}/${FLASK_APP}:${BUILDKITE_COMMIT}
+
+  - label: "Get Commits"
+    depends_on: "pull"
+    key: "get-commit"
+    concurrency: 1
+    concurrency_group: "arrow-bci-schedule-and-publish"
+    command:
+      - python -m buildkite.schedule_and_publish.create_env_file_for_docker
+      - export IMAGE_NAME=${DOCKER_REGISTRY}/${FLASK_APP}:${BUILDKITE_COMMIT}
+      - docker run ${IMAGE_NAME} --env_file env python -c 'from buildkite.schedule_and_publish.get_commits import get_commits; get_commits()'
