@@ -20,7 +20,6 @@ from buildkite.schedule_and_publish.publish_benchmark_results_on_slack import (
 )
 
 from models.benchmarkable import Benchmarkable
-from models.machine import Machine
 from models.run import Run
 from tests.helpers import mock_offline_machine
 
