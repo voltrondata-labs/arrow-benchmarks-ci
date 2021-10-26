@@ -2,19 +2,16 @@ version: '3.5'
 services:
   app:
     image: ${DOCKER_REGISTRY}/${FLASK_APP}:${BUILDKITE_COMMIT}
-    command: ["gunicorn", "-b", "0.0.0.0:5000", "-w", "5", "app:app", "--access-logfile=-", "--error-logfile=-", "--preload"]
-    ports:
-      - "5000:5000"
     environment:
       BUILDKITE_API_BASE_URL: ${BUILDKITE_API_BASE_URL}
       BUILDKITE_API_TOKEN: ${BUILDKITE_API_TOKEN}
       BUILDKITE_ORG: ${BUILDKITE_ORG}
       CONBENCH_URL: ${CONBENCH_URL}
-      DB_USERNAME: ${DB_USERNAME}
       DB_HOST: ${DB_HOST}
-      DB_PASSWORD: ${DB_PASSWORD}
       DB_NAME: ${DB_NAME}
+      DB_PASSWORD: ${DB_PASSWORD}
       DB_PORT: ${DB_PORT}
+      DB_USERNAME: ${DB_USERNAME}
       FLASK_DEBUG: 0
       GITHUB_API_BASE_URL: ${GITHUB_API_BASE_URL}
       GITHUB_REPO: ${GITHUB_REPO}
