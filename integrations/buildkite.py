@@ -25,7 +25,8 @@ class Buildkite:
             "name": pipeline_name,
             "repository": f"https://github.com/{Config.GITHUB_REPO}.git",
             "default_branch": "main",
-            "branch_configuration": "main",
+            # TODO: Update to main once done with testing
+            "branch_configuration": "",
             "provider": {
                 "id": "github",
                 "settings": {
@@ -74,7 +75,7 @@ class Buildkite:
 
     def create_build(self, pipeline_name, commit, branch, message, env):
         # TODO: remove this
-        branch = "add-schedule-and-publish-pipeline"
+        branch = "add-dev-env-and-buildkite-pipelines"
         url = f"{self.base_url}/pipelines/{pipeline_name.replace(' ', '-').lower()}/builds"
         data = {
             "commit": commit,
