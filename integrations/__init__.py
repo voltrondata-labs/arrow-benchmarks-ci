@@ -13,6 +13,10 @@ retry_strategy = Retry(
 )
 
 
+class IntegrationException(Exception):
+    pass
+
+
 class IntegrationHTTPAdapter(HTTPAdapter):
     def __init__(self, *args, **kwargs):
         self.timeout = DEFAULT_TIMEOUT
@@ -31,6 +35,7 @@ class IntegrationHTTPAdapter(HTTPAdapter):
 
         if response.status_code < 200 or response.status_code > 399:
             log.error(f"reply: {response.status_code} {response.content}")
+            raise IntegrationException("something is off")
         else:
             log.info(f"reply: {response.status_code}")
 
