@@ -13,6 +13,4 @@ steps:
     concurrency: 1
     concurrency_group: "arrow-bci-schedule-and-publish"
     command:
-      - python -m buildkite.schedule_and_publish.create_env_file_for_docker
-      - export IMAGE_NAME=${DOCKER_REGISTRY}/${FLASK_APP}:${BUILDKITE_COMMIT}
-      - docker run ${IMAGE_NAME} --env_file env python -c 'from buildkite.schedule_and_publish.get_commits import get_commits; get_commits()'
+      - docker-compose -f buildkite/schedule_and_publish/docker-compose.yml run app python -c 'from buildkite.schedule_and_publish.get_commits import get_commits; get_commits()'
