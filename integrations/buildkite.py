@@ -22,7 +22,7 @@ class Buildkite:
 
         url = f"{self.base_url}/pipelines"
         data = {
-            "name": pipeline_name.replace(" ", "-").lower(),
+            "name": pipeline_name,
             "repository": f"https://github.com/{Config.GITHUB_REPO}.git",
             "default_branch": "main",
             "branch_configuration": "main",
