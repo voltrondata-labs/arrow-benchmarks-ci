@@ -74,8 +74,6 @@ class Buildkite:
         return self.session.delete(url)
 
     def create_build(self, pipeline_name, commit, branch, message, env):
-        # TODO: remove this
-        branch = "add-dev-env-and-buildkite-pipelines"
         url = f"{self.base_url}/pipelines/{pipeline_name.replace(' ', '-').lower()}/builds"
         data = {
             "commit": commit,
