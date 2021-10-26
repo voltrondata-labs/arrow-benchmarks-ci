@@ -13,4 +13,4 @@ steps:
     concurrency: 1
     concurrency_group: "arrow-bci-schedule-and-publish"
     command:
-      - docker-compose -f docker-compose -f envs/prod/docker-compose.yml run app python -c 'from buildkite.schedule_and_publish.get_commits import get_commits; get_commits()'
+      - docker-compose -f envs/prod/docker-compose.yml run app python -c 'from buildkite.schedule_and_publish.get_commits import get_commits; get_commits()'
