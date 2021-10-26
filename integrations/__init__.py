@@ -35,7 +35,7 @@ class IntegrationHTTPAdapter(HTTPAdapter):
 
         if response.status_code < 200 or response.status_code > 399:
             log.error(f"reply: {response.status_code} {response.content}")
-            raise IntegrationException("something is off")
+            raise IntegrationException(f"{request.url} {response.status_code} {response.content}")
         else:
             log.info(f"reply: {response.status_code}")
 

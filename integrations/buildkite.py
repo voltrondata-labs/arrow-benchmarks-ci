@@ -3,13 +3,8 @@ import requests
 
 from config import Config
 from integrations import adapter
-from logger import log
 
 PATH_TO_BENCHMARK_PIPELINE_YML = "buildkite/benchmark/pipeline.yml"
-
-
-class BuildkiteException(Exception):
-    pass
 
 
 class Buildkite:
@@ -87,12 +82,7 @@ class Buildkite:
             "message": message,
             "env": env,
         }
-        response = self.session.post(url, data=json.dumps(data))
-        if response.status_code > 399:
-            raise BuildkiteException(f"{url} {response.status_code} {response.json()}")
-
-        log.info(f"Created build {message}")
-        return response.json()
+        return self.session.post(url, data=json.dumps(data))
 
     def get_build(self, buildkite_build_url):
         return self.session.get(buildkite_build_url).json()
