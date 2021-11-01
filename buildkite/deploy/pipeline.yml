@@ -27,7 +27,7 @@ steps:
     command:
       - aws eks --region us-east-2 update-kubeconfig --name ${EKS_CLUSTER}
       - kubectl config set-context --current --namespace=${NAMESPACE}
-      - kubectl apply -f - envs/prod/secrets.yml
+      - kubectl apply -f envs/prod/secrets.yml
 
   - label: "Deploy CI API Server"
     key: "deploy-ci-api-server"
