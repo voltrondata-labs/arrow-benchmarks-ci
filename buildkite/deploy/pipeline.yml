@@ -3,21 +3,21 @@ steps:
     key: "build-and-push"
     concurrency: 1
     concurrency_group: "arrow-bci-deploy"
-    command:
-      - docker build -t ${FLASK_APP} .
-      - docker tag ${FLASK_APP}:latest ${DOCKER_REGISTRY}/${FLASK_APP}:${BUILDKITE_COMMIT}
-      - aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin ${DOCKER_REGISTRY}
-      - docker push ${DOCKER_REGISTRY}/${FLASK_APP}:${BUILDKITE_COMMIT}
+    command: |
+      docker build -t ${FLASK_APP} .
+      docker tag ${FLASK_APP}:latest ${DOCKER_REGISTRY}/${FLASK_APP}:${BUILDKITE_COMMIT}
+      aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin ${DOCKER_REGISTRY}
+      docker push ${DOCKER_REGISTRY}/${FLASK_APP}:${BUILDKITE_COMMIT}
 
   - label: "Run Migrations"
     key: "run-migrations"
     depends_on: "build-and-push"
     concurrency: 1
     concurrency_group: "arrow-bci-deploy"
-    command:
-      - aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin ${DOCKER_REGISTRY}
-      - docker pull ${DOCKER_REGISTRY}/${FLASK_APP}:${BUILDKITE_COMMIT}
-      - docker-compose -f envs/prod/docker-compose.yml run app alembic upgrade head
+    command: |
+      aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin ${DOCKER_REGISTRY}
+      docker pull ${DOCKER_REGISTRY}/${FLASK_APP}:${BUILDKITE_COMMIT}
+      docker-compose -f envs/prod/docker-compose.yml run app alembic upgrade head
 
   - label: "Deploy secrets and config"
     key: "deploy-secrets-and-config"
@@ -58,15 +58,20 @@ steps:
     depends_on: "deploy-secrets-and-config"
     concurrency: 1
     concurrency_group: "arrow-bci-deploy"
-    command:
-      - echo "WIP"
+    command: |
+      aws eks --region us-east-2 update-kubeconfig --name ${EKS_CLUSTER}
+      kubectl config set-context --current --namespace=${NAMESPACE}
+      cat envs/prod/deploy.yml | sed "\
+        s/{{BUILDKITE_COMMIT}}/${BUILDKITE_COMMIT}/g;\
+        s/{{DOCKER_REGISTRY}}}/${DOCKER_REGISTRY}/g;\
+        s/{{FLASK_APP}}/${FLASK_APP}/g" | kubectl apply -f -
 
   - label: "Update Machine Configs"
     key: "update-machine-configs"
     depends_on: "deploy-ci-api-server"
     concurrency: 1
     concurrency_group: "arrow-bci-deploy"
-    command:
-      - aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin ${DOCKER_REGISTRY}
-      - docker pull ${DOCKER_REGISTRY}/${FLASK_APP}:${BUILDKITE_COMMIT}
-      - docker-compose -f envs/prod/docker-compose.yml run app python -c 'from buildkite.deploy.update_machine_configs import update_machine_configs; update_machine_configs()'
+    command: |
+      aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin ${DOCKER_REGISTRY}
+      docker pull ${DOCKER_REGISTRY}/${FLASK_APP}:${BUILDKITE_COMMIT}
+      docker-compose -f envs/prod/docker-compose.yml run app python -c 'from buildkite.deploy.update_machine_configs import update_machine_configs; update_machine_configs()'
