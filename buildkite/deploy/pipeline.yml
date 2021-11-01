@@ -27,8 +27,7 @@ steps:
     command:
       - aws eks --region us-east-2 update-kubeconfig --name ${EKS_CLUSTER}
       - kubectl config set-context --current --namespace=${NAMESPACE}
-      - >-
-        cat envs/prod/secrets.yml | sed "
+      - cat envs/prod/secrets.yml | sed "
         s/{{BUILDKITE_API_TOKEN}}/$(echo -n $BUILDKITE_API_TOKEN | base64)/g;
         s/{{DB_HOST}}/$(echo -n $DB_HOST | base64)/g;
         s/{{DB_NAME}}/$(echo -n $DB_NAME | base64)/g;
