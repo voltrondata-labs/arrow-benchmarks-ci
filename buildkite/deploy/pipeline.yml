@@ -24,20 +24,10 @@ steps:
     depends_on: "run-migrations"
     concurrency: 1
     concurrency_group: "arrow-bci-deploy"
-    command: |-
-      aws eks --region us-east-2 update-kubeconfig --name ${EKS_CLUSTER}
-      kubectl config set-context --current --namespace=${NAMESPACE}
-      cat envs/prod/secrets.yml | sed "
-        s/{{BUILDKITE_API_TOKEN}}/$(echo -n $BUILDKITE_API_TOKEN | base64)/g;
-        s/{{DB_HOST}}/$(echo -n $DB_HOST | base64)/g;
-        s/{{DB_NAME}}/$(echo -n $DB_NAME | base64)/g;
-        s/{{DB_PASSWORD}}/$(echo -n $DB_PASSWORD | base64)/g;
-        s/{{DB_USERNAME}}/$(echo -n $DB_USERNAME | base64)/g;
-        s/{{GITHUB_API_TOKEN}}/$(echo -n $GITHUB_API_TOKEN | base64)/g;
-        s/{{GITHUB_SECRET}}/$(echo -n $GITHUB_SECRET | base64)/g;
-        s/{{SLACK_API_TOKEN}}/$(echo -n $SLACK_API_TOKEN | base64)/g;
-        s/{{SLACK_CHANNEL_FOR_BENCHMARK_RESULTS}}/$(echo -n $SLACK_CHANNEL_FOR_BENCHMARK_RESULTS | base64)/g;
-        s/{{SLACK_USER_ID_FOR_WARNINGS}}/$(echo -n $SLACK_USER_ID_FOR_WARNINGS | base64)/g" | kubectl apply -f -
+    command:
+      - aws eks --region us-east-2 update-kubeconfig --name ${EKS_CLUSTER}
+      - kubectl config set-context --current --namespace=${NAMESPACE}
+      - cat envs/prod/secrets.yml | sed "s/{{BUILDKITE_API_TOKEN}}/$(echo -n $BUILDKITE_API_TOKEN | base64)/g;s/{{DB_HOST}}/$(echo -n $DB_HOST | base64)/g;s/{{DB_NAME}}/$(echo -n $DB_NAME | base64)/g;s/{{DB_PASSWORD}}/$(echo -n $DB_PASSWORD | base64)/g;s/{{DB_USERNAME}}/$(echo -n $DB_USERNAME | base64)/g;s/{{GITHUB_API_TOKEN}}/$(echo -n $GITHUB_API_TOKEN | base64)/g;s/{{GITHUB_SECRET}}/$(echo -n $GITHUB_SECRET | base64)/g;s/{{SLACK_API_TOKEN}}/$(echo -n $SLACK_API_TOKEN | base64)/g;s/{{SLACK_CHANNEL_FOR_BENCHMARK_RESULTS}}/$(echo -n $SLACK_CHANNEL_FOR_BENCHMARK_RESULTS | base64)/g;s/{{SLACK_USER_ID_FOR_WARNINGS}}/$(echo -n $SLACK_USER_ID_FOR_WARNINGS | base64)/g" | kubectl apply -f -
 #      - cat envs/prod/config.yml | sed "\
 #        kubectl apply -f -
 
