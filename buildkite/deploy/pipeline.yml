@@ -53,8 +53,8 @@ steps:
         s,{{PIPY_PROJECT}},${PIPY_PROJECT},g;\
         s,{{SLACK_API_BASE_URL}},${SLACK_API_BASE_URL},g" | kubectl apply -f -
 
-  - label: "Deploy CI API Server"
-    key: "deploy-ci-api-server"
+  - label: "Deploy App"
+    key: "deploy-app"
     depends_on: "deploy-secrets-and-config"
     concurrency: 1
     concurrency_group: "arrow-bci-deploy"
@@ -70,7 +70,7 @@ steps:
 
   - label: "Update Machine Configs"
     key: "update-machine-configs"
-    depends_on: "deploy-ci-api-server"
+    depends_on: "deploy-app"
     concurrency: 1
     concurrency_group: "arrow-bci-deploy"
     command: |
