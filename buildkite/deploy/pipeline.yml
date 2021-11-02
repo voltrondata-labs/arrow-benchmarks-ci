@@ -66,6 +66,7 @@ steps:
         s/{{CERTIFICATE_ARN}}/${CERTIFICATE_ARN}/g;\
         s/{{DOCKER_REGISTRY}}/${DOCKER_REGISTRY}/g;\
         s/{{FLASK_APP}}/${FLASK_APP}/g" | kubectl apply -f -
+      kubectl rollout status deployment/arrow-bci-deployment
 
   - label: "Update Machine Configs"
     key: "update-machine-configs"
