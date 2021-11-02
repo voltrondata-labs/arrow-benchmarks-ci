@@ -19,7 +19,7 @@ steps:
       docker pull ${DOCKER_REGISTRY}/${FLASK_APP}:${BUILDKITE_COMMIT}
       docker-compose -f envs/prod/docker-compose.yml run app alembic upgrade head
 
-  - label: "Deploy secrets and config"
+  - label: "Deploy Secrets & Config"
     key: "deploy-secrets-and-config"
     depends_on: "run-migrations"
     concurrency: 1
