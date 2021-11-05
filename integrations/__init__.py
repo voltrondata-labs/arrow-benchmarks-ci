@@ -1,6 +1,7 @@
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
 
+from config import Config
 from logger import log
 
 DEFAULT_TIMEOUT = 30
@@ -44,4 +45,16 @@ class IntegrationHTTPAdapter(HTTPAdapter):
         return response
 
 
-adapter = IntegrationHTTPAdapter(max_retries=retry_strategy)
+class TestIntegrationHTTPAdapter(IntegrationHTTPAdapter):
+    def send(self, request, **kwargs):
+        from tests.helpers import outbound_requests
+
+        outbound_requests.append((request, kwargs))
+
+        return super().send(request, **kwargs)
+
+
+if Config.ENV == "DEV":
+    adapter = TestIntegrationHTTPAdapter(max_retries=retry_strategy)
+else:
+    adapter = IntegrationHTTPAdapter(max_retries=retry_strategy)

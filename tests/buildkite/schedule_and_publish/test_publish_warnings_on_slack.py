@@ -1,14 +1,12 @@
 from copy import deepcopy
 from datetime import datetime, timedelta
 
-from buildkite.schedule_and_publish.create_benchmark_builds import (
-    create_benchmark_builds,
-)
+from buildkite.schedule_and_publish.create_benchmark_builds import \
+    create_benchmark_builds
 from buildkite.schedule_and_publish.get_commits import get_commits
 from buildkite.schedule_and_publish.publish_warnings_on_slack import (
-    publish_offline_machine_warnings_on_slack,
     publish_buildkite_build_warnings_on_slack,
-)
+    publish_offline_machine_warnings_on_slack)
 from models.run import Run
 
 

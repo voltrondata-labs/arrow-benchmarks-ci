@@ -17,10 +17,12 @@ services:
       DB_PASSWORD: "postgres"
       DB_NAME: "postgres"
       DB_PORT: "5432"
+      ENV: "DEV"
       FLASK_DEBUG: 0
       GITHUB_API_BASE_URL: "http://mocked-integrations:9999/github"
       GITHUB_REPO: "ursacomputing/arrow-benchmarks-ci"
       GITHUB_REPO_WITH_BENCHMARKABLE_COMMITS: "apache/arrow"
+      GITHUB_SECRET: "github_secret"
       MAX_COMMITS_TO_FETCH: 5
       PIPY_API_BASE_URL: "http://mocked-integrations:9999/pipy"
       PIPY_PROJECT: "pyarrow"

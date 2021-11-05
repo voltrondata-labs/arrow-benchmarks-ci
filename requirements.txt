@@ -3,6 +3,5 @@ flask==1.1.2
 flask-restful
 gunicorn
 psycopg2
-pytest-flask
 requests
 SQLAlchemy>=1.4.0b1

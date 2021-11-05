@@ -1,4 +1,5 @@
-from buildkite.schedule_and_publish.get_pyarrow_versions import get_pyarrow_versions
+from buildkite.schedule_and_publish.get_pyarrow_versions import \
+    get_pyarrow_versions
 from models.benchmarkable import Benchmarkable
 from models.machine import Machine
 from models.notification import Notification

@@ -1,4 +1,5 @@
 from distutils.version import StrictVersion
+
 import requests
 
 from config import Config

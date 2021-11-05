@@ -9,6 +9,46 @@
     - reply_http:
         status_code: 200
         body_from_file: './github/get_commits.json'
+- key: get_commits_sha1
+  kind: Behavior
+  expect:
+    http:
+      method: GET
+      path: /github/repos/apache/arrow/commits/sha1
+  actions:
+    - reply_http:
+        status_code: 200
+        body_from_file: './github/get_commits_sha1.json'
+- key: get_commits_sha2
+  kind: Behavior
+  expect:
+    http:
+      method: GET
+      path: /github/repos/apache/arrow/commits/sha2
+  actions:
+    - reply_http:
+        status_code: 200
+        body_from_file: './github/get_commits_sha2.json'
+- key: get_pulls_1234
+  kind: Behavior
+  expect:
+    http:
+      method: GET
+      path: /github/repos/apache/arrow/pulls/1234
+  actions:
+    - reply_http:
+        status_code: 200
+        body_from_file: './github/get_pulls_1234.json'
+- key: post_issues_comments
+  kind: Behavior
+  expect:
+    http:
+      method: POST
+      path: /github/repos/apache/arrow/issues/*/comments
+  actions:
+    - reply_http:
+        status_code: 201
+        body_from_file: './github/post_issues_comments.json'
 - key: create_pipeline
   kind: Behavior
   expect:

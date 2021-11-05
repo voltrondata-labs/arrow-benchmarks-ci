@@ -1,0 +1,10 @@
+{
+  "url": "http://mocked-integrations:9999/github/repos/apache/arrow/pulls/9272",
+  "number": 1234,
+  "head": {
+    "sha": "sha2"
+  },
+  "base": {
+    "sha": "sha1"
+  }
+}

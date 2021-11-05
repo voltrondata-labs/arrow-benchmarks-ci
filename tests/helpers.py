@@ -1,3 +1,6 @@
+import hashlib
+import hmac
+import json
 from copy import deepcopy
 
 from config import Config
@@ -35,3 +38,38 @@ def mock_offline_machine():
     machine.hostname = "test"
     machine.port = 27
     machine.save()
+
+
+def make_github_webhook_event_for_comment(
+    client, comment_body="@ursabot please benchmark"
+):
+    # Send Github event with X-Hub-Signature-256
+    event = {
+        "action": "created",
+        "issue": {"number": 1234},
+        "comment": {"body": comment_body},
+        "repository": {},
+        "organization": {},
+        "sender": {},
+    }
+
+    data = json.dumps(event).encode()
+
+    signature = b"sha256=" + (
+        hmac.new(
+            key=Config.GITHUB_SECRET.encode(),
+            msg=data,
+            digestmod=hashlib.sha256,
+        )
+        .hexdigest()
+        .encode()
+    )
+
+    return client.post(
+        "/events",
+        data=data,
+        headers={"X-Hub-Signature-256": signature},
+    )
+
+
+outbound_requests = []

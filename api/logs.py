@@ -1,9 +1,9 @@
 from flask import request
 from flask_restful import Resource
 
+from logger import log
 from models.benchmark_group_execution import BenchmarkGroupExecution
 from models.memory_usage import MemoryUsage
-from logger import log
 
 log_type_class = {
     "BenchmarkGroupExecution": BenchmarkGroupExecution,

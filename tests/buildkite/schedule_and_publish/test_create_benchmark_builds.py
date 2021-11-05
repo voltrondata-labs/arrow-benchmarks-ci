@@ -1,9 +1,7 @@
-from buildkite.schedule_and_publish.create_benchmark_builds import (
-    create_benchmark_builds,
-)
+from buildkite.schedule_and_publish.create_benchmark_builds import \
+    create_benchmark_builds
 from buildkite.schedule_and_publish.get_commits import get_commits
 from models.run import Run
-
 from tests.helpers import machine_configs
 
 
