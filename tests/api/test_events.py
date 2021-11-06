@@ -1,9 +1,17 @@
 from api.events import benchmark_command_examples
+from buildkite.deploy.update_machine_configs import update_machine_configs
+from config import Config
 from models.benchmarkable import Benchmarkable
 from models.machine import Machine
 from models.run import Run
-from tests.helpers import (delete_data, make_github_webhook_event_for_comment,
-                           outbound_requests)
+from tests.conftest import run_before_and_after_tests
+from tests.helpers import (
+    delete_data,
+    machine_configs,
+    make_github_webhook_event_for_comment,
+    mock_offline_machine,
+    outbound_requests,
+)
 
 pull_comments_with_expected_machine_run_filters_and_skip_reason = {
     "@ursabot please benchmark lang=Python": {
@@ -12,20 +20,14 @@ pull_comments_with_expected_machine_run_filters_and_skip_reason = {
             {"lang": "Python"},
             "Only ['C++', 'Java'] langs are supported on ursa-thinkcentre-m75q",
         ),
-        "ec2-t3-large-us-east-2": ({"lang": "Python", "flags": {"cloud": True}}, None),
-        "ec2-t3-xlarge-us-east-2": ({"lang": "Python", "flags": {"cloud": True}}, None),
     },
     "@ursabot please benchmark": {
         "ursa-i9-9960x": ({"lang": "Python,R,JavaScript"}, None),
         "ursa-thinkcentre-m75q": ({"lang": "C++,Java"}, None),
-        "ec2-t3-large-us-east-2": ({"flags": {"cloud": True}}, None),
-        "ec2-t3-xlarge-us-east-2": ({"flags": {"cloud": True}}, None),
     },
     "@ursabot please benchmark    ": {
         "ursa-i9-9960x": ({"lang": "Python,R,JavaScript"}, None),
         "ursa-thinkcentre-m75q": ({"lang": "C++,Java"}, None),
-        "ec2-t3-large-us-east-2": ({"flags": {"cloud": True}}, None),
-        "ec2-t3-xlarge-us-east-2": ({"flags": {"cloud": True}}, None),
     },
     "@ursabot please benchmark lang=Python   ": {
         "ursa-i9-9960x": ({"lang": "Python"}, None),
@@ -33,22 +35,12 @@ pull_comments_with_expected_machine_run_filters_and_skip_reason = {
             {"lang": "Python"},
             "Only ['C++', 'Java'] langs are supported on ursa-thinkcentre-m75q",
         ),
-        "ec2-t3-large-us-east-2": ({"lang": "Python", "flags": {"cloud": True}}, None),
-        "ec2-t3-xlarge-us-east-2": ({"lang": "Python", "flags": {"cloud": True}}, None),
     },
     "@ursabot please benchmark lang=JavaScript   ": {
         "ursa-i9-9960x": ({"lang": "JavaScript"}, None),
         "ursa-thinkcentre-m75q": (
             {"lang": "JavaScript"},
             "Only ['C++', 'Java'] langs are supported on ursa-thinkcentre-m75q",
-        ),
-        "ec2-t3-large-us-east-2": (
-            {"lang": "JavaScript", "flags": {"cloud": True}},
-            "Only ['Python', 'R', 'C++'] langs are supported on ec2-t3-large-us-east-2",
-        ),
-        "ec2-t3-xlarge-us-east-2": (
-            {"lang": "JavaScript", "flags": {"cloud": True}},
-            "Only ['Python', 'R', 'C++'] langs are supported on ec2-t3-xlarge-us-east-2",
         ),
     },
     "@ursabot please benchmark lang=C++": {
@@ -57,28 +49,11 @@ pull_comments_with_expected_machine_run_filters_and_skip_reason = {
             "Only ['Python', 'R', 'JavaScript'] langs are supported on ursa-i9-9960x",
         ),
         "ursa-thinkcentre-m75q": ({"lang": "C++"}, None),
-        "ec2-t3-large-us-east-2": (
-            {"lang": "C++", "flags": {"cloud": True}},
-            "Provided benchmark filters do not have any benchmark groups to be executed on ec2-t3-large-us-east-2",
-        ),
-        "ec2-t3-xlarge-us-east-2": (
-            {"lang": "C++", "flags": {"cloud": True}},
-            "Provided benchmark filters do not have any benchmark groups to be executed on ec2-t3-xlarge-us-east-2",
-        ),
     },
     "\r\n@ursabot please benchmark   lang=C++": {
         "ursa-i9-9960x": (
             {"lang": "C++"},
             "Only ['Python', 'R', 'JavaScript'] langs are supported on ursa-i9-9960x",
-        ),
-        "ursa-thinkcentre-m75q": ({"lang": "C++"}, None),
-        "ec2-t3-large-us-east-2": (
-            {"lang": "C++", "flags": {"cloud": True}},
-            "Provided benchmark filters do not have any benchmark groups to be executed on ec2-t3-large-us-east-2",
-        ),
-        "ec2-t3-xlarge-us-east-2": (
-            {"lang": "C++", "flags": {"cloud": True}},
-            "Provided benchmark filters do not have any benchmark groups to be executed on ec2-t3-xlarge-us-east-2",
         ),
     },
     "@ursabot please benchmark lang=R": {
@@ -87,28 +62,12 @@ pull_comments_with_expected_machine_run_filters_and_skip_reason = {
             {"lang": "R"},
             "Only ['C++', 'Java'] langs are supported on ursa-thinkcentre-m75q",
         ),
-        "ec2-t3-large-us-east-2": (
-            {"lang": "R", "flags": {"cloud": True}},
-            "Provided benchmark filters do not have any benchmark groups to be executed on ec2-t3-large-us-east-2",
-        ),
-        "ec2-t3-xlarge-us-east-2": (
-            {"lang": "R", "flags": {"cloud": True}},
-            "Provided benchmark filters do not have any benchmark groups to be executed on ec2-t3-xlarge-us-east-2",
-        ),
     },
     "@ursabot please benchmark name=file-write": {
         "ursa-i9-9960x": ({"lang": "Python,R,JavaScript", "name": "file-write"}, None),
         "ursa-thinkcentre-m75q": (
             {"lang": "C++,Java", "name": "file-write"},
             "Only ['lang', 'command'] filters are supported on ursa-thinkcentre-m75q",
-        ),
-        "ec2-t3-large-us-east-2": (
-            {"name": "file-write", "flags": {"cloud": True}},
-            "Provided benchmark filters do not have any benchmark groups to be executed on ec2-t3-large-us-east-2",
-        ),
-        "ec2-t3-xlarge-us-east-2": (
-            {"name": "file-write", "flags": {"cloud": True}},
-            "Provided benchmark filters do not have any benchmark groups to be executed on ec2-t3-xlarge-us-east-2",
         ),
     },
     "@ursabot please benchmark name=file-write lang=Python": {
@@ -117,14 +76,6 @@ pull_comments_with_expected_machine_run_filters_and_skip_reason = {
             {"lang": "Python", "name": "file-write"},
             "Only ['C++', 'Java'] langs are supported on ursa-thinkcentre-m75q",
         ),
-        "ec2-t3-large-us-east-2": (
-            {"lang": "Python", "name": "file-write", "flags": {"cloud": True}},
-            "Provided benchmark filters do not have any benchmark groups to be executed on ec2-t3-large-us-east-2",
-        ),
-        "ec2-t3-xlarge-us-east-2": (
-            {"lang": "Python", "name": "file-write", "flags": {"cloud": True}},
-            "Provided benchmark filters do not have any benchmark groups to be executed on ec2-t3-xlarge-us-east-2",
-        ),
     },
     "@ursabot please benchmark    name=file-write  lang=Python ": {
         "ursa-i9-9960x": ({"lang": "Python", "name": "file-write"}, None),
@@ -132,28 +83,12 @@ pull_comments_with_expected_machine_run_filters_and_skip_reason = {
             {"lang": "Python", "name": "file-write"},
             "Only ['C++', 'Java'] langs are supported on ursa-thinkcentre-m75q",
         ),
-        "ec2-t3-large-us-east-2": (
-            {"lang": "Python", "name": "file-write", "flags": {"cloud": True}},
-            "Provided benchmark filters do not have any benchmark groups to be executed on ec2-t3-large-us-east-2",
-        ),
-        "ec2-t3-xlarge-us-east-2": (
-            {"lang": "Python", "name": "file-write", "flags": {"cloud": True}},
-            "Provided benchmark filters do not have any benchmark groups to be executed on ec2-t3-xlarge-us-east-2",
-        ),
     },
     "@ursabot please benchmark name=file-*": {
         "ursa-i9-9960x": ({"lang": "Python,R,JavaScript", "name": "file-*"}, None),
         "ursa-thinkcentre-m75q": (
             {"lang": "C++,Java", "name": "file-*"},
             "Only ['lang', 'command'] filters are supported on ursa-thinkcentre-m75q",
-        ),
-        "ec2-t3-large-us-east-2": (
-            {"name": "file-*", "flags": {"cloud": True}},
-            "Provided benchmark filters do not have any benchmark groups to be executed on ec2-t3-large-us-east-2",
-        ),
-        "ec2-t3-xlarge-us-east-2": (
-            {"name": "file-*", "flags": {"cloud": True}},
-            "Provided benchmark filters do not have any benchmark groups to be executed on ec2-t3-xlarge-us-east-2",
         ),
     },
     "@ursabot please benchmark command=cpp-micro --suite-filter=arrow-compute-vector-selection-benchmark --benchmark-filter=TakeStringRandomIndicesWithNulls/262144/2 --iterations=3 --show-output=true": {
@@ -170,20 +105,6 @@ pull_comments_with_expected_machine_run_filters_and_skip_reason = {
                 "command": "cpp-micro --suite-filter=arrow-compute-vector-selection-benchmark --benchmark-filter=TakeStringRandomIndicesWithNulls/262144/2 --iterations=3 --show-output=true",
             },
             None,
-        ),
-        "ec2-t3-large-us-east-2": (
-            {
-                "command": "cpp-micro --suite-filter=arrow-compute-vector-selection-benchmark --benchmark-filter=TakeStringRandomIndicesWithNulls/262144/2 --iterations=3 --show-output=true",
-                "flags": {"cloud": True},
-            },
-            "Only ['lang', 'name'] filters are supported on ec2-t3-large-us-east-2",
-        ),
-        "ec2-t3-xlarge-us-east-2": (
-            {
-                "command": "cpp-micro --suite-filter=arrow-compute-vector-selection-benchmark --benchmark-filter=TakeStringRandomIndicesWithNulls/262144/2 --iterations=3 --show-output=true",
-                "flags": {"cloud": True},
-            },
-            "Only ['lang', 'name'] filters are supported on ec2-t3-xlarge-us-east-2",
         ),
     },
 }
@@ -203,13 +124,15 @@ expected_benchmarkable_id = "sha2"
 expected_baseline_benchmarkable_id = "sha1"
 
 
-def test_post_events_for_pr_with_supported_ursabot_commands(client, monkeypatch):
+def test_post_events_for_pr_with_supported_ursabot_commands(client):
     for (
         comment,
         expected_output,
     ) in pull_comments_with_expected_machine_run_filters_and_skip_reason.items():
         print(comment)
         delete_data()
+        update_machine_configs(machine_configs())
+        mock_offline_machine()
         response = make_github_webhook_event_for_comment(client, comment)
         assert response.status_code == 202
         assert response.json == ""
@@ -222,16 +145,17 @@ def test_post_events_for_pr_with_supported_ursabot_commands(client, monkeypatch)
         assert baseline_benchmarkable
         assert benchmarkable.baseline_id == expected_baseline_benchmarkable_id
         assert benchmarkable.pull_number == expected_pull_number
-        for machine, (
+        for machine_name, (
             expected_filters,
             expected_skip_reason,
         ) in expected_output.items():
+            machine = Machine.get(machine_name)
             machine_run = benchmarkable.machine_run(machine)
             assert machine_run.filters == expected_filters
             assert machine_run.skip_reason == expected_skip_reason
             assert (
                 baseline_benchmarkable.machine_run(machine).filters
-                == Machine.get(machine).default_filters["arrow-commit"]
+                == machine.default_filters["arrow-commit"]
             )
 
         # Verify new benchmarkables were not created for the same event
@@ -241,23 +165,21 @@ def test_post_events_for_pr_with_supported_ursabot_commands(client, monkeypatch)
         assert len(Benchmarkable.all()) == 2
 
 
-# def test_post_events_for_pr_with_unsupported_ursabot_commands(client, monkeypatch):
-#     for comment in pull_comments_with_unsupported_ursabot_commands:
-#         mock_all_integrations_and_env_vars(monkeypatch)
-#         delete_data()
-#         response = make_github_webhook_event_for_comment(client, comment)
-#
-#         assert response.status_code == 202
-#         assert response.json == ""
-#         assert len(Benchmarkable.all()) == 0
-#         assert outbound_requests[-1] == {
-#             "get_pull_comment": {
-#                 "pull_number": expected_pull_number,
-#                 "comment_body": benchmark_command_examples,
-#             }
-#         }
-#
-#
+def test_post_events_for_pr_with_unsupported_ursabot_commands(client):
+    for comment in pull_comments_with_unsupported_ursabot_commands:
+        response = make_github_webhook_event_for_comment(client, comment)
+
+        assert response.status_code == 202
+        assert response.json == ""
+        assert len(Benchmarkable.all()) == 0
+        assert outbound_requests[-1] == {
+            "get_pull_comment": {
+                "pull_number": expected_pull_number,
+                "comment_body": benchmark_command_examples,
+            }
+        }
+
+
 # def test_post_events_for_pr_with_existing_results(client, monkeypatch):
 #     mock_all_integrations_and_env_vars(monkeypatch)
 #     delete_data()
