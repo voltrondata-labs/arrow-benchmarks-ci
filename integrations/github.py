@@ -40,4 +40,5 @@ class Github:
         return self.session.patch(url, data=json.dumps(data)).json()
 
 
-github = Github()
+def github():
+    return Github()

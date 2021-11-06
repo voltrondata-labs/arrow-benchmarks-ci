@@ -93,14 +93,14 @@ class Notification(Base, BaseMixin):
         log.info(
             f"Creating pull comment for pull {self.pull_number} {self.benchmarkable.type} {self.benchmarkable_id}"
         )
-        self.message = github.create_pull_comment(self.pull_number, comment_body)
+        self.message = github().create_pull_comment(self.pull_number, comment_body)
         self.save()
 
     def update_pull_comment(self, comment_body):
         log.info(
             f"Updating pull comment for pull {self.pull_number} {self.benchmarkable.type} {self.benchmarkable_id}"
         )
-        self.message = github.update_pull_comment(self.pull_comment_url, comment_body)
+        self.message = github().update_pull_comment(self.pull_comment_url, comment_body)
         self.save()
 
     def post_slack_message(self, text):

@@ -121,9 +121,9 @@ def create_benchmarkable_and_runs(pull_dict, pull_benchmark_filters):
             f"Commit {id} already has scheduled benchmark runs."
         )
 
-    data = github.get_commit(id)
+    data = github().get_commit(id)
     baseline_id = pull_dict["base"]["sha"]
-    baseline_data = github.get_commit(baseline_id)
+    baseline_data = github().get_commit(baseline_id)
 
     Benchmarkable.create(
         dict(
@@ -175,7 +175,7 @@ class Events(Resource):
 
             try:
                 benchmark_filters = get_pull_benchmark_filters(event["comment"]["body"])
-                pull_dict = github.get_pull(pull_number)
+                pull_dict = github().get_pull(pull_number)
                 create_benchmarkable_and_runs(pull_dict, benchmark_filters)
             except UnsupportedBenchmarkCommand:
                 github.create_pull_comment(pull_number, benchmark_command_examples)
