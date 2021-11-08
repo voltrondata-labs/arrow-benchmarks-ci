@@ -49,7 +49,7 @@ class TestIntegrationHTTPAdapter(IntegrationHTTPAdapter):
     def send(self, request, **kwargs):
         from tests.helpers import outbound_requests
 
-        outbound_requests.append((request, kwargs))
+        outbound_requests.append((request.url, request.body))
 
         return super().send(request, **kwargs)
 

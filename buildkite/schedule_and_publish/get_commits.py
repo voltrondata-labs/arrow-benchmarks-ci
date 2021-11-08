@@ -26,7 +26,7 @@ def get_originating_pull_number(commit_dict):
 
 
 def get_commits():
-    commit_dicts = github().get_commits()
+    commit_dicts = github.get_commits()
     commit_dicts.reverse()
 
     for commit_dict in commit_dicts:

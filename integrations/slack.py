@@ -10,6 +10,7 @@ class Slack:
     def __init__(self):
         self.session = requests.Session()
         self.session.mount("https://", adapter)
+        self.session.mount("http://", adapter)
         self.session.headers = {
             "Authorization": f"Bearer {Config.SLACK_API_TOKEN}",
             "Content-Type": "application/json",

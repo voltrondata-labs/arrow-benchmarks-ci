@@ -11,6 +11,7 @@ class Github:
     def __init__(self):
         self.session = requests.Session()
         self.session.mount("https://", adapter)
+        self.session.mount("http://", adapter)
         if Config.GITHUB_API_TOKEN:
             self.session.headers = {
                 "Authorization": f"Bearer {Config.GITHUB_API_TOKEN}"
@@ -40,5 +41,4 @@ class Github:
         return self.session.patch(url, data=json.dumps(data)).json()
 
 
-def github():
-    return Github()
+github = Github()
