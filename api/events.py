@@ -57,11 +57,9 @@ def verify_github_request_signature(github_request):
     if not actual_github_request_signature:
         raise GithubSignatureInvalid("X-Hub-Signature-256 header was not sent.")
 
-    github_secret = Config.GITHUB_SECRET
-
     expected_github_request_signature = "sha256=" + (
         hmac.new(
-            key=github_secret.encode(),
+            key=Config.GITHUB_SECRET.encode(),
             msg=github_request.data,
             digestmod=hashlib.sha256,
         ).hexdigest()
