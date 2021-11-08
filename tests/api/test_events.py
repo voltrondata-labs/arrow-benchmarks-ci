@@ -56,6 +56,7 @@ pull_comments_with_expected_machine_run_filters_and_skip_reason = {
             {"lang": "C++"},
             "Only ['Python', 'R', 'JavaScript'] langs are supported on ursa-i9-9960x",
         ),
+        "ursa-thinkcentre-m75q": ({"lang": "C++"}, None),
     },
     "@ursabot please benchmark lang=R": {
         "ursa-i9-9960x": ({"lang": "R"}, None),
@@ -125,24 +126,44 @@ expected_benchmarkable_id = "sha2"
 expected_baseline_benchmarkable_id = "sha1"
 
 
-def verify_benchmarkables_were_created_for_pull_request_comment(
+def verify_benchmarkables_and_builds_were_created_for_pull_request_comment(
     response, expected_runs
 ):
     assert response.status_code == 202
     assert response.json == ""
     assert len(Benchmarkable.all()) == 2
     assert len(Run.all()) == 2 * len(list(machine_configs().keys()))
-    assert outbound_requests[-1] == (
-        f"http://mocked-integrations:9999/github/repos/apache/arrow/commits/{expected_baseline_benchmarkable_id}",
-        None,
-    )
-    assert outbound_requests[-2] == (
-        f"http://mocked-integrations:9999/github/repos/apache/arrow/commits/{expected_benchmarkable_id}",
-        None,
-    )
-
     benchmarkable = Benchmarkable.get(expected_benchmarkable_id)
     baseline_benchmarkable = Benchmarkable.get(expected_baseline_benchmarkable_id)
+    expected_outbound_requests = [
+        f"http://mocked-integrations:9999/github/repos/apache/arrow/pulls/1234",
+        f"http://mocked-integrations:9999/github/repos/apache/arrow/commits/{expected_benchmarkable_id}",
+        f"http://mocked-integrations:9999/github/repos/apache/arrow/commits/{expected_baseline_benchmarkable_id}",
+    ]
+    for machine in ["ursa-thinkcentre-m75q", "ursa-i9-9960x"]:
+        _, skip_reason = expected_runs[machine]
+        if skip_reason:
+            expected_outbound_requests.extend(
+                [
+                    f"http://mocked-integrations:9999/buildkite/v2/organizations/apache-arrow/pipelines/arrow-bci-benchmark-on-{machine}/builds?branch=main&state%5B%5D=scheduled&state%5B%5D=running",
+                    f"http://mocked-integrations:9999/buildkite/v2/organizations/apache-arrow/pipelines/arrow-bci-benchmark-on-{machine}/builds",
+                ]
+            )
+        else:
+            expected_outbound_requests.extend(
+                [
+                    f"http://mocked-integrations:9999/buildkite/v2/organizations/apache-arrow/pipelines/arrow-bci-benchmark-on-{machine}/builds",
+                    f"http://mocked-integrations:9999/buildkite/v2/organizations/apache-arrow/pipelines/arrow-bci-benchmark-on-{machine}/builds",
+                    f"http://mocked-integrations:9999/buildkite/v2/organizations/apache-arrow/pipelines/arrow-bci-benchmark-on-{machine}/builds?branch=main&state%5B%5D=scheduled&state%5B%5D=running",
+                ]
+            )
+
+    for i in range(len(expected_outbound_requests)):
+        assert (
+            expected_outbound_requests[i]
+            == outbound_requests[i - len(expected_outbound_requests)][0]
+        )
+
     assert benchmarkable
     assert baseline_benchmarkable
     assert benchmarkable.baseline_id == expected_baseline_benchmarkable_id
@@ -170,7 +191,7 @@ def test_post_events_for_pr_with_supported_ursabot_commands(client):
         update_machine_configs(machine_configs())
         mock_offline_machine()
         response = make_github_webhook_event_for_comment(client, comment)
-        verify_benchmarkables_were_created_for_pull_request_comment(
+        verify_benchmarkables_and_builds_were_created_for_pull_request_comment(
             response, expected_runs
         )
 
@@ -194,7 +215,9 @@ def test_post_events_for_pr_with_existing_results(client):
         "@ursabot please benchmark"
     ]
     response = make_github_webhook_event_for_comment(client)
-    verify_benchmarkables_were_created_for_pull_request_comment(response, expected_runs)
+    verify_benchmarkables_and_builds_were_created_for_pull_request_comment(
+        response, expected_runs
+    )
 
     # Verify PR requests with benchmark filters do not create new runs
     # for PR baseline and contender commits with existing runs with ALL benchmarks
