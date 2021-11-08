@@ -2,6 +2,7 @@ import json
 
 from api.events import benchmark_command_examples
 from buildkite.deploy.update_machine_configs import update_machine_configs
+from config import Config
 from models.benchmarkable import Benchmarkable
 from models.machine import Machine
 from models.run import Run
@@ -215,11 +216,11 @@ def test_post_events_for_pr_with_existing_results(client):
         )
 
 
-def test_github_request_signature(client, monkeypatch):
-    monkeypatch.setenv("GITHUB_SECRET", "test")
+def test_github_request_signature(client):
+    Config.GITHUB_SECRET = "test"
     response = make_github_webhook_event_for_comment(client)
     assert response.status_code == 401
     assert (
         response.json
-        == "Github's actual X-Hub-Signature-256 dit not match expected X-Hub-Signature-256"
+        == "Github's actual X-Hub-Signature-256 dit not match expected X-Hub-Signature-256."
     )

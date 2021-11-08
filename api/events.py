@@ -6,6 +6,7 @@ import os
 from flask import request
 from flask_restful import Resource
 
+from config import Config
 from integrations.github import github
 from logger import log
 from models.benchmarkable import Benchmarkable
@@ -46,7 +47,7 @@ class CommitHasScheduledBenchmarkRuns(Exception):
     pass
 
 
-class GithubSignatureIncorrect(Exception):
+class GithubSignatureInvalid(Exception):
     pass
 
 
@@ -54,12 +55,9 @@ def verify_github_request_signature(github_request):
     actual_github_request_signature = github_request.headers.get("X-Hub-Signature-256")
 
     if not actual_github_request_signature:
-        raise Exception("X-Hub-Signature-256 header was not sent.")
+        raise GithubSignatureInvalid("X-Hub-Signature-256 header was not sent.")
 
-    github_secret = os.getenv("GITHUB_SECRET")
-
-    if not github_secret:
-        raise Exception("GITHUB_SECRET is not set in webhooks-secret")
+    github_secret = Config.GITHUB_SECRET
 
     expected_github_request_signature = "sha256=" + (
         hmac.new(
@@ -72,8 +70,8 @@ def verify_github_request_signature(github_request):
     if not hmac.compare_digest(
         expected_github_request_signature, actual_github_request_signature
     ):
-        raise GithubSignatureIncorrect(
-            "Github's actual X-Hub-Signature-256 dit not match expected X-Hub-Signature-256"
+        raise GithubSignatureInvalid(
+            "Github's actual X-Hub-Signature-256 dit not match expected X-Hub-Signature-256."
         )
 
 
@@ -168,7 +166,7 @@ class Events(Resource):
     def post(self):
         try:
             verify_github_request_signature(request)
-        except GithubSignatureIncorrect as e:
+        except GithubSignatureInvalid as e:
             log.exception(e)
             return e.args[0], 401
 
