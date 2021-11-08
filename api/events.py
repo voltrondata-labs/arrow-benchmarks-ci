@@ -5,9 +5,6 @@ import json
 from flask import request
 from flask_restful import Resource
 
-from buildkite.schedule_and_publish.create_benchmark_builds import (
-    create_benchmark_builds,
-)
 from config import Config
 from integrations.github import github
 from logger import log
@@ -184,7 +181,6 @@ class Events(Resource):
                 benchmark_filters = get_pull_benchmark_filters(event["comment"]["body"])
                 pull_dict = github.get_pull(pull_number)
                 create_benchmarkable_and_runs(pull_dict, benchmark_filters)
-                create_benchmark_builds()
             except UnsupportedBenchmarkCommand:
                 github.create_pull_comment(pull_number, benchmark_command_examples)
             except CommitHasScheduledBenchmarkRuns as e:

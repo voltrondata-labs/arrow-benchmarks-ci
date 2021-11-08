@@ -140,23 +140,6 @@ def verify_benchmarkables_and_builds_were_created_for_pull_request_comment(
         f"http://mocked-integrations:9999/github/repos/apache/arrow/commits/{expected_benchmarkable_id}",
         f"http://mocked-integrations:9999/github/repos/apache/arrow/commits/{expected_baseline_benchmarkable_id}",
     ]
-    for machine in ["ursa-thinkcentre-m75q", "ursa-i9-9960x"]:
-        _, skip_reason = expected_runs[machine]
-        if skip_reason:
-            expected_outbound_requests.extend(
-                [
-                    f"http://mocked-integrations:9999/buildkite/v2/organizations/apache-arrow/pipelines/arrow-bci-benchmark-on-{machine}/builds?branch=main&state%5B%5D=scheduled&state%5B%5D=running",
-                    f"http://mocked-integrations:9999/buildkite/v2/organizations/apache-arrow/pipelines/arrow-bci-benchmark-on-{machine}/builds",
-                ]
-            )
-        else:
-            expected_outbound_requests.extend(
-                [
-                    f"http://mocked-integrations:9999/buildkite/v2/organizations/apache-arrow/pipelines/arrow-bci-benchmark-on-{machine}/builds",
-                    f"http://mocked-integrations:9999/buildkite/v2/organizations/apache-arrow/pipelines/arrow-bci-benchmark-on-{machine}/builds",
-                    f"http://mocked-integrations:9999/buildkite/v2/organizations/apache-arrow/pipelines/arrow-bci-benchmark-on-{machine}/builds?branch=main&state%5B%5D=scheduled&state%5B%5D=running",
-                ]
-            )
 
     for i in range(len(expected_outbound_requests)):
         assert (
