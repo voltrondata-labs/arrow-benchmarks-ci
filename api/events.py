@@ -46,6 +46,10 @@ class CommitHasScheduledBenchmarkRuns(Exception):
     pass
 
 
+class GithubSignatureIncorrect(Exception):
+    pass
+
+
 def verify_github_request_signature(github_request):
     actual_github_request_signature = github_request.headers.get("X-Hub-Signature-256")
 
@@ -68,7 +72,7 @@ def verify_github_request_signature(github_request):
     if not hmac.compare_digest(
         expected_github_request_signature, actual_github_request_signature
     ):
-        raise Exception(
+        raise GithubSignatureIncorrect(
             "Github's actual X-Hub-Signature-256 dit not match expected X-Hub-Signature-256"
         )
 
@@ -162,7 +166,12 @@ def is_pull_request_comment_for_ursabot(event):
 
 class Events(Resource):
     def post(self):
-        verify_github_request_signature(request)
+        try:
+            verify_github_request_signature(request)
+        except GithubSignatureIncorrect as e:
+            log.exception(e)
+            return e.args[0], 401
+
         event = json.loads(request.data)
         log.info(event)
 

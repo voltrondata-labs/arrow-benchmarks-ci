@@ -57,7 +57,7 @@ def make_github_webhook_event_for_comment(
 
     signature = b"sha256=" + (
         hmac.new(
-            key="wtt".encode(),
+            key="github_secret".encode(),
             msg=data,
             digestmod=hashlib.sha256,
         )

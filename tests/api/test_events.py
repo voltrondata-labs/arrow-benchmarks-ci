@@ -187,7 +187,7 @@ def test_post_events_for_pr_with_unsupported_ursabot_commands(client):
         )
 
 
-def test_post_events_for_pr_with_existing_results(client, monkeypatch):
+def test_post_events_for_pr_with_existing_results(client):
     # Create runs with ALL benchmarks for PR baseline and contender commits
     expected_runs = pull_comments_with_expected_machine_run_filters_and_skip_reason[
         "@ursabot please benchmark"
@@ -213,3 +213,13 @@ def test_post_events_for_pr_with_existing_results(client, monkeypatch):
             f"http://mocked-integrations:9999/github/repos/apache/arrow/issues/{expected_pull_number}/comments",
             json.dumps({"body": "Commit sha2 already has scheduled benchmark runs."}),
         )
+
+
+def test_github_request_signature(client, monkeypatch):
+    monkeypatch.setenv("GITHUB_SECRET", "test")
+    response = make_github_webhook_event_for_comment(client)
+    assert response.status_code == 401
+    assert (
+        response.json
+        == "Github's actual X-Hub-Signature-256 dit not match expected X-Hub-Signature-256"
+    )
