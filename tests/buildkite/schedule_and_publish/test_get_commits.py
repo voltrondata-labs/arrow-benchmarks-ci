@@ -1,4 +1,5 @@
 import json
+
 from buildkite.schedule_and_publish.get_commits import get_commits
 from models.benchmarkable import Benchmarkable
 from models.machine import Machine

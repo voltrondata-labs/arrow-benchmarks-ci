@@ -2,11 +2,11 @@ from buildkite.schedule_and_publish.create_benchmark_builds import (
     create_benchmark_builds,
 )
 from buildkite.schedule_and_publish.get_commits import get_commits
-from buildkite.schedule_and_publish.update_benchmark_builds_status import (
-    update_benchmark_builds_status,
-)
 from buildkite.schedule_and_publish.publish_benchmark_results_on_slack import (
     publish_benchmark_results_on_slack,
+)
+from buildkite.schedule_and_publish.update_benchmark_builds_status import (
+    update_benchmark_builds_status,
 )
 from models.benchmarkable import Benchmarkable
 from models.machine import Machine

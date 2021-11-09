@@ -16,6 +16,7 @@ class Conbench:
     def __init__(self):
         self.session = requests.Session()
         self.session.mount("https://", adapter)
+        self.session.mount("http://", adapter)
         self.session.headers = {"Content-Type": "application/json"}
         self.base_url = f"{Config.CONBENCH_URL}/api"
 

@@ -1,6 +1,5 @@
 from buildkite.deploy.update_machine_configs import update_machine_configs
 from models.machine import Machine
-
 from tests.helpers import machine_configs
 
 

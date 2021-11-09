@@ -1,4 +1,5 @@
 import json
+
 import requests
 
 from config import Config
@@ -11,6 +12,7 @@ class Buildkite:
     def __init__(self):
         self.session = requests.Session()
         self.session.mount("https://", adapter)
+        self.session.mount("http://", adapter)
         self.session.headers = {"Authorization": f"Bearer {Config.BUILDKITE_API_TOKEN}"}
         self.base_url = (
             f"{Config.BUILDKITE_API_BASE_URL}/v2/organizations/{Config.BUILDKITE_ORG}"

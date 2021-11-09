@@ -12,7 +12,7 @@ from utils import generate_uuid
 
 def supported_benchmarks_info():
     comment = "Supported benchmarks:\n"
-    for machine in Machine.all():
+    for machine in Machine.all(None, order_by="name"):
         comment += f"{machine.name}: {machine.info}\n"
 
     return comment
@@ -25,6 +25,19 @@ class Notification(Base, BaseMixin):
     benchmarkable_id = NotNull(s.String, s.ForeignKey("benchmarkable.id"))
     message = Nullable(postgresql.JSONB)
     finished_at = Nullable(s.DateTime(timezone=False))
+
+    @property
+    def pull_comment_body(self):
+        if self.message:
+            return self.message["body"]
+
+    @property
+    def pull_comment_url(self):
+        return self.message["url"]
+
+    @property
+    def pull_number(self):
+        return self.benchmarkable.pull_number
 
     def all_runs_finished(self):
         return (

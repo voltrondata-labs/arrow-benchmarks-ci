@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_restful import Api
 
+from api.events import Events
 from api.health_check import HealthCheck
 from api.logs import Logs
 from api.runs import Runs
@@ -18,6 +19,7 @@ def cleanup(_):
     Session.remove()
 
 
+api.add_resource(Events, "/events")
 api.add_resource(HealthCheck, "/health-check")
 api.add_resource(Logs, "/logs")
 api.add_resource(Runs, "/runs/<string:id>")

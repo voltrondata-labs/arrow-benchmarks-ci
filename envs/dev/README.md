@@ -21,7 +21,7 @@ In order to test APIs and CI scripts with real Buildkite, Github, Pypy and Slack
 - SLACK_USER_ID_FOR_WARNINGS
 
 ### Set environment variables
-    source envs/dev-conda/env
+    source envs/dev/env
 
 ### Start DB
     brew services start postgres

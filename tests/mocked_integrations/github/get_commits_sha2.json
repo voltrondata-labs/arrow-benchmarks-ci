@@ -1,0 +1,16 @@
+{
+  "sha": "sha2",
+  "committer": {
+    "login": "random_user",
+    "html_url": "https://github.com/random_user"
+  },
+  "commit": {
+    "message": "Commit message"
+  },
+  "html_url": "https://github.com/apache/arrow/commit/f2f663be0a87e13c9cd5403dea51379deb4cf04d",
+  "parents": [
+    {
+      "sha": "sha1"
+    }
+  ]
+}
