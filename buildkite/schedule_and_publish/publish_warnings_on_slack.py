@@ -28,8 +28,10 @@ def publish_buildkite_build_warnings_on_slack():
     warnings = []
 
     for run in Run.all(status="scheduled"):
-        if run.buildkite_build_run_time_until_now > timedelta(
-            hours=max_benchmark_build_run_time_hours
+        if (
+            run.buildkite_build_run_time_until_now
+            and run.buildkite_build_run_time_until_now
+            > timedelta(hours=max_benchmark_build_run_time_hours)
         ):
             warning = f":warning: Benchmark build {run.buildkite_build_web_url} is running > {max_benchmark_build_run_time_hours} hours."
             warnings.append(warning)
