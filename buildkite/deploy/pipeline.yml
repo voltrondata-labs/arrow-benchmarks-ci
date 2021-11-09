@@ -79,8 +79,8 @@ steps:
       docker-compose -f envs/prod/docker-compose.yml run app python -c 'from buildkite.deploy.update_machine_configs import update_machine_configs; update_machine_configs()'
 
 - label: "Health Check"
-  key: "healhh-check"
+  key: "health-check"
   depends_on: "deploy-app"
   concurrency: 1
   concurrency_group: "arrow-bci-deploy"
-  command: curl https://arrow-bci.ursa.dev/health-check
+  command: curl --fail https://arrow-bci.ursa.dev/health-check
