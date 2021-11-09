@@ -111,7 +111,7 @@ def get_pull_benchmark_filters(comment):
     return filters
 
 
-def create_benchmarkable_and_runs(pull_dict, pull_benchmark_filters):
+def create_benchmarkables_and_runs(pull_dict, pull_benchmark_filters):
     benchmarkable_type = "arrow-commit"
     id = pull_dict["head"]["sha"]
 
@@ -124,7 +124,17 @@ def create_benchmarkable_and_runs(pull_dict, pull_benchmark_filters):
     baseline_id = pull_dict["base"]["sha"]
     baseline_data = github.get_commit(baseline_id)
 
-    Benchmarkable.create(
+    baseline_benchmarkable = Benchmarkable.create(
+        dict(
+            id=baseline_id,
+            type=benchmarkable_type,
+            data=baseline_data,
+            baseline_id=baseline_data["parents"][0]["sha"],
+            reason="arrow-commit",
+        )
+    )
+
+    benchmarkable = Benchmarkable.create(
         dict(
             id=id,
             type=benchmarkable_type,
@@ -135,15 +145,8 @@ def create_benchmarkable_and_runs(pull_dict, pull_benchmark_filters):
             pull_number=pull_dict["number"],
         )
     )
-    Benchmarkable.create(
-        dict(
-            id=baseline_id,
-            type=benchmarkable_type,
-            data=baseline_data,
-            baseline_id=baseline_data["parents"][0]["sha"],
-            reason="arrow-commit",
-        )
-    )
+
+    return baseline_benchmarkable, benchmarkable
 
 
 def is_pull_request_comment_for_ursabot(event):
@@ -180,7 +183,19 @@ class Events(Resource):
             try:
                 benchmark_filters = get_pull_benchmark_filters(event["comment"]["body"])
                 pull_dict = github.get_pull(pull_number)
-                create_benchmarkable_and_runs(pull_dict, benchmark_filters)
+
+                baseline_benchmarkable, benchmarkable = create_benchmarkables_and_runs(
+                    pull_dict, benchmark_filters
+                )
+
+                for run in baseline_benchmarkable.runs + benchmarkable.runs:
+                    if run.status == "created":
+                        run.create_benchmark_build()
+
+                notification = benchmarkable.pull_notification()
+                notification.create_pull_comment(
+                    notification.generate_pull_comment_body()
+                )
             except UnsupportedBenchmarkCommand:
                 github.create_pull_comment(pull_number, benchmark_command_examples)
             except CommitHasScheduledBenchmarkRuns as e:

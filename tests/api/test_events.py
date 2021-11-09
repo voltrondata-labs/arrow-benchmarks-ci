@@ -12,8 +12,8 @@ from tests.helpers import (
     make_github_webhook_event_for_comment,
     mock_offline_machine,
     outbound_requests,
-    test_benchmarkable_id,
     test_baseline_benchmarkable_id,
+    test_benchmarkable_id,
     test_pull_number,
 )
 
@@ -132,24 +132,18 @@ def verify_benchmarkables_and_builds_were_created_for_pull_request_comment(
     assert response.json == ""
     assert len(Benchmarkable.all()) == 2
     assert len(Run.all()) == 2 * len(list(machine_configs().keys()))
+
     benchmarkable = Benchmarkable.get(test_benchmarkable_id)
     baseline_benchmarkable = Benchmarkable.get(test_baseline_benchmarkable_id)
-    expected_outbound_requests = [
-        f"http://mocked-integrations:9999/github/repos/apache/arrow/pulls/1234",
-        f"http://mocked-integrations:9999/github/repos/apache/arrow/commits/{test_benchmarkable_id}",
-        f"http://mocked-integrations:9999/github/repos/apache/arrow/commits/{test_baseline_benchmarkable_id}",
-    ]
-
-    for i in range(len(expected_outbound_requests)):
-        assert (
-            expected_outbound_requests[i]
-            == outbound_requests[i - len(expected_outbound_requests)][0]
-        )
 
     assert benchmarkable
     assert baseline_benchmarkable
     assert benchmarkable.baseline_id == test_baseline_benchmarkable_id
     assert benchmarkable.pull_number == test_pull_number
+    assert benchmarkable.pull_notification().message == {
+        "url": "http://mocked-integrations:9999/github/repos/apache/arrow/issues/comments/1234",
+        "body": "test",
+    }
     for machine_name, (
         expected_filters,
         expected_skip_reason,
@@ -158,6 +152,10 @@ def verify_benchmarkables_and_builds_were_created_for_pull_request_comment(
         machine_run = benchmarkable.machine_run(machine)
         assert machine_run.filters == expected_filters
         assert machine_run.skip_reason == expected_skip_reason
+        if expected_skip_reason:
+            assert machine_run.status == "skipped"
+        else:
+            assert machine_run.status == "scheduled"
         assert (
             baseline_benchmarkable.machine_run(machine).filters
             == machine.default_filters["arrow-commit"]
