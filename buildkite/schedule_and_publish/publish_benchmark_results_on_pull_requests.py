@@ -9,13 +9,15 @@ def publish_benchmark_results_on_pull_requests():
     )
 
     for notification in notifications:
-        new_comment_body = notification.generate_pull_comment_body()
-
         # TODO: remove this code once done testing
         if notification.pull_number not in [1234, 9272]:
-            print(notification.pull_number)
-            print(new_comment_body)
+            print(f"Skipping {notification.pull_number}")
             continue
+
+        if not notification.benchmarkable.baseline:
+            continue
+
+        new_comment_body = notification.generate_pull_comment_body()
 
         if not notification.pull_comment_body:
             notification.create_pull_comment(new_comment_body)
