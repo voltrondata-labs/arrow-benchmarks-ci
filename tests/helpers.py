@@ -11,6 +11,11 @@ from models.memory_usage import MemoryUsage
 from models.notification import Notification
 from models.run import Run
 
+outbound_requests = []
+test_pull_number = 1234
+test_benchmarkable_id = "sha2"
+test_baseline_benchmarkable_id = "sha1"
+
 
 def delete_data():
     for model in [
@@ -70,6 +75,3 @@ def make_github_webhook_event_for_comment(
         data=data,
         headers={"X-Hub-Signature-256": signature},
     )
-
-
-outbound_requests = []

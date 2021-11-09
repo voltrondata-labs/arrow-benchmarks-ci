@@ -49,6 +49,16 @@
     - reply_http:
         status_code: 201
         body_from_file: './github/post_issues_comments.json'
+- key: patch_issues_comments
+  kind: Behavior
+  expect:
+    http:
+      method: PATCH
+      path: /github/repos/apache/arrow/issues/comments/1234
+  actions:
+    - reply_http:
+        status_code: 201
+        body_from_file: './github/patch_issues_comments.json'
 - key: create_pipeline
   kind: Behavior
   expect:

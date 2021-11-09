@@ -12,6 +12,9 @@ from tests.helpers import (
     make_github_webhook_event_for_comment,
     mock_offline_machine,
     outbound_requests,
+    test_benchmarkable_id,
+    test_baseline_benchmarkable_id,
+    test_pull_number,
 )
 
 pull_comments_with_expected_machine_run_filters_and_skip_reason = {
@@ -121,10 +124,6 @@ pull_comments_with_unsupported_ursabot_commands = [
     "@ursabot please benchmark name=file-write lang=C++",
 ]
 
-expected_pull_number = 1234
-expected_benchmarkable_id = "sha2"
-expected_baseline_benchmarkable_id = "sha1"
-
 
 def verify_benchmarkables_and_builds_were_created_for_pull_request_comment(
     response, expected_runs
@@ -133,12 +132,12 @@ def verify_benchmarkables_and_builds_were_created_for_pull_request_comment(
     assert response.json == ""
     assert len(Benchmarkable.all()) == 2
     assert len(Run.all()) == 2 * len(list(machine_configs().keys()))
-    benchmarkable = Benchmarkable.get(expected_benchmarkable_id)
-    baseline_benchmarkable = Benchmarkable.get(expected_baseline_benchmarkable_id)
+    benchmarkable = Benchmarkable.get(test_benchmarkable_id)
+    baseline_benchmarkable = Benchmarkable.get(test_baseline_benchmarkable_id)
     expected_outbound_requests = [
         f"http://mocked-integrations:9999/github/repos/apache/arrow/pulls/1234",
-        f"http://mocked-integrations:9999/github/repos/apache/arrow/commits/{expected_benchmarkable_id}",
-        f"http://mocked-integrations:9999/github/repos/apache/arrow/commits/{expected_baseline_benchmarkable_id}",
+        f"http://mocked-integrations:9999/github/repos/apache/arrow/commits/{test_benchmarkable_id}",
+        f"http://mocked-integrations:9999/github/repos/apache/arrow/commits/{test_baseline_benchmarkable_id}",
     ]
 
     for i in range(len(expected_outbound_requests)):
@@ -149,8 +148,8 @@ def verify_benchmarkables_and_builds_were_created_for_pull_request_comment(
 
     assert benchmarkable
     assert baseline_benchmarkable
-    assert benchmarkable.baseline_id == expected_baseline_benchmarkable_id
-    assert benchmarkable.pull_number == expected_pull_number
+    assert benchmarkable.baseline_id == test_baseline_benchmarkable_id
+    assert benchmarkable.pull_number == test_pull_number
     for machine_name, (
         expected_filters,
         expected_skip_reason,
@@ -187,7 +186,7 @@ def test_post_events_for_pr_with_unsupported_ursabot_commands(client):
         assert response.json == ""
         assert len(Benchmarkable.all()) == 0
         assert outbound_requests[-1] == (
-            f"http://mocked-integrations:9999/github/repos/apache/arrow/issues/{expected_pull_number}/comments",
+            f"http://mocked-integrations:9999/github/repos/apache/arrow/issues/{test_pull_number}/comments",
             json.dumps({"body": (benchmark_command_examples)}),
         )
 
@@ -217,14 +216,15 @@ def test_post_events_for_pr_with_existing_results(client):
         assert len(Benchmarkable.all()) == 2
         assert len(Run.all()) == 2 * len(list(machine_configs().keys()))
         assert outbound_requests[-1] == (
-            f"http://mocked-integrations:9999/github/repos/apache/arrow/issues/{expected_pull_number}/comments",
+            f"http://mocked-integrations:9999/github/repos/apache/arrow/issues/{test_pull_number}/comments",
             json.dumps({"body": "Commit sha2 already has scheduled benchmark runs."}),
         )
 
 
-def test_github_request_signature(client):
+def test_github_request_signature(client, monkeypatch):
     Config.GITHUB_SECRET = "test"
     response = make_github_webhook_event_for_comment(client)
+    Config.GITHUB_SECRET = "github_secret"
     assert response.status_code == 401
     assert (
         response.json

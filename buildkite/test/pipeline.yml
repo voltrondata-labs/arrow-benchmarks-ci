@@ -2,8 +2,6 @@ steps:
   - label: "Test CI (Buildkite) Scripts"
     key: "test-ci-scripts"
     command:
-      - curl --fail https://arrow-bci.ursa.dev/health-check
-      - curl --fail https://arrow-bci.ursa.dev/health-checkr
       - docker-compose -f envs/test/docker-compose.yml down
       - docker-compose -f envs/test/docker-compose.yml build
       - docker-compose -f envs/test/docker-compose.yml run app pytest -vv tests/buildkite/
