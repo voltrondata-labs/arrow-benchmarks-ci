@@ -35,6 +35,7 @@ steps:
         s/{{DB_USERNAME}}/$(echo -n $DB_USERNAME | base64 -w 0)/g;\
         s/{{GITHUB_API_TOKEN}}/$(echo -n $GITHUB_API_TOKEN | base64 -w 0)/g;\
         s/{{GITHUB_SECRET}}/$(echo -n $GITHUB_SECRET | base64 -w 0)/g;\
+        s/{{SECRET}}/$(echo -n $SECRET | base64 -w 0)/g;\
         s/{{SLACK_API_TOKEN}}/$(echo -n $SLACK_API_TOKEN | base64 -w 0)/g;\
         s/{{SLACK_CHANNEL_FOR_BENCHMARK_RESULTS}}/$(echo -n $SLACK_CHANNEL_FOR_BENCHMARK_RESULTS | base64 -w 0)/g;\
         s/{{SLACK_USER_ID_FOR_WARNINGS}}/$(echo -n $SLACK_USER_ID_FOR_WARNINGS | base64 -w 0)/g" | kubectl apply -f -
@@ -83,4 +84,4 @@ steps:
     depends_on: "deploy-app"
     concurrency: 1
     concurrency_group: "arrow-bci-deploy"
-    command: curl --fail https://arrow-bci.ursa.dev/health-check
+    command: curl --retry 5 --fail https://arrow-bci.ursa.dev/health-check

@@ -1,10 +1,10 @@
 import sqlalchemy as s
 from sqlalchemy.dialects import postgresql
-from sqlalchemy.orm import relationship, backref
+from sqlalchemy.orm import backref, relationship
 
 from config import Config
 from db import Base, Session
-from integrations.conbench import conbench, ConbenchNotFoundException
+from integrations.conbench import ConbenchNotFoundException, conbench
 from logger import log
 from models.base import BaseMixin, NotNull, Nullable
 from models.machine import Machine

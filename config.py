@@ -31,6 +31,8 @@ class Config:
 
     PYTHON_VERSION_FOR_BENCHMARK_BUILDS = "3.8"
 
+    SECRET = os.getenv("SECRET")
+
     SLACK_API_BASE_URL = os.getenv("SLACK_API_BASE_URL")
     SLACK_API_TOKEN = os.getenv("SLACK_API_TOKEN")
     SLACK_CHANNEL_FOR_BENCHMARK_RESULTS = os.getenv(
