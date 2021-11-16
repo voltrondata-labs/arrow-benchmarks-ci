@@ -3,6 +3,8 @@ from sqlalchemy.dialects import postgresql
 
 from db import Base
 from models.base import BaseMixin, NotNull, Nullable
+from models.run import Run
+from utils import UnauthorizedException
 
 
 class BenchmarkGroupExecution(Base, BaseMixin):
@@ -26,3 +28,8 @@ class BenchmarkGroupExecution(Base, BaseMixin):
     stderr = Nullable(s.Text)
     total_machine_virtual_memory = Nullable(s.BigInteger)
     created_at = NotNull(s.DateTime(timezone=False), server_default=s.sql.func.now())
+
+    @classmethod
+    def validate_data(cls, current_machine, data):
+        if not Run.first(id=data["run_id"], machine_name=current_machine.name):
+            raise UnauthorizedException

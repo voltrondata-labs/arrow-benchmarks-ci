@@ -16,6 +16,7 @@ export GITHUB_SECRET="github_secret"
 export MAX_COMMITS_TO_FETCH=5
 export PIPY_API_BASE_URL=https://pypi.org/pypi
 export PIPY_PROJECT=pyarrow
+export SECRET=secret
 export SLACK_API_BASE_URL="https://slack.com/api"
 export SLACK_API_TOKEN=token
 export SLACK_CHANNEL_FOR_BENCHMARK_RESULTS=channel

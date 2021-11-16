@@ -1,6 +1,7 @@
 import json
-import sqlalchemy as s
 from datetime import datetime
+
+import sqlalchemy as s
 from sqlalchemy.dialects import postgresql
 
 from config import Config

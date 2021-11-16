@@ -26,6 +26,7 @@ services:
       MAX_COMMITS_TO_FETCH: 5
       PIPY_API_BASE_URL: "http://mocked-integrations:9999/pipy"
       PIPY_PROJECT: "pyarrow"
+      SECRET: "secret"
       SLACK_API_BASE_URL: "http://mocked-integrations:9999/slack"
       SLACK_API_TOKEN: "token"
       SLACK_CHANNEL_FOR_BENCHMARK_RESULTS: "test"

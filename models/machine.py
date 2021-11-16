@@ -1,9 +1,13 @@
-from copy import deepcopy
 import socket
-import sqlalchemy as s
-from sqlalchemy.dialects import postgresql
-from sqlalchemy.orm import relationship, backref
+from copy import deepcopy
+from datetime import datetime
 
+import sqlalchemy as s
+from authlib.jose import jwt
+from sqlalchemy.dialects import postgresql
+from sqlalchemy.orm import backref, relationship
+
+from config import Config
 from db import Base
 from integrations.buildkite import buildkite
 from logger import log
@@ -21,7 +25,6 @@ class Machine(Base, BaseMixin):
     hostname = Nullable(s.String)
     ip_address = Nullable(s.String)
     port = Nullable(s.Integer)
-    api_token = Nullable(s.String)
     runs = relationship("Run", backref=backref("machine", lazy="joined"))
 
     @property
@@ -103,3 +106,9 @@ class Machine(Base, BaseMixin):
                 return False
             finally:
                 s.close()
+
+    def generate_api_access_token(self):
+        header = {"alg": "HS256"}
+        payload = {"machine": self.name, "created_at": str(datetime.utcnow())}
+        key = Config.SECRET
+        return jwt.encode(header, payload, key).decode()

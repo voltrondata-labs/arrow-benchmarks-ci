@@ -5,8 +5,8 @@ Revises:
 Create Date: 2021-10-19 17:08:20.360069
 
 """
-from alembic import op
 import sqlalchemy as sa
+from alembic import op
 from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.
@@ -74,7 +74,6 @@ def upgrade():
         sa.Column("hostname", sa.String(), nullable=True),
         sa.Column("ip_address", sa.String(), nullable=True),
         sa.Column("port", sa.Integer(), nullable=True),
-        sa.Column("api_token", sa.String(), nullable=True),
         sa.PrimaryKeyConstraint("name"),
     )
     op.create_table(
