@@ -1,0 +1,5 @@
+steps:
+  - label: "Test Benchmark Build"
+    command:
+      - docker build -f buildkite/benchmark-test/Dockerfile . -t benchmark-test
+      - docker run -i benchmark-test python -m buildkite.benchmark.run_benchmark_groups
