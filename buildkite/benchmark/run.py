@@ -293,8 +293,9 @@ class Run:
     def print_env_vars():
         for var, value in sorted(os.environ.items()):
             if "PASSWORD" in var or "SECRET" in var or "TOKEN" in var:
-                continue
-            logging.info(f"{var}={value}")
+                logging.info(f"{var}=[REDACTED]{value[0:1]}")
+            else:
+                logging.info(f"{var}={value}")
 
     def benchmark_groups_for_lang(self, lang):
         return list(
