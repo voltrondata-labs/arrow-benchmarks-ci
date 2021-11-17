@@ -112,6 +112,11 @@ COPY buildkite/benchmark/utils.sh /build/buildkite/benchmark/utils.sh
 RUN bash buildkite/benchmark/utils.sh create_conda_env_with_arrow
 RUN bash buildkite/benchmark/utils.sh install_conbench
 
-ENV FILTERS="{\"name\":\"dataset-select\"}"
 COPY buildkite/benchmark /build/buildkite/benchmark
 COPY utils.py /build/utils.py
+
+ENV FILTERS="{\"lang\":\"Python,R,JavaScript\"}"
+ENV RUN_ID="test1234"
+ENV RUN_NAME="test1234"
+ENV MACHINE="docker-test"
+ENV CONBENCH_URL="https://conbench.ursa.dev"
