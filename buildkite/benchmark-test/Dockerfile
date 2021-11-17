@@ -62,7 +62,46 @@ RUN apt install -y -q gcc g++ make
 
 WORKDIR /build
 
-ENV ARROW_REPO=https://github.com/apache/arrow.git
+# Setting Arrow build env vars in Dockerfile so they are available
+# to docker containers and RUN commands during docker build.
+# These env vars can only be set by "bash buildkite/benchmark/utils.sh create_conda_env_with_arrow"
+#command when it is run outside of docker image/container
+ENV ARROW_BUILD_TESTS="OFF"
+ENV ARROW_BUILD_TYPE="release"
+ENV ARROW_DEPENDENCY_SOURCE="AUTO"
+ENV ARROW_DATASET="ON"
+ENV ARROW_DEFAULT_MEMORY_POOL="mimalloc"
+ENV ARROW_ENABLE_UNSAFE_MEMORY_ACCESS="true"
+ENV ARROW_ENABLE_NULL_CHECK_FOR_GET="false"
+ENV ARROW_FLIGHT="OFF"
+ENV ARROW_GANDIVA="OFF"
+ENV ARROW_HDFS="ON"
+ENV ARROW_HOME=$CONDA_PREFIX
+ENV ARROW_INSTALL_NAME_RPATH="OFF"
+ENV ARROW_MIMALLOC="ON"
+ENV ARROW_NO_DEPRECATED_API="ON"
+ENV ARROW_ORC="ON"
+ENV ARROW_PARQUET="ON"
+ENV ARROW_PLASMA="ON"
+ENV ARROW_PYTHON="ON"
+ENV ARROW_S3="ON"
+ENV ARROW_USE_ASAN="OFF"
+ENV ARROW_USE_CCACHE="ON"
+ENV ARROW_USE_UBSAN="OFF"
+ENV ARROW_WITH_BROTLI="ON"
+ENV ARROW_WITH_BZ2="ON"
+ENV ARROW_WITH_LZ4="ON"
+ENV ARROW_WITH_SNAPPY="ON"
+ENV ARROW_WITH_ZLIB="ON"
+ENV ARROW_WITH_ZSTD="ON"
+ENV GTest_SOURCE="BUNDLED"
+ENV ORC_SOURCE="BUNDLED"
+ENV PARQUET_BUILD_EXAMPLES="ON"
+ENV PARQUET_BUILD_EXECUTABLES="ON"
+ENV PYTHON="python"
+ENV LD_LIBRARY_PATH=$CONDA_PREFIX/lib:$LD_LIBRARY_PATH
+
+ENV ARROW_REPO="https://github.com/apache/arrow.git"
 ENV BENCHMARKABLE_TYPE="arrow-commit"
 ENV BENCHMARKABLE="b305edb2db9177e1a2b56a7713bfe49259315961"
 ENV PYTHON_VERSION="3.8"
@@ -71,6 +110,7 @@ ENV PATH="/root/miniconda3/bin:${PATH}"
 COPY buildkite/benchmark/utils.sh /build/buildkite/benchmark/utils.sh
 RUN bash buildkite/benchmark/utils.sh create_conda_env_with_arrow
 RUN bash buildkite/benchmark/utils.sh install_conbench
+
 ENV FILTERS="{\"name\":\"dataset-select\"}"
 COPY buildkite/benchmark /build/buildkite/benchmark
 COPY utils.py /build/utils.py
