@@ -1,5 +1,6 @@
 steps:
   - label: "Test Benchmark Build"
     command:
+      - set -x
       - docker build -f buildkite/benchmark-test/Dockerfile . -t benchmark-test
       - docker run -i --env CONBENCH_EMAIL=$CONBENCH_EMAIL --env CONBENCH_PASSWORD=$CONBENCH_PASSWORD benchmark-test python -m buildkite.benchmark.run_benchmark_groups

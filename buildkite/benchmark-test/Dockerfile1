@@ -1,0 +1,9 @@
+FROM ubuntu:20.04
+
+RUN apt-get -y update
+RUN apt-get -y upgrade
+RUN apt-get install python3 -y
+RUN apt-get install python3-pip -y
+RUN apt-get install -y -q curl
+RUN curl -LO https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+RUN bash Miniconda3-latest-Linux-x86_64.sh -b
