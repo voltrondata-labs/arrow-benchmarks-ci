@@ -7,6 +7,7 @@ RUN apt-get install python3-pip -y
 RUN apt-get install -y -q curl
 RUN curl -LO https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
 RUN bash Miniconda3-latest-Linux-x86_64.sh -b
+ENV PATH="/root/miniconda3/bin:${PATH}"
 
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get install -y -q --no-install-recommends \
@@ -60,12 +61,10 @@ RUN apt-get install -y -q nodejs
 RUN apt install -y -q yarn
 RUN apt install -y -q gcc g++ make
 
-WORKDIR /build
-
-# Setting Arrow build env vars in Dockerfile so they are available
-# to docker containers and RUN commands during docker build.
+# Set Arrow build env vars in Dockerfile so they are available
+# to RUN commands during docker build process.
 # These env vars can only be set by "bash buildkite/benchmark/utils.sh create_conda_env_with_arrow"
-#command when it is run outside of docker image/container
+# command when it is run outside of docker build process
 ENV ARROW_BUILD_TESTS="OFF"
 ENV ARROW_BUILD_TYPE="release"
 ENV ARROW_DEPENDENCY_SOURCE="AUTO"
@@ -101,12 +100,14 @@ ENV PARQUET_BUILD_EXECUTABLES="ON"
 ENV PYTHON="python"
 ENV LD_LIBRARY_PATH="/root/miniconda3/envs/arrow-commit/lib":$LD_LIBRARY_PATH
 
+# Set benchmark build env vars
 ENV ARROW_REPO="https://github.com/apache/arrow.git"
 ENV BENCHMARKABLE_TYPE="arrow-commit"
 ENV BENCHMARKABLE="b305edb2db9177e1a2b56a7713bfe49259315961"
 ENV PYTHON_VERSION="3.8"
 ENV BENCHMARKS_DATA_DIR="/test"
-ENV PATH="/root/miniconda3/bin:${PATH}"
+
+WORKDIR /build
 COPY buildkite/benchmark/utils.sh /build/buildkite/benchmark/utils.sh
 RUN bash buildkite/benchmark/utils.sh create_conda_env_with_arrow
 RUN bash buildkite/benchmark/utils.sh install_conbench
