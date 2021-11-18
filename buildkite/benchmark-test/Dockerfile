@@ -66,65 +66,8 @@ RUN apt-get update -y -q && \
 # the same way in the docker container
 RUN curl -LO https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
 RUN bash Miniconda3-latest-Linux-x86_64.sh -b
-ENV PATH="/root/miniconda3/bin:${PATH}"
-RUN eval "$(command '/root/miniconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
-
-# Set Arrow build env vars in Dockerfile so they are available
-# to RUN commands during docker build process and docker containers.
-# These env vars can only be set by "bash buildkite/benchmark/utils.sh create_conda_env_with_arrow"
-# command when it is run outside of docker build process
-ENV ARROW_BUILD_TESTS="OFF" \
-    ARROW_BUILD_TYPE="release"  \
-    ARROW_DEPENDENCY_SOURCE="AUTO"  \
-    ARROW_DATASET="ON"  \
-    ARROW_DEFAULT_MEMORY_POOL="mimalloc"  \
-    ARROW_ENABLE_UNSAFE_MEMORY_ACCESS="true"  \
-    ARROW_ENABLE_NULL_CHECK_FOR_GET="false"  \
-    ARROW_FLIGHT="OFF"  \
-    ARROW_GANDIVA="OFF"  \
-    ARROW_HDFS="ON"  \
-    ARROW_HOME="/root/miniconda3/envs/arrow-commit"  \
-    ARROW_INSTALL_NAME_RPATH="OFF"  \
-    ARROW_MIMALLOC="ON"  \
-    ARROW_NO_DEPRECATED_API="ON"  \
-    ARROW_ORC="ON"  \
-    ARROW_PARQUET="ON"  \
-    ARROW_PLASMA="ON"  \
-    ARROW_PYTHON="ON"  \
-    ARROW_S3="ON"  \
-    ARROW_USE_ASAN="OFF"  \
-    ARROW_USE_CCACHE="ON"  \
-    ARROW_USE_UBSAN="OFF"  \
-    ARROW_WITH_BROTLI="ON"  \
-    ARROW_WITH_BZ2="ON"  \
-    ARROW_WITH_LZ4="ON"  \
-    ARROW_WITH_SNAPPY="ON"  \
-    ARROW_WITH_ZLIB="ON"  \
-    ARROW_WITH_ZSTD="ON"  \
-    GTest_SOURCE="BUNDLED"  \
-    ORC_SOURCE="BUNDLED"  \
-    PARQUET_BUILD_EXAMPLES="ON"  \
-    PARQUET_BUILD_EXECUTABLES="ON"  \
-    PYTHON="python"  \
-    LD_LIBRARY_PATH="/root/miniconda3/envs/arrow-commit/lib":$LD_LIBRARY_PATH
-
-# Set benchmark build env vars
-ENV ARROW_REPO="https://github.com/apache/arrow.git" \
-    BENCHMARKABLE_TYPE="arrow-commit" \
-    BENCHMARKABLE="641554b0bcce587549bfcfd0cde3cb4bc23054aa" \
-    PYTHON_VERSION="3.8" \
-    BENCHMARKS_DATA_DIR="/test"
-
 WORKDIR /build
 COPY buildkite/benchmark/utils.sh /build/buildkite/benchmark/utils.sh
-RUN bash buildkite/benchmark/utils.sh create_conda_env_with_arrow
-RUN bash buildkite/benchmark/utils.sh install_conbench
-
 COPY buildkite/benchmark /build/buildkite/benchmark
 COPY utils.py /build/utils.py
-
-ENV FILTERS="{}"
-ENV RUN_ID="test1234567"
-ENV RUN_NAME="test1234567"
-ENV MACHINE="docker-test"
-ENV CONBENCH_URL="https://conbench.ursa.dev"
+COPY buildkite/benchmark-test/run.sh /build/buildkite/benchmark-test/run.sh
