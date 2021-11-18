@@ -10,7 +10,6 @@ RUN apt-get update -y -q && \
     rm -rf /var/lib/apt/lists/*
 
 # Install C++, Java and R dependencies
-ARG r=4.1
 ARG jdk=8
 RUN apt-get update -y -q && \
     apt-get install -y -q --no-install-recommends \
@@ -48,8 +47,7 @@ RUN apt-get update -y -q && \
         pkg-config \
         protobuf-compiler \
         rapidjson-dev \
-        r-recommended=${r}* \
-        r-base=${r}* \
+        r-base \
         tzdata \
         wget && \
     apt-get clean && \
