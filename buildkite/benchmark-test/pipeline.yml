@@ -14,4 +14,4 @@ steps:
         --env RUN_NAME=${RUN_NAME:-"benchmark build test: $BUILDKITE_BUILD_ID"} \
         --env MACHINE="docker-container-for-testing-benchmark-builds" \
         --env CONBENCH_URL="https://conbench.ursa.dev" \
-        benchmark-test source buildkite/benchmark/utils.sh build_arrow_and_run_benchmark_groups
+        benchmark-test bash buildkite/benchmark/utils.sh build_arrow_and_run_benchmark_groups
