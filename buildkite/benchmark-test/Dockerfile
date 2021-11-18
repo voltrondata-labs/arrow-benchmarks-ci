@@ -117,8 +117,8 @@ COPY buildkite/benchmark /build/buildkite/benchmark
 COPY utils.py /build/utils.py
 
 ENV FILTERS="{\"lang\":\"Java,Python,R,JavaScript,C++\"}"
-ENV RUN_ID="test1234"
-ENV RUN_NAME="test1234"
+ENV RUN_ID="test12345"
+ENV RUN_NAME="test12345"
 ENV MACHINE="docker-test"
 ENV CONBENCH_URL="https://conbench.ursa.dev"
 
