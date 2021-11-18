@@ -293,7 +293,7 @@ class Run:
     def print_env_vars():
         for var, value in sorted(os.environ.items()):
             if "PASSWORD" in var or "SECRET" in var or "TOKEN" in var:
-                logging.info(f"{var}=[REDACTED]{value[0:1]}")
+                logging.info(f"{var}=[REDACTED]")
             else:
                 logging.info(f"{var}={value}")
 
