@@ -115,7 +115,7 @@ RUN bash buildkite/benchmark/utils.sh install_conbench
 COPY buildkite/benchmark /build/buildkite/benchmark
 COPY utils.py /build/utils.py
 
-ENV FILTERS="{\"lang\":\"Java\"}"
+ENV FILTERS="{\"lang\":\"R\"}"
 ENV RUN_ID="test1234"
 ENV RUN_NAME="test1234"
 ENV MACHINE="docker-test"
