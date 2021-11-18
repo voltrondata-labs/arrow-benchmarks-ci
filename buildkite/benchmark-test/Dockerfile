@@ -2,6 +2,7 @@ FROM ubuntu:20.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update -y -q && \
+    apt-get -y upgrade && \
     apt-get install -y -q \
         python3 \
         python3-pip \
@@ -51,8 +52,8 @@ RUN apt-get install -y -q --no-install-recommends \
         r-base=${r}* \
         tzdata \
         wget && \
-apt-get clean && \
-rm -rf /var/lib/apt/lists*
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists*
 
 # Install JavaScript dependencies
 ARG node=14
