@@ -79,3 +79,5 @@ COPY buildkite/benchmark/utils.sh /build/buildkite/benchmark/utils.sh
 COPY buildkite/benchmark /build/buildkite/benchmark
 COPY utils.py /build/utils.py
 COPY buildkite/benchmark-test/run.sh /build/buildkite/benchmark-test/run.sh
+
+RUN update-java-alternatives -s java-1.8.0-openjdk-amd64
