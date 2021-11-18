@@ -11,7 +11,7 @@ ENV PATH="/root/miniconda3/bin:${PATH}"
 
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get install -y -q --no-install-recommends \
-            autoconf \
+        autoconf \
         ca-certificates \
         ccache \
         cmake \
@@ -60,6 +60,7 @@ RUN curl -fsSL https://deb.nodesource.com/setup_14.x
 RUN apt-get install -y -q nodejs
 RUN apt install -y -q yarn
 RUN apt install -y -q gcc g++ make
+RUN eval "$(command '/root/miniconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
 
 # Set Arrow build env vars in Dockerfile so they are available
 # to RUN commands during docker build process.
@@ -115,7 +116,7 @@ RUN bash buildkite/benchmark/utils.sh install_conbench
 COPY buildkite/benchmark /build/buildkite/benchmark
 COPY utils.py /build/utils.py
 
-ENV FILTERS="{\"lang\":\"JavaScript\"}"
+ENV FILTERS="{\"lang\":\"R\"}"
 ENV RUN_ID="test1234"
 ENV RUN_NAME="test1234"
 ENV MACHINE="docker-test"
