@@ -11,39 +11,39 @@ ENV PATH="/root/miniconda3/bin:${PATH}"
 
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get install -y -q --no-install-recommends \
-    autoconf \
-    ca-certificates \
-    ccache \
-    cmake \
-    g++ \
-    gcc \
-    gdb \
-    git \
-    libbenchmark-dev \
-    libboost-filesystem-dev \
-    libboost-regex-dev \
-    libboost-system-dev \
-    libbrotli-dev \
-    libbz2-dev \
-    libgflags-dev \
-    libcurl4-openssl-dev \
-    libgoogle-glog-dev \
-    liblz4-dev \
-    libprotobuf-dev \
-    libprotoc-dev \
-    libre2-dev \
-    libsnappy-dev \
-    libssl-dev \
-    libthrift-dev \
-    libutf8proc-dev \
-    libzstd-dev \
-    make \
-    ninja-build \
-    pkg-config \
-    protobuf-compiler \
-    rapidjson-dev \
-    tzdata \
-    wget && \
+            autoconf \
+        ca-certificates \
+        ccache \
+        cmake \
+        g++ \
+        gcc \
+        gdb \
+        git \
+        libbenchmark-dev \
+        libboost-filesystem-dev \
+        libboost-regex-dev \
+        libboost-system-dev \
+        libbrotli-dev \
+        libbz2-dev \
+        libgflags-dev \
+        libcurl4-openssl-dev \
+        libgoogle-glog-dev \
+        liblz4-dev \
+        libprotobuf-dev \
+        libprotoc-dev \
+        libre2-dev \
+        libsnappy-dev \
+        libssl-dev \
+        libthrift-dev \
+        libutf8proc-dev \
+        libzstd-dev \
+        make \
+        ninja-build \
+        pkg-config \
+        protobuf-compiler \
+        rapidjson-dev \
+        tzdata \
+        wget && \
 apt-get clean && \
 rm -rf /var/lib/apt/lists*
 
@@ -115,7 +115,7 @@ RUN bash buildkite/benchmark/utils.sh install_conbench
 COPY buildkite/benchmark /build/buildkite/benchmark
 COPY utils.py /build/utils.py
 
-ENV FILTERS="{\"lang\":\"R,JavaScript\"}"
+ENV FILTERS="{\"lang\":\"JavaScript\"}"
 ENV RUN_ID="test1234"
 ENV RUN_NAME="test1234"
 ENV MACHINE="docker-test"
