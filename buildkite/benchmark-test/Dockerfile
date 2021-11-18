@@ -123,4 +123,4 @@ ENV CONBENCH_URL="https://conbench.ursa.dev"
 
 RUN apt-get install -y -q --no-install-recommends openjdk-8-jdk
 RUN apt-get install -y -q --no-install-recommends maven
-RUN apt-get install -y -q --no-install-recommends r-base
+RUN apt-get install -y -q r-base
