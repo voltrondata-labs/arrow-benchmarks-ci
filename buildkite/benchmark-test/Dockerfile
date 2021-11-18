@@ -1,13 +1,7 @@
 FROM ubuntu:20.04
 
 ENV DEBIAN_FRONTEND=noninteractive
-RUN apt-get update -y -q && \
-    apt-get install -y -q \
-        python3 \
-        python3-pip \
-        python3-dev && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+RUN apt-get upgrade
 
 # Install C++ dependencies
 RUN apt-get update -y -q && \
@@ -44,11 +38,19 @@ RUN apt-get update -y -q && \
         pkg-config \
         protobuf-compiler \
         rapidjson-dev \
-        r-base \
         tzdata \
         wget && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists*
+
+# Install Python dependencies
+RUN apt-get update -y -q && \
+    apt-get install -y -q \
+        python3 \
+        python3-pip \
+        python3-dev && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 # Install R dependencies
 RUN apt-get update -y -q && \
@@ -69,15 +71,16 @@ RUN apt-get update -y -q && \
     apt-get install -y -q --no-install-recommends openjdk-8-jdk maven && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists*
+RUN update-java-alternatives -s java-1.8.0-openjdk-amd64
 
-# Install conda so all benchmark build scripts that are run on bare metal in conda env are run
-# the same way in the docker container
+# Since this docker image is used for testing benchmark builds that are run on bare metal in conda env,
+# install Conda so all benchmark build scripts are run the same way in the docker container
 RUN curl -LO https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
 RUN bash Miniconda3-latest-Linux-x86_64.sh -b
+
+# Copy files necessary for running bencmarks
 WORKDIR /build
 COPY buildkite/benchmark/utils.sh /build/buildkite/benchmark/utils.sh
 COPY buildkite/benchmark /build/buildkite/benchmark
 COPY utils.py /build/utils.py
 COPY buildkite/benchmark-test/run.sh /build/buildkite/benchmark-test/run.sh
-
-RUN update-java-alternatives -s java-1.8.0-openjdk-amd64
