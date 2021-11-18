@@ -13,7 +13,7 @@ RUN apt-get update -y -q && \
 ARG r=4.1
 ARG jdk=8
 RUN apt-get install -y -q --no-install-recommends \
-        autoconf \a
+        autoconf \
         ca-certificates \
         ccache \
         cmake \
