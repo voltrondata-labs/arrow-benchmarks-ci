@@ -54,12 +54,12 @@ RUN apt-get install -y -q \
 apt-get clean && \
 rm -rf /var/lib/apt/lists/*
 
-RUN apt update && apt -y upgrade
-RUN apt -y install curl dirmngr apt-transport-https lsb-release ca-certificates
-RUN curl -fsSL https://deb.nodesource.com/setup_14.x
-RUN apt-get install -y -q nodejs
-RUN apt install -y -q yarn
-RUN apt install -y -q gcc g++ make
+ARG node=14
+RUN wget -q -O - https://deb.nodesource.com/setup_${node}.x | bash - && \
+    apt-get install -y nodejs && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* && \
+    npm install -g yarn
 RUN eval "$(command '/root/miniconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
 
 # Set Arrow build env vars in Dockerfile so they are available
@@ -116,7 +116,7 @@ RUN bash buildkite/benchmark/utils.sh install_conbench
 COPY buildkite/benchmark /build/buildkite/benchmark
 COPY utils.py /build/utils.py
 
-ENV FILTERS="{\"lang\":\"Java,Python,R,JavaScript,C++\"}"
+ENV FILTERS="{\"lang\":\"JavaScript\"}"
 ENV RUN_ID="test12345"
 ENV RUN_NAME="test12345"
 ENV MACHINE="docker-test"
