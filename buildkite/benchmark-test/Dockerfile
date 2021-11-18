@@ -121,5 +121,5 @@ ENV RUN_NAME="test1234"
 ENV MACHINE="docker-test"
 ENV CONBENCH_URL="https://conbench.ursa.dev"
 
-RUN apt-get install openjdk-8-jdk
-RUN apt-get install maven
+RUN apt-get install -y -q --no-install-recommends openjdk-8-jdk
+RUN apt-get install -y -q --no-install-recommends maven
