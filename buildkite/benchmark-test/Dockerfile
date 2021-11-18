@@ -1,9 +1,9 @@
 FROM ubuntu:20.04
 
 ENV DEBIAN_FRONTEND=noninteractive
-RUN apt-get update -y -q && \
-    apt-get -y upgrade && \
-    apt-get install -y -q \
+RUN apt-get -y update
+RUN apt-get -y upgrade
+RUN apt-get install -y -q \
         python3 \
         python3-pip \
         python3-dev && \
