@@ -9,8 +9,7 @@ RUN apt-get update -y -q && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# Install C++, Java and R dependencies
-ARG jdk=8
+# Install C++ dependencies
 RUN apt-get update -y -q && \
     apt-get install -y -q --no-install-recommends \
         autoconf \
@@ -41,9 +40,7 @@ RUN apt-get update -y -q && \
         libutf8proc-dev \
         libzstd-dev \
         make \
-        maven \
         ninja-build \
-        openjdk-${jdk}-jdk \
         pkg-config \
         protobuf-compiler \
         rapidjson-dev \
@@ -53,14 +50,25 @@ RUN apt-get update -y -q && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists*
 
-# Install JavaScript dependencies
-ARG node=14
+# Install R dependencies
 RUN apt-get update -y -q && \
-    wget -q -O - https://deb.nodesource.com/setup_${node}.x | bash - && \
+    apt-get install -y -q --no-install-recommends r-base && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists*
+
+# Install JavaScript dependencies
+RUN apt-get update -y -q && \
+    wget -q -O - https://deb.nodesource.com/setup_14.x | bash - && \
     apt-get install -y nodejs && \
     apt-get clean && \
-    rm -rf /var/lib/apt/lists/* && \
+    rm -rf /var/lib/apt/lists* && \
     npm install -g yarn
+
+# Setup Java dependencies
+RUN apt-get update -y -q && \
+    apt-get install -y -q --no-install-recommends openjdk-8-jdk maven && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists*
 
 # Install conda so all benchmark build scripts that are run on bare metal in conda env are run
 # the same way in the docker container
