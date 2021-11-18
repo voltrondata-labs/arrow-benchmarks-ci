@@ -1,20 +1,23 @@
 FROM ubuntu:20.04
 
-RUN apt-get -y update
-RUN apt-get -y upgrade
-RUN apt-get install python3 -y
-RUN apt-get install python3-pip -y
-RUN apt-get install -y -q curl
-RUN curl -LO https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
-RUN bash Miniconda3-latest-Linux-x86_64.sh -b
-ENV PATH="/root/miniconda3/bin:${PATH}"
-
 ENV DEBIAN_FRONTEND=noninteractive
+RUN apt-get update -y -q && \
+    apt-get install -y -q \
+        python3 \
+        python3-pip \
+        python3-dev && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# Install C++, Java and R dependencies
+ARG r=4.1
+ARG jdk=8
 RUN apt-get install -y -q --no-install-recommends \
-        autoconf \
+        autoconf \a
         ca-certificates \
         ccache \
         cmake \
+        curl \
         g++ \
         gcc \
         gdb \
@@ -40,23 +43,18 @@ RUN apt-get install -y -q --no-install-recommends \
         make \
         maven \
         ninja-build \
-        openjdk-8-jdk \
+        openjdk-${jdk}-jdk \
         pkg-config \
         protobuf-compiler \
         rapidjson-dev \
-        r-base \
+        r-recommended=${r}* \
+        r-base=${r}* \
         tzdata \
         wget && \
 apt-get clean && \
 rm -rf /var/lib/apt/lists*
 
-RUN apt-get install -y -q \
-    python3 \
-    python3-pip \
-    python3-dev && \
-apt-get clean && \
-rm -rf /var/lib/apt/lists/*
-
+# Install JavaScript dependencies
 ARG node=14
 RUN wget -q -O - https://deb.nodesource.com/setup_${node}.x | bash - && \
     apt-get install -y nodejs && \
@@ -64,11 +62,15 @@ RUN wget -q -O - https://deb.nodesource.com/setup_${node}.x | bash - && \
     rm -rf /var/lib/apt/lists/* && \
     npm install -g yarn
 
-
+# Install conda so all benchmark build scripts that run on bare metal in conda env are run
+# the same way in docker container
+RUN curl -LO https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+RUN bash Miniconda3-latest-Linux-x86_64.sh -b
+ENV PATH="/root/miniconda3/bin:${PATH}"
 RUN eval "$(command '/root/miniconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
 
 # Set Arrow build env vars in Dockerfile so they are available
-# to RUN commands during docker build process.
+# to RUN commands during docker build process and docker containers.
 # These env vars can only be set by "bash buildkite/benchmark/utils.sh create_conda_env_with_arrow"
 # command when it is run outside of docker build process
 ENV ARROW_BUILD_TESTS="OFF"
@@ -122,7 +124,7 @@ COPY buildkite/benchmark /build/buildkite/benchmark
 COPY utils.py /build/utils.py
 
 ENV FILTERS="{}"
-ENV RUN_ID="test12345"
-ENV RUN_NAME="test12345"
+ENV RUN_ID="test123456"
+ENV RUN_NAME="test123456"
 ENV MACHINE="docker-test"
 ENV CONBENCH_URL="https://conbench.ursa.dev"
