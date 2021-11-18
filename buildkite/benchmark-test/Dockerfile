@@ -38,10 +38,13 @@ RUN apt-get install -y -q --no-install-recommends \
         libutf8proc-dev \
         libzstd-dev \
         make \
+        maven \
         ninja-build \
+        openjdk-8-jdk \
         pkg-config \
         protobuf-compiler \
         rapidjson-dev \
+        r-base \
         tzdata \
         wget && \
 apt-get clean && \
@@ -60,6 +63,8 @@ RUN wget -q -O - https://deb.nodesource.com/setup_${node}.x | bash - && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* && \
     npm install -g yarn
+
+
 RUN eval "$(command '/root/miniconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
 
 # Set Arrow build env vars in Dockerfile so they are available
@@ -116,12 +121,8 @@ RUN bash buildkite/benchmark/utils.sh install_conbench
 COPY buildkite/benchmark /build/buildkite/benchmark
 COPY utils.py /build/utils.py
 
-ENV FILTERS="{\"lang\":\"JavaScript\"}"
+ENV FILTERS="{}"
 ENV RUN_ID="test12345"
 ENV RUN_NAME="test12345"
 ENV MACHINE="docker-test"
 ENV CONBENCH_URL="https://conbench.ursa.dev"
-
-RUN apt-get install -y -q --no-install-recommends openjdk-8-jdk
-RUN apt-get install -y -q --no-install-recommends maven
-RUN apt-get install -y -q r-base
