@@ -1,7 +1,11 @@
 #!/bin/bash
 
 init_conda() {
-  eval "$(command '/var/lib/buildkite-agent/miniconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
+  if [ -d "/var/lib/buildkite-agent" ]; then
+    eval "$(command '/var/lib/buildkite-agent/miniconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
+  else
+    eval "$(command '/root/miniconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
+  fi
 }
 
 create_conda_env_for_arrow_commit() {
@@ -84,6 +88,17 @@ install_java_script_project_dependencies() {
 
 create_data_dir() {
   mkdir -p "${BENCHMARKS_DATA_DIR}"
+}
+
+build_arrow_and_run_benchmark_groups() {
+  export ARROW_REPO=https://github.com/apache/arrow.git
+
+  source buildkite/benchmark/utils.sh init_conda
+  source buildkite/benchmark/utils.sh create_conda_env_with_arrow
+  source buildkite/benchmark/utils.sh install_conbench
+
+  python -m buildkite.benchmark.run_benchmark_groups
+  conda deactivate
 }
 
 "$@"

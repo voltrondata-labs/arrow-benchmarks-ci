@@ -80,7 +80,5 @@ RUN bash Miniconda3-latest-Linux-x86_64.sh -b
 
 # Copy files necessary for running bencmarks
 WORKDIR /build
-COPY buildkite/benchmark/utils.sh /build/buildkite/benchmark/utils.sh
 COPY buildkite/benchmark /build/buildkite/benchmark
 COPY utils.py /build/utils.py
-COPY buildkite/benchmark-test/run.sh /build/buildkite/benchmark-test/run.sh
