@@ -115,8 +115,11 @@ RUN bash buildkite/benchmark/utils.sh install_conbench
 COPY buildkite/benchmark /build/buildkite/benchmark
 COPY utils.py /build/utils.py
 
-ENV FILTERS="{\"lang\":\"Python,R,JavaScript\"}"
+ENV FILTERS="{\"lang\":\"C++, Java\"}"
 ENV RUN_ID="test1234"
 ENV RUN_NAME="test1234"
 ENV MACHINE="docker-test"
 ENV CONBENCH_URL="https://conbench.ursa.dev"
+
+RUN apt-get install openjdk-8-jdk
+RUN apt-get install maven
