@@ -113,7 +113,7 @@ ENV ARROW_REPO="https://github.com/apache/arrow.git" \
     BENCHMARKABLE_TYPE="arrow-commit" \
     BENCHMARKABLE="641554b0bcce587549bfcfd0cde3cb4bc23054aa" \
     PYTHON_VERSION="3.8" \
-    BENCHMARKS_DATA_DIR="/test" \
+    BENCHMARKS_DATA_DIR="/test"
 
 WORKDIR /build
 COPY buildkite/benchmark/utils.sh /build/buildkite/benchmark/utils.sh
