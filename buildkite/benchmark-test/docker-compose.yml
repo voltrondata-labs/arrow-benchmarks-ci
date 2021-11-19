@@ -1,6 +1,7 @@
 version: '3.5'
 services:
   benchmark-test:
+    context: .
     build:
       dockerfile: buildkite/benchmark-test/Dockerfile
     environment:
