@@ -13,16 +13,16 @@ docker build -f buildkite/benchmark-test/Dockerfile . -t benchmark-test
 
 # Run benchmarks
 docker run -i \
+    --env BENCHMARKABLE=${BENCHMARKABLE:-"641554b0bcce587549bfcfd0cde3cb4bc23054aa"} \
+    --env BENCHMARKABLE_TYPE=${BENCHMARKABLE_TYPE:-"arrow-commit"} \
+    --env BENCHMARKS_DATA_DIR="/data" \
     --env CONBENCH_EMAIL=$CONBENCH_EMAIL \
     --env CONBENCH_PASSWORD="$CONBENCH_PASSWORD" \
-    --env BENCHMARKABLE_TYPE=${BENCHMARKABLE_TYPE:-"arrow-commit"} \
-    --env BENCHMARKABLE=${BENCHMARKABLE:-"641554b0bcce587549bfcfd0cde3cb4bc23054aa"} \
+    --env CONBENCH_URL="https://conbench.ursa.dev" \
+    --env MACHINE="docker-container-for-testing-benchmark-builds" \
     --env PYTHON_VERSION=${PYTHON_VERSION:-"3.8"} \
-    --env BENCHMARKS_DATA_DIR="/data" \
     --env RUN_ID=$BUILDKITE_BUILD_ID \
     --env RUN_NAME=${RUN_NAME:-"benchmark build test: $BUILDKITE_BUILD_ID"} \
-    --env MACHINE="docker-container-for-testing-benchmark-builds" \
-    --env CONBENCH_URL="https://conbench.ursa.dev" \
     benchmark-test bash buildkite/benchmark/utils.sh build_arrow_and_run_benchmark_groups
 ```
 

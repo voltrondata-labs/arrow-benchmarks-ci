@@ -5,14 +5,14 @@ services:
       context: ../..
       dockerfile: buildkite/benchmark-test/Dockerfile
     environment:
+      BENCHMARKABLE: ${BENCHMARKABLE:-641554b0bcce587549bfcfd0cde3cb4bc23054aa}
+      BENCHMARKABLE_TYPE: ${BENCHMARKABLE_TYPE:-arrow-commit}
+      BENCHMARKS_DATA_DIR: "/data"
       CONBENCH_EMAIL: ${CONBENCH_EMAIL}
       CONBENCH_PASSWORD: ${CONBENCH_PASSWORD}"
-      BENCHMARKABLE_TYPE: ${BENCHMARKABLE_TYPE:-arrow-commit}
-      BENCHMARKABLE: ${BENCHMARKABLE:-641554b0bcce587549bfcfd0cde3cb4bc23054aa}
-      PYTHON_VERSION: ${PYTHON_VERSION:-3.8}
-      BENCHMARKS_DATA_DIR: "/data"
+      CONBENCH_URL: "https://conbench.ursa.dev"
       FILTERS: "${FILTERS:-{}}"
+      MACHINE: "docker-container-for-testing-benchmark-builds"
+      PYTHON_VERSION: ${PYTHON_VERSION:-3.8}
       RUN_ID: ${BUILDKITE_BUILD_ID}
       RUN_NAME: "benchmark build test: ${BUILDKITE_BUILD_ID}"
-      MACHINE: "docker-container-for-testing-benchmark-builds"
-      CONBENCH_URL: "https://conbench.ursa.dev"
