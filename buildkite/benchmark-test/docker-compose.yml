@@ -1,8 +1,8 @@
 version: '3.5'
 services:
   benchmark-test:
-    context: .
     build:
+      context: .
       dockerfile: buildkite/benchmark-test/Dockerfile
     environment:
       CONBENCH_EMAIL: ${CONBENCH_EMAIL}
