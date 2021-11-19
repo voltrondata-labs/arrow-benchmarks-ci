@@ -96,6 +96,7 @@ build_arrow_and_run_benchmark_groups() {
   echo $BENCHMARKABLE
   echo $FILTERS
   echo $RUN_NAME
+  echo $RUN_ID
 
   source buildkite/benchmark/utils.sh init_conda
   source buildkite/benchmark/utils.sh create_conda_env_with_arrow
