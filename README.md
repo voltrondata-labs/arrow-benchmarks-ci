@@ -28,7 +28,7 @@ docker run -i \
     --env BENCHMARKABLE=${BENCHMARKABLE:-"641554b0bcce587549bfcfd0cde3cb4bc23054aa"} \
     --env PYTHON_VERSION=${PYTHON_VERSION:-"3.8"} \
     --env BENCHMARKS_DATA_DIR="/data" \
-    --env FILTERS=${FILTERS:-"{}"} \
+    --env FILTERS=${FILTERS:-{}} \
     --env RUN_ID=$BUILDKITE_BUILD_ID \
     --env RUN_NAME=${RUN_NAME:-"benchmark build test: $BUILDKITE_BUILD_ID"} \
     --env MACHINE="docker-container-for-testing-benchmark-builds" \
@@ -43,6 +43,6 @@ docker run -i \
     - Click Options if you want to override default env vars and enter your env vars into Environment Variables field:
        ```
        BENCHMARKABLE=641554b0bcce587549bfcfd0cde3cb4bc23054aa
-       FILTERS="{\"lang\":\"Java\"}"
+       FILTERS={"lang":"Java"}
        ```
     - Click Create Build
