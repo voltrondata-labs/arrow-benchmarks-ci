@@ -92,16 +92,9 @@ create_data_dir() {
 
 build_arrow_and_run_benchmark_groups() {
   export ARROW_REPO=https://github.com/apache/arrow.git
-  echo $BENCHMARKABLE_TYPE
-  echo $BENCHMARKABLE
-  echo $FILTERS
-  echo $RUN_NAME
-  echo $RUN_ID
-
   source buildkite/benchmark/utils.sh init_conda
   source buildkite/benchmark/utils.sh create_conda_env_with_arrow
   source buildkite/benchmark/utils.sh install_conbench
-
   python -m buildkite.benchmark.run_benchmark_groups
   conda deactivate
 }
