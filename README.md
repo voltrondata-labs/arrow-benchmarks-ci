@@ -37,12 +37,9 @@ docker run -i \
 ```
 
 #### How can I test benchmark builds that run on ursa-i9-9960x and ursa-thinkcentre-m75q using Buildkite
+This option is only available to [Apache Arrow CI Buildkite org](https://buildkite.com/organizations/apache-arrow/) users at the moment.
+
 1. Go to https://buildkite.com/apache-arrow/arrow-bci-benchmark-build-test
 2. Click New Build
     - Set Commit and Branch for arrow-benchmarks-ci repo that you would like to test
-    - Click Options if you want to override default env vars and enter your env vars into Environment Variables field:
-       ```
-       BENCHMARKABLE=641554b0bcce587549bfcfd0cde3cb4bc23054aa
-       FILTERS={"lang":"Java"}
-       ```
     - Click Create Build
