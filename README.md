@@ -1,16 +1,16 @@
 # arrow-benchmarks-ci
 ![Screenshot](diagram.png)
 
-## How do I get Conbench credentials?
+## How can I get Conbench credentials?
 You might need Conbench credentials for these reasons:
 - You need to add your own machine to the list of machines where Apache Arrow benchmarks are run for every apache/arrow
 master commit and for benchmark requests on PRs
 - You need to test benchmark builds (that run on `ursa-i9-9960x` and `ursa-thinkcentre-m75q`) locally to verify that your
 code changes will not break benchmark builds
 
-TODO
+TODO: Add steps
 
-#### How do I test benchmark builds that run on ursa-i9-9960x and ursa-thinkcentre-m75q locally
+#### How can I test benchmark builds that run on ursa-i9-9960x and ursa-thinkcentre-m75q locally
 ```bash
 # Set conbench credentials
 export CONBENCH_EMAIL=<conbench_user_id>
@@ -36,7 +36,7 @@ docker run -i \
     benchmark-test bash buildkite/benchmark/utils.sh build_arrow_and_run_benchmark_groups
 ```
 
-#### How do I test benchmark builds that run on ursa-i9-9960x and ursa-thinkcentre-m75q using Buildkite
+#### How can I test benchmark builds that run on ursa-i9-9960x and ursa-thinkcentre-m75q using Buildkite
 1. Go to https://buildkite.com/apache-arrow/arrow-bci-benchmark-build-test
 2. Click New Build
     - Set Commit and Branch for arrow-benchmarks-ci repo that you would like to test
