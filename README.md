@@ -1,18 +1,9 @@
 # arrow-benchmarks-ci
 ![Screenshot](diagram.png)
 
-## How can I get Conbench credentials?
-You might need Conbench credentials for these reasons:
-- You need to add your own machine to the list of machines where Apache Arrow benchmarks are run for every apache/arrow
-master commit and for benchmark requests on PRs
-- You need to test benchmark builds (that run on `ursa-i9-9960x` and `ursa-thinkcentre-m75q`) locally to verify that your
-code changes will not break benchmark builds
-
-TODO: Add steps
-
 #### How can I test benchmark builds that run on ursa-i9-9960x and ursa-thinkcentre-m75q locally
 ```bash
-# Set conbench credentials
+# Set env vars for conbench credentials if you need benchmark results to be posted to Conbench during testing
 export CONBENCH_EMAIL=<conbench_user_id>
 export CONBENCH_PASSWORD=<conbench_user_password>
 
@@ -28,7 +19,6 @@ docker run -i \
     --env BENCHMARKABLE=${BENCHMARKABLE:-"641554b0bcce587549bfcfd0cde3cb4bc23054aa"} \
     --env PYTHON_VERSION=${PYTHON_VERSION:-"3.8"} \
     --env BENCHMARKS_DATA_DIR="/data" \
-    --env FILTERS=${FILTERS} \
     --env RUN_ID=$BUILDKITE_BUILD_ID \
     --env RUN_NAME=${RUN_NAME:-"benchmark build test: $BUILDKITE_BUILD_ID"} \
     --env MACHINE="docker-container-for-testing-benchmark-builds" \
