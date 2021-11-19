@@ -2,4 +2,5 @@ steps:
   - label: "Test Benchmark Build"
     command: |
       docker-compose -f buildkite/benchmark-test/docker-compose.yml build
-      docker-compose -f buildkite/benchmark-test/docker-compose.yml run benchmark-test bash buildkite/benchmark/utils.sh build_arrow_and_run_benchmark_groups
+      docker-compose -f buildkite/benchmark-test/docker-compose.yml run \
+        benchmark-test bash buildkite/benchmark/utils.sh build_arrow_and_run_benchmark_groups
