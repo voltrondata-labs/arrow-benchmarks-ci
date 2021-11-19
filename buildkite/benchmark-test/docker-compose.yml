@@ -11,7 +11,7 @@ services:
       BENCHMARKABLE: ${BENCHMARKABLE:-641554b0bcce587549bfcfd0cde3cb4bc23054aa}
       PYTHON_VERSION: ${PYTHON_VERSION:-3.8}
       BENCHMARKS_DATA_DIR: "/data"
-      FILTERS: ${FILTERS:-{}}
+      FILTERS: "${FILTERS:-{'lang': 'Python'}}"
       RUN_ID: ${BUILDKITE_BUILD_ID}
       RUN_NAME: "benchmark build test: ${BUILDKITE_BUILD_ID}"
       MACHINE: "docker-container-for-testing-benchmark-builds"
