@@ -26,6 +26,7 @@ steps:
     concurrency_group: "arrow-bci-deploy"
     command: |
       aws eks --region us-east-2 update-kubeconfig --name ${EKS_CLUSTER}
+      echo $PATH
       kubectl config set-context --current --namespace=${NAMESPACE}
       cat envs/prod/secrets.yml | sed "\
         s/{{BUILDKITE_API_TOKEN}}/$(echo -n $BUILDKITE_API_TOKEN | base64 -w 0)/g;\
