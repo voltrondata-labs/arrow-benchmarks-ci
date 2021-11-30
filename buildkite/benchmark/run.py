@@ -9,7 +9,7 @@ import requests
 
 from utils import generate_uuid
 
-from .run_context import run_context
+from .run_utils import post_logs_to_arrow_bci, run_context
 
 benchmarkable_id = os.getenv("BENCHMARKABLE")
 run_id = os.getenv("RUN_ID")
@@ -143,18 +143,8 @@ class BenchmarkGroup:
         if self.mock_run:
             return
 
-        if not arrow_bci_url or not arrow_bci_api_access_token:
-            return
-
         logging.info(self.log_data())
-        requests.post(
-            f"{arrow_bci_url}/logs",
-            data=json.dumps(self.log_data()),
-            headers={
-                "Content-Type": "application/json",
-                "Authorization": f"Bearer {arrow_bci_api_access_token}",
-            },
-        )
+        post_logs_to_arrow_bci("/logs", self.log_data())
 
 
 class Run:
@@ -179,17 +169,7 @@ class Run:
         self.executed_commands = []
 
     def capture_context(self):
-        if not arrow_bci_url or not arrow_bci_api_access_token:
-            return
-
-        requests.post(
-            f"{arrow_bci_url}/runs/{run_id}",
-            data=json.dumps(run_context()),
-            headers={
-                "Content-Type": "application/json",
-                "Authorization": f"Bearer {arrow_bci_api_access_token}",
-            },
-        )
+        post_logs_to_arrow_bci(f"/runs/{run_id}", run_context())
 
     def execute_command(self, command, path=".", exit_on_failure=True):
         logging.info(f"Started executing -> {command}")

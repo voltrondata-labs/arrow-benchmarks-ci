@@ -1,20 +1,17 @@
-import json
-import os
 import sys
 import time
 
 import psutil
-import requests
 
 from utils import generate_uuid
+
+from .run_utils import post_logs_to_arrow_bci
 
 current_process_pid = psutil.Process().pid
 parent_process_id = int(sys.argv[1])
 benchmark_group_execution_id = sys.argv[2]
 total_machine_memory = psutil.virtual_memory().total
 child_processes_still_running = True
-arrow_bci_url = os.getenv("ARROW_BCI_URL")
-arrow_bci_api_access_token = os.getenv("ARROW_BCI_API_ACCESS_TOKEN")
 
 while child_processes_still_running:
     child_processes_still_running = False
@@ -39,13 +36,6 @@ while child_processes_still_running:
                     "mem_rss_bytes": mem_rss_bytes,
                     "mem_percent": memory_percent,
                 }
-                requests.post(
-                    f"{arrow_bci_url}/logs",
-                    data=json.dumps(data),
-                    headers={
-                        "Content-Type": "application/json",
-                        "Authorization": f"Bearer {arrow_bci_api_access_token}",
-                    },
-                )
+                post_logs_to_arrow_bci("/logs", data)
 
     time.sleep(10)

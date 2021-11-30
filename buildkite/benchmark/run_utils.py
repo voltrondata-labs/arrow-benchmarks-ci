@@ -1,6 +1,14 @@
+import json
+import logging
 import os
 import subprocess
 import sys
+
+import requests
+
+arrow_bci_url = os.getenv("ARROW_BCI_URL")
+arrow_bci_api_access_token = os.getenv("ARROW_BCI_API_ACCESS_TOKEN")
+logging.basicConfig(level=logging.DEBUG)
 
 
 def context():
@@ -32,3 +40,21 @@ def run_context():
         "machine_info": machine_info(),
         "conda_packages": conda_packages(),
     }
+
+
+def post_logs_to_arrow_bci(url, data):
+    if not arrow_bci_url or not arrow_bci_api_access_token:
+        return
+
+    try:
+        requests.post(
+            f"{arrow_bci_url}/{url}",
+            data=json.dumps(data),
+            headers={
+                "Content-Type": "application/json",
+                "Authorization": f"Bearer {arrow_bci_api_access_token}",
+            },
+        )
+    except Exception as e:
+        logging.exception(f"Failed to post to {url}: {data}")
+        logging.exception(e)
