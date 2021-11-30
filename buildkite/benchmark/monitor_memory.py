@@ -1,8 +1,10 @@
 import json
-import psutil
-import requests
+import os
 import sys
 import time
+
+import psutil
+import requests
 
 from utils import generate_uuid
 
@@ -11,6 +13,8 @@ parent_process_id = int(sys.argv[1])
 benchmark_group_execution_id = sys.argv[2]
 total_machine_memory = psutil.virtual_memory().total
 child_processes_still_running = True
+arrow_bci_url = os.getenv("ARROW_BCI_URL")
+arrow_bci_api_access_token = os.getenv("ARROW_BCI_API_ACCESS_TOKEN")
 
 while child_processes_still_running:
     child_processes_still_running = False
@@ -36,9 +40,12 @@ while child_processes_still_running:
                     "mem_percent": memory_percent,
                 }
                 requests.post(
-                    "https://benchmark-jobs.ursa.dev/logs",
+                    f"{arrow_bci_url}/logs",
                     data=json.dumps(data),
-                    headers={"Content-Type": "application/json"},
+                    headers={
+                        "Content-Type": "application/json",
+                        "Authorization": f"Bearer {arrow_bci_api_access_token}",
+                    },
                 )
 
     time.sleep(10)
