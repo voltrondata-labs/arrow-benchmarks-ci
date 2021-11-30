@@ -144,7 +144,7 @@ class BenchmarkGroup:
             return
 
         logging.info(self.log_data())
-        post_logs_to_arrow_bci("/logs", self.log_data())
+        post_logs_to_arrow_bci("logs", self.log_data())
 
 
 class Run:
@@ -169,7 +169,7 @@ class Run:
         self.executed_commands = []
 
     def capture_context(self):
-        post_logs_to_arrow_bci(f"/runs/{run_id}", run_context())
+        post_logs_to_arrow_bci(f"runs/{run_id}", run_context())
 
     def execute_command(self, command, path=".", exit_on_failure=True):
         logging.info(f"Started executing -> {command}")

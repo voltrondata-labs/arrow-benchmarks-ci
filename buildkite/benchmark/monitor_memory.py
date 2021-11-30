@@ -36,6 +36,6 @@ while child_processes_still_running:
                     "mem_rss_bytes": mem_rss_bytes,
                     "mem_percent": memory_percent,
                 }
-                post_logs_to_arrow_bci("/logs", data)
+                post_logs_to_arrow_bci("logs", data)
 
     time.sleep(10)
