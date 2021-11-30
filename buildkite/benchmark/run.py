@@ -1,18 +1,22 @@
-from datetime import datetime
 import json
 import logging
 import os
+import subprocess
+from datetime import datetime
+
 import psutil
 import requests
-import subprocess
 
 from utils import generate_uuid
+
 from .run_context import run_context
 
 benchmarkable_id = os.getenv("BENCHMARKABLE")
 run_id = os.getenv("RUN_ID")
 run_name = os.getenv("RUN_NAME")
 machine = os.getenv("MACHINE")
+arrow_bci_url = os.getenv("ARROW_BCI_URL")
+arrow_bci_api_access_token = os.getenv("ARROW_BCI_API_ACCESS_TOKEN")
 build_dir = os.getcwd()
 total_machine_memory = psutil.virtual_memory().total
 logging.basicConfig(level=logging.DEBUG)
@@ -90,7 +94,11 @@ class BenchmarkGroup:
         if self.mock_run:
             return
 
-        # Monitor memory only Python and R benchmarks
+        # Monitor memory only if memory usage can be logged to Arrow Benchmarks CI
+        if not arrow_bci_url or not arrow_bci_api_access_token:
+            return
+
+        # Monitor memory only for Python and R benchmarks
         if self.lang not in ["Python", "R"]:
             return
 
@@ -135,11 +143,17 @@ class BenchmarkGroup:
         if self.mock_run:
             return
 
+        if not arrow_bci_url or not arrow_bci_api_access_token:
+            return
+
         logging.info(self.log_data())
         requests.post(
-            "https://benchmark-jobs.ursa.dev/logs",
+            f"{arrow_bci_url}/logs",
             data=json.dumps(self.log_data()),
-            headers={"Content-Type": "application/json"},
+            headers={
+                "Content-Type": "application/json",
+                "Authorization": f"Bearer {arrow_bci_api_access_token}",
+            },
         )
 
 
@@ -165,10 +179,16 @@ class Run:
         self.executed_commands = []
 
     def capture_context(self):
+        if not arrow_bci_url or not arrow_bci_api_access_token:
+            return
+
         requests.post(
-            f"https://benchmark-jobs.ursa.dev/runs/{run_id}",
+            f"{arrow_bci_url}/runs/{run_id}",
             data=json.dumps(run_context()),
-            headers={"Content-Type": "application/json"},
+            headers={
+                "Content-Type": "application/json",
+                "Authorization": f"Bearer {arrow_bci_api_access_token}",
+            },
         )
 
     def execute_command(self, command, path=".", exit_on_failure=True):

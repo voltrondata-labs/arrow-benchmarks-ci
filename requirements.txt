@@ -3,6 +3,7 @@ authlib
 flask==1.1.2
 flask-restful
 gunicorn
+psutil
 psycopg2
 requests
 SQLAlchemy>=1.4.0b1
