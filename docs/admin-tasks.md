@@ -16,9 +16,9 @@ Type "help", "copyright", "credits" or "license" for more information.
 
 ### Create BUILDKITE_AGENT_TOKEN for Benchmark Machine
 - Go to https://buildkite.com/organizations/apache-arrow/settings
-- Copy Organization ID under GraphQL API Integration so you can use it in the next step
+- Copy `Organization ID` under GraphQL API Integration so you can use it in the next step
 - Go to https://buildkite.com/user/graphql/console
-- Paste this query
+- Paste this query, replacing `Organization ID` with your Organization ID
 ```
 mutation {
   agentTokenCreate(input: {
