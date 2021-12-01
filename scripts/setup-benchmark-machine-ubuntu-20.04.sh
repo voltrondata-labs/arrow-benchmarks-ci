@@ -93,11 +93,11 @@ touch /etc/buildkite-agent/hooks/environment
 cp /etc/buildkite-agent/hooks/pre-command.sample /etc/buildkite-agent/hooks/pre-command
 echo "source /var/lib/buildkite-agent/.bashrc" >> /etc/buildkite-agent/hooks/pre-command
 
-# Start Buildkite Agent
-systemctl enable buildkite-agent && systemctl start buildkite-agent
-
 # Install conda
 su - buildkite-agent
 curl -LO https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
 bash Miniconda3-latest-Linux-x86_64.sh -b -p $HOME/miniconda3
 $HOME/miniconda3/bin/conda init
+
+# Start Buildkite Agent
+systemctl enable buildkite-agent && systemctl start buildkite-agent
