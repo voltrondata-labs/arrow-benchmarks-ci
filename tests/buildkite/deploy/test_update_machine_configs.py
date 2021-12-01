@@ -1,3 +1,5 @@
+from copy import deepcopy
+
 from buildkite.deploy.update_machine_configs import update_machine_configs
 from models.machine import Machine
 from tests.helpers import machine_configs
@@ -20,7 +22,7 @@ def test_update_machine_configs_add_machines():
 
 
 def test_update_machine_configs_remove_machine():
-    configs = machine_configs
+    configs = deepcopy(machine_configs)
     machine_to_remove = list(configs.keys())[0]
     assert Machine.get(machine_to_remove)
 
