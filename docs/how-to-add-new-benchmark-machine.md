@@ -37,6 +37,8 @@ with name = your-benchmark-machine:
 - If your machine is running OS other than Ubuntu, please create a new setup script and use `setup-benchmark-machine-ubuntu-20.04.sh` as a reference.
 
 ```shell script
+sudo su
+
 # Export env vars to be used by setup-benchmark-machine-ubuntu-20.04.sh
 export ARROW_BCI_URL=<ARROW_BCI_URL>
 export ARROW_BCI_API_ACCESS_TOKEN=<ARROW_BCI_API_ACCESS_TOKEN>
@@ -49,16 +51,20 @@ export MACHINE=<MACHINE>
 
 # Install Apache Arrow C++, Python, R, Java and JavaScript dependencies and Buildkite Agent
 curl -LO https://raw.githubusercontent.com/ursacomputing/arrow-benchmarks-ci/fix-bugs-in-setup-script/scripts/setup-benchmark-machine-ubuntu-20.04.sh
-sudo ./setup-benchmark-machine-ubuntu-20.04.sh
+chmod +x setup-benchmark-machine-ubuntu-20.04.sh
+source ./setup-benchmark-machine-ubuntu-20.04.sh
 
 # Install Conda for buildkite-agent user
-sudo su
 su - buildkite-agent
 curl -LO https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
-Miniconda3-latest-Linux-x86_64.sh -b -p "$HOME/miniconda3"
+bash Miniconda3-latest-Linux-x86_64.sh -b -p "$HOME/miniconda3"
 "$HOME/miniconda3/bin/conda" init
 exit
 
 # Start Buildkite Agent
 systemctl enable buildkite-agent && systemctl start buildkite-agent
+
+# Verify Buildkite Agent is running
+journalctl -f -u buildkite-agent
+ps aux | grep buildkite
 ```
