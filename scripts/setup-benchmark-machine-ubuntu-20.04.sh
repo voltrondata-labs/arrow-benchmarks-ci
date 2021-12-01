@@ -1,8 +1,9 @@
 #!/bin/bash
 
-# Install Arrow C++ dependencies
 apt-get upgrade
-apt-get update -y -q && \
+apt-get update -y -q
+
+echo "-------Installing C++ dependencies"
 apt-get install -y -q --no-install-recommends \
     autoconf \
     ca-certificates \
@@ -41,8 +42,7 @@ apt-get install -y -q --no-install-recommends \
 apt-get clean && \
 rm -rf /var/lib/apt/lists*
 
-# Install Python dependencies
-apt-get update -y -q && \
+echo "-------Installing Python dependencies"
 apt-get install -y -q \
     python3 \
     python3-pip \
@@ -50,33 +50,30 @@ apt-get install -y -q \
 apt-get clean && \
 rm -rf /var/lib/apt/lists/*
 
-# Install R dependencies
-apt-get update -y -q && \
+echo "-------Installing R dependencies"
 apt-get install -y -q --no-install-recommends r-base && \
 apt-get clean && \
 rm -rf /var/lib/apt/lists*
 
-# Install JavaScript dependencies
-apt-get update -y -q && \
+echo "-------Installing JavaScript dependencies"
 wget -q -O - https://deb.nodesource.com/setup_14.x | bash - && \
 apt-get install -y nodejs && \
 apt-get clean && \
 rm -rf /var/lib/apt/lists* && \
 npm install -g yarn
 
-# Install Java dependencies
-apt-get update -y -q && \
+echo "-------Installing Java dependencies"
 apt-get install -y -q --no-install-recommends openjdk-8-jdk maven && \
 apt-get clean && \
 rm -rf /var/lib/apt/lists*
 update-java-alternatives -s java-1.8.0-openjdk-amd64
 
-# Install Buildkite Agent
+echo "-------Installing Buildkite Agent"
 sh -c 'echo deb https://apt.buildkite.com/buildkite-agent stable main > /etc/apt/sources.list.d/buildkite-agent.list'
 apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 32A37959C2FA5C3C99EFBC32A79206696452D198
-apt-get update && sudo apt-get install -y buildkite-agent
+apt-get install -y buildkite-agent
 
-# Setup Buildkite agent config and hooks
+echo "-------Setting up Buildkite agent config and hooks"
 sed -i "s/xxx/$BUILDKITE_AGENT_TOKEN/g" /etc/buildkite-agent/buildkite-agent.cfg
 echo "tags=\"queue=$BUILDKITE_QUEUE\"" >>/etc/buildkite-agent/buildkite-agent.cfg
 
@@ -93,11 +90,4 @@ touch /etc/buildkite-agent/hooks/environment
 cp /etc/buildkite-agent/hooks/pre-command.sample /etc/buildkite-agent/hooks/pre-command
 echo "source /var/lib/buildkite-agent/.bashrc" >> /etc/buildkite-agent/hooks/pre-command
 
-# Install conda
-su - buildkite-agent
-curl -LO https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
-bash Miniconda3-latest-Linux-x86_64.sh -b -p $HOME/miniconda3
-$HOME/miniconda3/bin/conda init
-
-# Start Buildkite Agent
-systemctl enable buildkite-agent && systemctl start buildkite-agent
+echo "Done"
