@@ -45,15 +45,15 @@ class Config:
     )
 
     MACHINES = {
-        # "new-machine": {
-        #     "info": "name = dataset-filter",
-        #     "default_filters": {
-        #         "arrow-commit": {"name": "dataset-filter"},
-        #     },
-        #     "supported_filters": ["name"],
-        #     "supported_langs": ["Python"],
-        #     "offline_warning_enabled": False,
-        # },
+        "new-machine": {
+            "info": "name = dataset-filter",
+            "default_filters": {
+                "arrow-commit": {"name": "dataset-filter"},
+            },
+            "supported_filters": ["name"],
+            "supported_langs": ["Python"],
+            "offline_warning_enabled": False,
+        },
         # "ursa-i9-9960x": {
         #     "info": "langs = Python, R, JavaScript",
         #     "default_filters": {
