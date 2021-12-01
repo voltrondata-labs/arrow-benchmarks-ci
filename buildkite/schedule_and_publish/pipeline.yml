@@ -74,5 +74,4 @@ steps:
   - wait
 
   - label: "Trigger Arrow BCI Schedule & Publish"
-    concurrency: 1
     trigger: "arrow-bci-schedule-and-publish"
