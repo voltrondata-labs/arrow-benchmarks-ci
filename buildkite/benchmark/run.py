@@ -131,8 +131,8 @@ class BenchmarkGroup:
             "process_pid": psutil.Process().pid,
             "command": self.command,
             "started_at": str(self.started_at),
-            "finished_at": str(self.finished_at),
-            "total_run_time": str(self.total_run_time),
+            "finished_at": str(self.finished_at) if self.finished_at else None,
+            "total_run_time": str(self.total_run_time) if self.total_run_time else None,
             "failed": self.failed,
             "return_code": self.return_code,
             "stderr": self.stderr,
@@ -312,8 +312,9 @@ class Run:
     def run_benchmark_groups(self, lang):
         self.print_env_vars()
         for benchmark_group in self.benchmark_groups_for_lang(lang):
-            benchmark_group.start_memory_monitor()
             benchmark_group.started_at = datetime.now()
+            benchmark_group.log_execution()
+            benchmark_group.start_memory_monitor()
 
             return_code, stderr = self.execute_command(
                 benchmark_group.command,
@@ -324,8 +325,8 @@ class Run:
             benchmark_group.finished_at = datetime.now()
             benchmark_group.return_code = return_code
             benchmark_group.stderr = stderr
-            benchmark_group.stop_memory_monitor()
             benchmark_group.log_execution()
+            benchmark_group.stop_memory_monitor()
 
     def print_results(self):
         print(
