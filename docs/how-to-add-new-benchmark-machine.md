@@ -14,7 +14,6 @@ MACHINES = {
         "offline_warning_enabled": False,
     },
 }
-
 ```
 ### 2. Get environment vars for Buildkite Agent that will run on your benchmark machine
 - Add a comment to your Pull Request
@@ -32,15 +31,13 @@ with name = your-benchmark-machine:
 ```
 - Please also let us know how you would like environment vars to be shared with you.
 
-### 3. Run `setup-benchmark-machine-ubuntu-20.04.sh` script on your benchmark machine
-- Note that `setup-benchmark-machine-ubuntu-20.04.sh` only installs dependencies for Arrow C++, Python, R, Java and JavaScript.
+### 3. Setup your benchmark machine
+- Note that `setup-benchmark-machine-ubuntu-20.04.sh` only installs dependencies for Apache Arrow C++, Python, R, Java and JavaScript.
 - If you need to install additional dependencies, please update `setup-benchmark-machine-ubuntu-20.04.sh`. 
-- If you need to set up a machine, which is running OS other than Ubuntu, please create a new setup script.
-and use `setup-benchmark-machine-ubuntu-20.04.sh` as a reference.
-```shell script
-git clone https://github.com/ursacomputing/arrow-benchmarks-ci.git
-cd arrow-benchmarks-ci/
+- If your machine is running OS other than Ubuntu, please create a new setup script and use `setup-benchmark-machine-ubuntu-20.04.sh` as a reference.
 
+```shell script
+# Export env vars to be used by setup-benchmark-machine-ubuntu-20.04.sh
 export ARROW_BCI_URL=<ARROW_BCI_URL>
 export ARROW_BCI_API_ACCESS_TOKEN=<ARROW_BCI_API_ACCESS_TOKEN>
 export BUILDKITE_AGENT_TOKEN=<BUILDKITE_AGENT_TOKEN>
@@ -50,5 +47,18 @@ export CONBENCH_PASSWORD=<CONBENCH_PASSWORD>
 export CONBENCH_URL=<CONBENCH_URL>
 export MACHINE=<MACHINE>
 
-source ./scripts/setup-benchmark-machine-ubuntu-20.04.sh
+# Install Apache Arrow C++, Python, R, Java and JavaScript dependencies and Buildkite Agent
+curl -LO https://raw.githubusercontent.com/ursacomputing/arrow-benchmarks-ci/fix-bugs-in-setup-script/scripts/setup-benchmark-machine-ubuntu-20.04.sh
+sudo ./setup-benchmark-machine-ubuntu-20.04.sh
+
+# Install Conda for buildkite-agent user
+sudo su
+su - buildkite-agent
+curl -LO https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+Miniconda3-latest-Linux-x86_64.sh -b -p "$HOME/miniconda3"
+"$HOME/miniconda3/bin/conda" init
+exit
+
+# Start Buildkite Agent
+systemctl enable buildkite-agent && systemctl start buildkite-agent
 ```
