@@ -107,7 +107,7 @@ class Machine(Base, BaseMixin):
             finally:
                 s.close()
 
-    def generate_api_access_token(self):
+    def create_api_access_token(self):
         header = {"alg": "HS256"}
         payload = {"machine": self.name, "created_at": str(datetime.utcnow())}
         key = Config.SECRET
