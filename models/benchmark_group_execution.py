@@ -30,6 +30,16 @@ class BenchmarkGroupExecution(Base, BaseMixin):
     created_at = NotNull(s.DateTime(timezone=False), server_default=s.sql.func.now())
 
     @classmethod
+    def create(cls, data):
+        bge = cls.get(data["id"])
+        if bge:
+            for attr in ["finished_at", "total_run_time", "failed", "return_code", "stderr"]:
+                setattr(bge, attr, data["attr"])
+        else:
+            bge = cls(**data)
+        bge.save()
+
+    @classmethod
     def validate_data(cls, current_machine, data):
         if not Run.first(id=data["run_id"], machine_name=current_machine.name):
             raise UnauthorizedException

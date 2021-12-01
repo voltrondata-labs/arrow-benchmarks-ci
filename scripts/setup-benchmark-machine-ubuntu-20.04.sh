@@ -71,10 +71,6 @@ apt-get clean && \
 rm -rf /var/lib/apt/lists*
 update-java-alternatives -s java-1.8.0-openjdk-amd64
 
-# Install conda
-curl -LO https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
-bash Miniconda3-latest-Linux-x86_64.sh -b
-
 # Install Buildkite Agent
 sh -c 'echo deb https://apt.buildkite.com/buildkite-agent stable main > /etc/apt/sources.list.d/buildkite-agent.list'
 apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 32A37959C2FA5C3C99EFBC32A79206696452D198
@@ -96,6 +92,12 @@ touch /etc/buildkite-agent/hooks/environment
 
 cp /etc/buildkite-agent/hooks/pre-command.sample /etc/buildkite-agent/hooks/pre-command
 echo "source /var/lib/buildkite-agent/.bashrc" >> /etc/buildkite-agent/hooks/pre-command
+
+# Install conda
+su - buildkite-agent
+curl -LO https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+bash Miniconda3-latest-Linux-x86_64.sh -b -p $HOME/miniconda3
+$HOME/miniconda3/bin/conda init
 
 # Start Buildkite Agent
 systemctl enable buildkite-agent && systemctl start buildkite-agent
