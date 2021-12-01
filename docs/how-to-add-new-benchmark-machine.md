@@ -2,11 +2,27 @@
 
 Note that we only have a script for setting up benchmark machine with Ubuntu 20.04.2 x86_64 GNU/Linux.
 
-### 1. Get environment vars for Buildkite Agent that will run on your benchmark machine
-- Create [new issue](https://github.com/ursacomputing/arrow-benchmarks-ci/issues/new) with a comment like this:
+### 1. Create Pull Request for adding your benchmark machine
+- Add your benchmark machine to `MACHINES` in [config.py](../config.py)
+```python
+MACHINES = {
+    "your-benchmark-machine": {
+        "info": "langs = Python",
+        "default_filters": {
+            "arrow-commit": {"lang": "Python"},
+        },
+        "supported_filters": ["name", "lang"],
+        "supported_langs": ["Python"],
+        "offline_warning_enabled": False,
+    },
+}
+
 ```
-@ElenaHenderson We want to add a new benchmark machine with name = your-machine-name that will be 
-running Rust/Java/etc benchmarks and we need these Buildkite environment vars:
+### 2. Get environment vars for Buildkite Agent that will run on your benchmark machine
+- Add a comment to your Pull Request
+```
+@ElenaHenderson Will you please create environment vars for Buildkite Agent for our benchmark machine 
+with name = your-benchmark-machine:
 - ARROW_BCI_URL
 - ARROW_BCI_API_ACCESS_TOKEN
 - BUILDKITE_AGENT_TOKEN
@@ -18,7 +34,11 @@ running Rust/Java/etc benchmarks and we need these Buildkite environment vars:
 ```
 - Please also let us know how you would like environment vars to be shared with you.
 
-### 2. Run setup-benchmark-machine-ubuntu-20.04.sh script on your benchmark machine
+### 3. Run `setup-benchmark-machine-ubuntu-20.04.sh` script on your benchmark machine
+- Note that `setup-benchmark-machine-ubuntu-20.04.sh` only installs dependencies for Arrow C++, Python, R, Java and JavaScript.
+- If you need to install additional dependencies, please update `setup-benchmark-machine-ubuntu-20.04.sh`. 
+- If you need to set a machine, which is not running Ubuntu, please create a new setup script 
+and use `setup-benchmark-machine-ubuntu-20.04.sh` as a reference.
 ```shell script
 sudo su
 git clone https://github.com/ursacomputing/arrow-benchmarks-ci.git
