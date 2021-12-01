@@ -50,7 +50,7 @@ export CONBENCH_URL=<CONBENCH_URL>
 export MACHINE=<MACHINE>
 
 # Install Apache Arrow C++, Python, R, Java and JavaScript dependencies and Buildkite Agent
-curl -LO https://raw.githubusercontent.com/ursacomputing/arrow-benchmarks-ci/fix-bugs-in-setup-script/scripts/setup-benchmark-machine-ubuntu-20.04.sh
+curl -LO https://raw.githubusercontent.com/ursacomputing/arrow-benchmarks-ci/main/scripts/setup-benchmark-machine-ubuntu-20.04.sh
 chmod +x setup-benchmark-machine-ubuntu-20.04.sh
 source ./setup-benchmark-machine-ubuntu-20.04.sh
 
