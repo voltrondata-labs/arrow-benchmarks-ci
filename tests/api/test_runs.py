@@ -23,7 +23,7 @@ def update_run(client, run_id=None, api_access_token=None):
 
     if not api_access_token:
         run = Run.get(run_id)
-        api_access_token = run.machine.generate_api_access_token()
+        api_access_token = run.machine.create_api_access_token()
 
     return run_id, client.post(
         f"/runs/{run_id}",
@@ -56,7 +56,7 @@ def test_runs_401_invalid_token(client):
 
 
 def test_runs_404_unknown_run(client):
-    api_access_token = Machine.first().generate_api_access_token()
+    api_access_token = Machine.first().create_api_access_token()
     run_id, response = update_run(
         client, run_id="unknown", api_access_token=api_access_token
     )
