@@ -37,7 +37,7 @@ with name = your-benchmark-machine:
 ### 3. Run `setup-benchmark-machine-ubuntu-20.04.sh` script on your benchmark machine
 - Note that `setup-benchmark-machine-ubuntu-20.04.sh` only installs dependencies for Arrow C++, Python, R, Java and JavaScript.
 - If you need to install additional dependencies, please update `setup-benchmark-machine-ubuntu-20.04.sh`. 
-- If you need to set a machine, which is not running Ubuntu, please create a new setup script 
+- If you need to set up a machine, which is running OS other than Ubuntu, please create a new setup script.
 and use `setup-benchmark-machine-ubuntu-20.04.sh` as a reference.
 ```shell script
 sudo su
