@@ -60,7 +60,7 @@ def log_benchmark_group_execution(client, data=None, api_access_token=None):
         data["run_id"] = run.id
 
     if not api_access_token:
-        api_access_token = machine.generate_api_access_token()
+        api_access_token = machine.create_api_access_token()
 
     headers = {
         "Content-Type": "application/json",
@@ -76,7 +76,7 @@ def log_memory_usage(client, data=None, api_access_token=None):
 
     if not api_access_token:
         machine = Machine.first()
-        api_access_token = machine.generate_api_access_token()
+        api_access_token = machine.create_api_access_token()
 
     headers = {
         "Content-Type": "application/json",
@@ -114,7 +114,7 @@ def test_benchmark_group_execution_logs_401_invalid_run_id(client):
 def test_memory_usage_logs_201(client):
     assert not MemoryUsage.get(memory_usage_data["id"])
     machine = Machine.first()
-    api_access_token = machine.generate_api_access_token()
+    api_access_token = machine.create_api_access_token()
     log_benchmark_group_execution(client, data=None, api_access_token=api_access_token)
     response = log_memory_usage(client, data=None, api_access_token=api_access_token)
     assert response.status_code == 201
@@ -124,7 +124,7 @@ def test_memory_usage_logs_201(client):
 def test_memory_usage_logs_401_invalid_token(client):
     assert not MemoryUsage.get(memory_usage_data["id"])
     machine = Machine.first()
-    api_access_token = machine.generate_api_access_token()
+    api_access_token = machine.create_api_access_token()
     log_benchmark_group_execution(client, data=None, api_access_token=api_access_token)
     response = log_memory_usage(client, data=None, api_access_token="invalid token")
     assert response.status_code == 401
@@ -134,7 +134,7 @@ def test_memory_usage_logs_401_invalid_token(client):
 def test_memory_usage_logs_401_not_existing_benchmark_execution_group(client):
     assert not MemoryUsage.get(memory_usage_data["id"])
     machine = Machine.first()
-    api_access_token = machine.generate_api_access_token()
+    api_access_token = machine.create_api_access_token()
     log_benchmark_group_execution(client, data=None, api_access_token=api_access_token)
     data = deepcopy(memory_usage_data)
     data["benchmark_group_execution_id"] = "not_existing_benchmark_execution_group_id"
@@ -146,8 +146,8 @@ def test_memory_usage_logs_401_not_existing_benchmark_execution_group(client):
 def test_memory_usage_logs_401_unauthorized_machine(client):
     assert not MemoryUsage.get(memory_usage_data["id"])
     machines = Machine.all()
-    api_access_token_1 = machines[0].generate_api_access_token()
-    api_access_token_2 = machines[1].generate_api_access_token()
+    api_access_token_1 = machines[0].create_api_access_token()
+    api_access_token_2 = machines[1].create_api_access_token()
     log_benchmark_group_execution(
         client, data=None, api_access_token=api_access_token_1
     )

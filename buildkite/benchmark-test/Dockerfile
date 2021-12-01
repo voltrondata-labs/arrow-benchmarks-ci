@@ -66,7 +66,7 @@ RUN apt-get update -y -q && \
     rm -rf /var/lib/apt/lists* && \
     npm install -g yarn
 
-# Setup Java dependencies
+# Install Java dependencies
 RUN apt-get update -y -q && \
     apt-get install -y -q --no-install-recommends openjdk-8-jdk maven && \
     apt-get clean && \
