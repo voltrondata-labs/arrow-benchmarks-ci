@@ -38,7 +38,6 @@ with name = your-benchmark-machine:
 - If you need to set up a machine, which is running OS other than Ubuntu, please create a new setup script.
 and use `setup-benchmark-machine-ubuntu-20.04.sh` as a reference.
 ```shell script
-sudo su
 git clone https://github.com/ursacomputing/arrow-benchmarks-ci.git
 cd arrow-benchmarks-ci/
 

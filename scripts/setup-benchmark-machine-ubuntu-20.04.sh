@@ -1,5 +1,7 @@
 #!/bin/bash
 
+sudo su
+
 # Install Arrow C++ dependencies
 apt-get upgrade
 apt-get update -y -q && \
@@ -96,8 +98,11 @@ echo "source /var/lib/buildkite-agent/.bashrc" >> /etc/buildkite-agent/hooks/pre
 # Install conda
 su - buildkite-agent
 curl -LO https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
-bash Miniconda3-latest-Linux-x86_64.sh -b -p $HOME/miniconda3
-$HOME/miniconda3/bin/conda init
+#bash Miniconda3-latest-Linux-x86_64.sh -b -p "$HOME/miniconda3"
+bash Miniconda3-latest-Linux-x86_64.sh -b -p "/var/lib/buildkite-agent/miniconda3"
+#"$HOME/miniconda3/bin/conda" init
+"/var/lib/buildkite-agent/miniconda3/bin/conda" init
+exit
 
 # Start Buildkite Agent
 systemctl enable buildkite-agent && systemctl start buildkite-agent
