@@ -131,7 +131,7 @@ def verify_benchmarkables_and_builds_were_created_for_pull_request_comment(
     assert response.status_code == 202
     assert response.json == ""
     assert len(Benchmarkable.all()) == 2
-    assert len(Run.all()) == 2 * len(list(machine_configs().keys()))
+    assert len(Run.all()) == 2 * len(list(machine_configs.keys()))
 
     benchmarkable = Benchmarkable.get(test_benchmarkable_id)
     baseline_benchmarkable = Benchmarkable.get(test_baseline_benchmarkable_id)
@@ -168,7 +168,7 @@ def test_post_events_for_pr_with_supported_ursabot_commands(client):
         expected_runs,
     ) in pull_comments_with_expected_machine_run_filters_and_skip_reason.items():
         delete_data()
-        update_machine_configs(machine_configs())
+        update_machine_configs(machine_configs)
         mock_offline_machine()
         response = make_github_webhook_event_for_comment(client, comment)
         verify_benchmarkables_and_builds_were_created_for_pull_request_comment(
@@ -212,7 +212,7 @@ def test_post_events_for_pr_with_existing_results(client):
         assert response.status_code == 202
         assert response.json == ""
         assert len(Benchmarkable.all()) == 2
-        assert len(Run.all()) == 2 * len(list(machine_configs().keys()))
+        assert len(Run.all()) == 2 * len(list(machine_configs.keys()))
         assert outbound_requests[-1] == (
             f"http://mocked-integrations:9999/github/repos/apache/arrow/issues/{test_pull_number}/comments",
             json.dumps({"body": "Commit sha2 already has scheduled benchmark runs."}),

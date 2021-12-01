@@ -9,7 +9,7 @@ from tests.helpers import delete_data, machine_configs, mock_offline_machine
 @pytest.fixture(autouse=True)
 def run_before_and_after_tests():
     delete_data()
-    update_machine_configs(machine_configs())
+    update_machine_configs(machine_configs)
     mock_offline_machine()
     yield
 

@@ -19,16 +19,12 @@ class Buildkite:
         )
 
     def create_pipeline(self, pipeline_name, agent_queue):
-        # TODO: Remove line below once done with testing
-        agent_queue = "arrow-benchmarks-ci-test"
-
         url = f"{self.base_url}/pipelines"
         data = {
             "name": pipeline_name,
             "repository": f"https://github.com/{Config.GITHUB_REPO}.git",
             "default_branch": "main",
-            # TODO: Update to main once done with testing
-            "branch_configuration": "",
+            "branch_configuration": "main",
             "provider": {
                 "id": "github",
                 "settings": {

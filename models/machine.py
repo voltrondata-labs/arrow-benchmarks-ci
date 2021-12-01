@@ -7,6 +7,7 @@ from authlib.jose import jwt
 from sqlalchemy.dialects import postgresql
 from sqlalchemy.orm import backref, relationship
 
+from buildkite.benchmark.run import repos_with_benchmark_groups, MockRun
 from config import Config
 from db import Base
 from integrations.buildkite import buildkite
@@ -73,14 +74,13 @@ class Machine(Base, BaseMixin):
                     f"Only {self.supported_filters} filters are supported on {self.name}",
                 )
 
-        # TODO
-        # for repo_with_benchmark_groups in repos_with_benchmark_groups:
-        #     mock_run = MockRun(repo_with_benchmark_groups, filters=machine_run_filters)
-        #     if not mock_run.has_benchmark_groups_to_execute():
-        #         return (
-        #             machine_run_filters,
-        #             f"Provided benchmark filters do not have any benchmark groups to be executed on {self.machine}",
-        #         )
+        for repo_with_benchmark_groups in repos_with_benchmark_groups:
+            mock_run = MockRun(repo_with_benchmark_groups, filters=machine_run_filters)
+            if not mock_run.has_benchmark_groups_to_execute():
+                return (
+                    machine_run_filters,
+                    f"Provided benchmark filters do not have any benchmark groups to be executed on {self.machine}",
+                )
 
         return machine_run_filters, None
 
