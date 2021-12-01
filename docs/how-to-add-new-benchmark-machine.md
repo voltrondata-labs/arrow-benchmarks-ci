@@ -65,6 +65,6 @@ exit
 systemctl enable buildkite-agent && systemctl start buildkite-agent
 
 # Verify Buildkite Agent is running
-journalctl -f -u buildkite-agent
 ps aux | grep buildkite
+journalctl -f -u buildkite-agent
 ```
