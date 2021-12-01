@@ -14,7 +14,7 @@ from tests.helpers import (
     test_benchmarkable_id,
 )
 
-machines = list(machine_configs().keys())
+machines = list(machine_configs.keys())
 finished_status = "Finished :arrow_down:33.33% :arrow_up:33.33%"
 failed_status = "Failed :arrow_down:33.33% :arrow_up:33.33%"
 scheduled_status_with_warning = "Scheduled :warning: ursa-i9-9960x is offline."

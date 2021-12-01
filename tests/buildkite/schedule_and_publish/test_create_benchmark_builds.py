@@ -12,7 +12,7 @@ def test_create_benchmark_builds_no_pull_requests():
     for i in [1, 2, 3, 4, 5]:
         # machine.has_scheduled_or_running_builds() is always False for unit tests
         create_benchmark_builds()
-        for machine_name, params in machine_configs().items():
+        for machine_name, params in machine_configs.items():
             runs = Run.all(machine_name=machine_name, status="scheduled")
             assert len(runs) == i
             for run in runs:

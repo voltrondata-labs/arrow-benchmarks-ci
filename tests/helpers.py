@@ -1,9 +1,7 @@
 import hashlib
 import hmac
 import json
-from copy import deepcopy
 
-from config import Config
 from models.benchmark_group_execution import BenchmarkGroupExecution
 from models.benchmarkable import Benchmarkable
 from models.machine import Machine
@@ -15,6 +13,27 @@ outbound_requests = []
 test_pull_number = 1234
 test_benchmarkable_id = "sha2"
 test_baseline_benchmarkable_id = "sha1"
+machine_configs = {
+    "ursa-i9-9960x": {
+        "info": "langs = Python, R, JavaScript",
+        "default_filters": {
+            "arrow-commit": {"lang": "Python,R,JavaScript"},
+            "pyarrow-apache-wheel": {"lang": "Python"},
+        },
+        "supported_filters": ["lang", "name"],
+        "supported_langs": ["Python", "R", "JavaScript"],
+        "offline_warning_enabled": True,
+    },
+    "ursa-thinkcentre-m75q": {
+        "info": "langs = C++, Java",
+        "default_filters": {
+            "arrow-commit": {"lang": "C++,Java"},
+        },
+        "supported_filters": ["lang", "command"],
+        "supported_langs": ["C++", "Java"],
+        "offline_warning_enabled": True,
+    },
+}
 
 
 def delete_data():
@@ -28,13 +47,6 @@ def delete_data():
     ]:
         model.delete_all()
         assert model.all() == []
-
-
-def machine_configs():
-    configs = {}
-    for machine in ["ursa-i9-9960x", "ursa-thinkcentre-m75q"]:
-        configs[machine] = deepcopy(Config.MACHINES[machine])
-    return configs
 
 
 def mock_offline_machine():

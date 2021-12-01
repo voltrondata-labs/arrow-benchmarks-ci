@@ -22,9 +22,6 @@ class Conbench:
 
     def get_compare_runs(self, baseline_run_id, contender_run_id):
         url = f"{self.base_url}/compare/runs/{baseline_run_id}...{contender_run_id}/"
-        # TODO: Remove this
-        url = f"{self.base_url}/compare/runs/31971634-7204-4fa5-a16e-f4f1154a57e2...77cb3ad6-c6fb-4c8d-815d-6c66a63ac9ee/"
-
         response = self.session.get(url)
 
         if response.status_code == 404:

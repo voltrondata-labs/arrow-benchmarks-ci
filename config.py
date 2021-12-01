@@ -45,42 +45,42 @@ class Config:
     )
 
     MACHINES = {
-        "new-machine": {
-            "info": "name = dataset-filter",
-            "default_filters": {
-                "arrow-commit": {"name": "dataset-filter"},
-            },
-            "supported_filters": ["name"],
-            "supported_langs": ["Python"],
-            "offline_warning_enabled": False,
-        },
-        "ursa-i9-9960x": {
-            "info": "langs = Python, R, JavaScript",
-            "default_filters": {
-                "arrow-commit": {"lang": "Python,R,JavaScript"},
-                "pyarrow-apache-wheel": {"lang": "Python"},
-            },
-            "supported_filters": ["lang", "name"],
-            "supported_langs": ["Python", "R", "JavaScript"],
-            "offline_warning_enabled": True,
-        },
-        "ursa-thinkcentre-m75q": {
-            "info": "langs = C++, Java",
-            "default_filters": {
-                "arrow-commit": {"lang": "C++,Java"},
-            },
-            "supported_filters": ["lang", "command"],
-            "supported_langs": ["C++", "Java"],
-            "offline_warning_enabled": True,
-        },
-        "ec2-t3-xlarge-us-east-2": {
-            "info": "cloud = True",
-            "default_filters": {
-                "arrow-commit": {"flags": {"cloud": True}},
-                "pyarrow-apache-wheel": {"lang": "Python", "flags": {"cloud": True}},
-            },
-            "supported_filters": ["lang", "name"],
-            "supported_langs": ["Python", "R", "C++"],
-            "offline_warning_enabled": False,
-        },
+        # "new-machine": {
+        #     "info": "name = dataset-filter",
+        #     "default_filters": {
+        #         "arrow-commit": {"name": "dataset-filter"},
+        #     },
+        #     "supported_filters": ["name"],
+        #     "supported_langs": ["Python"],
+        #     "offline_warning_enabled": False,
+        # },
+        # "ursa-i9-9960x": {
+        #     "info": "langs = Python, R, JavaScript",
+        #     "default_filters": {
+        #         "arrow-commit": {"lang": "Python,R,JavaScript"},
+        #         "pyarrow-apache-wheel": {"lang": "Python"},
+        #     },
+        #     "supported_filters": ["lang", "name"],
+        #     "supported_langs": ["Python", "R", "JavaScript"],
+        #     "offline_warning_enabled": True,
+        # },
+        # "ursa-thinkcentre-m75q": {
+        #     "info": "langs = C++, Java",
+        #     "default_filters": {
+        #         "arrow-commit": {"lang": "C++,Java"},
+        #     },
+        #     "supported_filters": ["lang", "command"],
+        #     "supported_langs": ["C++", "Java"],
+        #     "offline_warning_enabled": True,
+        # },
+        # "ec2-t3-xlarge-us-east-2": {
+        #     "info": "cloud = True",
+        #     "default_filters": {
+        #         "arrow-commit": {"flags": {"cloud": True}},
+        #         "pyarrow-apache-wheel": {"lang": "Python", "flags": {"cloud": True}},
+        #     },
+        #     "supported_filters": ["lang", "name"],
+        #     "supported_langs": ["Python", "R", "C++"],
+        #     "offline_warning_enabled": False,
+        # },
     }
