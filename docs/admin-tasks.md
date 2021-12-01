@@ -1,7 +1,7 @@
 ## Admin Tasks
 
 Admin Tasks can only performed by a contributor who has access to AWS account running Arrow Benchmarks CI and 
-Apache Arrow Buildkite Org
+[Apache Arrow Buildkite Org](https://buildkite.com/organizations/apache-arrow) user.
 
 ### Create ARROW_BCI_API_ACCESS_TOKEN for Benchmark Machine
 ```shell script
@@ -52,4 +52,7 @@ mutation {
 ```
 
 ### Create CONBENCH_EMAIL and CONBENCH_PASSWORD for Benchmark Machine
-- Go to https://conbench.ursa.dev/register/ and add new user
+- Go to https://conbench.ursa.dev/register/ and register new user with
+    - Name = new-machine-name
+    - User = new-machine-name@some-domain.com
+    

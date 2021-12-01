@@ -1,7 +1,5 @@
 ## How to Add New Benchmark Machine
 
-Note that we only have a script for setting up benchmark machine with Ubuntu 20.04.2 x86_64 GNU/Linux.
-
 ### 1. Create Pull Request for adding your benchmark machine
 - Add your benchmark machine to `MACHINES` in [config.py](../config.py)
 ```python
@@ -21,7 +19,7 @@ MACHINES = {
 ### 2. Get environment vars for Buildkite Agent that will run on your benchmark machine
 - Add a comment to your Pull Request
 ```
-@ElenaHenderson Will you please create environment vars for Buildkite Agent for our benchmark machine 
+@ElenaHenderson Will you please provide environment vars for Buildkite Agent for our benchmark machine 
 with name = your-benchmark-machine:
 - ARROW_BCI_URL
 - ARROW_BCI_API_ACCESS_TOKEN
