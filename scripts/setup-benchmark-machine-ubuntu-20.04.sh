@@ -1,7 +1,5 @@
 #!/bin/bash
 
-sudo su
-
 # Install Arrow C++ dependencies
 apt-get upgrade
 apt-get update -y -q && \

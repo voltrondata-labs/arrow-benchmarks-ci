@@ -20,6 +20,10 @@ running Rust/Java/etc benchmarks and we need these Buildkite environment vars:
 
 ### 2. Run setup-benchmark-machine-ubuntu-20.04.sh script on your benchmark machine
 ```shell script
+sudo su
+git clone https://github.com/ursacomputing/arrow-benchmarks-ci.git
+cd arrow-benchmarks-ci/
+
 export ARROW_BCI_URL=<ARROW_BCI_URL>
 export ARROW_BCI_API_ACCESS_TOKEN=<ARROW_BCI_API_ACCESS_TOKEN>
 export BUILDKITE_AGENT_TOKEN=<BUILDKITE_AGENT_TOKEN>
@@ -29,5 +33,5 @@ export CONBENCH_PASSWORD=<CONBENCH_PASSWORD>
 export CONBENCH_URL=<CONBENCH_URL>
 export MACHINE=<MACHINE>
 
-./scripts/setup-benchmark-machine-ubuntu-20.04.sh
+source ./scripts/setup-benchmark-machine-ubuntu-20.04.sh
 ```
