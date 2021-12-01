@@ -62,3 +62,17 @@ steps:
     command:
       - docker-compose -f envs/prod/docker-compose.yml run app python -c 'from buildkite.schedule_and_publish.publish_warnings_on_slack import publish_offline_machine_warnings_on_slack; publish_offline_machine_warnings_on_slack()'
       - docker-compose -f envs/prod/docker-compose.yml run app python -c 'from buildkite.schedule_and_publish.publish_warnings_on_slack import publish_buildkite_build_warnings_on_slack; publish_buildkite_build_warnings_on_slack()'
+
+  - wait
+
+  - label: "Sleep for 1 Min"
+    concurrency: 1
+    concurrency_group: "arrow-bci-schedule-and-publish"
+    command:
+      - sleep 60
+
+  - wait
+
+  - label: "Trigger Arrow BCI Schedule & Publish"
+    concurrency: 1
+    trigger: "arrow-bci-schedule-and-publish"

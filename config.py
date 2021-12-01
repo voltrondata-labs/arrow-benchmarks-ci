@@ -45,7 +45,16 @@ class Config:
     )
 
     MACHINES = {
-        "new-machine": {
+        "machine1": {
+            "info": "name = dataset-filter",
+            "default_filters": {
+                "arrow-commit": {"name": "dataset-filter"},
+            },
+            "supported_filters": ["name"],
+            "supported_langs": ["Python"],
+            "offline_warning_enabled": False,
+        },
+        "machine2": {
             "info": "name = dataset-filter",
             "default_filters": {
                 "arrow-commit": {"name": "dataset-filter"},
