@@ -55,4 +55,3 @@ mutation {
 - Go to https://conbench.ursa.dev/register/ and register new user with
     - Name = new-machine-name
     - User = new-machine-name@some-domain.com
-    
