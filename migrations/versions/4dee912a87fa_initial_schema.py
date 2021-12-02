@@ -72,7 +72,7 @@ def upgrade():
             nullable=False,
         ),
         sa.Column(
-            "include_in_benchmark_results_messages",
+            "publish_benchmark_results",
             sa.Boolean(),
             server_default="false",
             nullable=False,

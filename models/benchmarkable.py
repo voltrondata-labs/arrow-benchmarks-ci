@@ -178,7 +178,7 @@ class Benchmarkable(Base, BaseMixin):
             runs_status += f" :warning: {machine.name} is offline."
         return runs_status
 
-    def all_runs_finished(self):
+    def all_runs_with_publishable_benchmark_results_finished(self):
         return all([run.finished_at for run in self.runs])
 
     def slack_notification(self):

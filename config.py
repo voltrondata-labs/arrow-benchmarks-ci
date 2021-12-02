@@ -54,7 +54,7 @@ class Config:
             "supported_filters": ["lang", "name"],
             "supported_langs": ["R", "JavaScript"],
             "offline_warning_enabled": True,
-            "include_in_benchmark_results_messages": False,
+            "publish_benchmark_results": False,
         },
         "machine2": {
             "info": "langs = Java",
@@ -64,7 +64,7 @@ class Config:
             "supported_filters": ["lang"],
             "supported_langs": ["Java"],
             "offline_warning_enabled": True,
-            "include_in_benchmark_results_messages": True,
+            "publish_benchmark_results": True,
         },
         "machine3": {
             "info": "langs = Python, R, JavaScript",
@@ -75,7 +75,7 @@ class Config:
             "supported_filters": ["lang", "name"],
             "supported_langs": ["Python", "R", "JavaScript"],
             "offline_warning_enabled": True,
-            "include_in_benchmark_results_messages": True,
+            "publish_benchmark_results": True,
         },
         "machine4": {
             "info": "langs = C++, Java",
@@ -85,7 +85,7 @@ class Config:
             "supported_filters": ["lang", "command"],
             "supported_langs": ["C++", "Java"],
             "offline_warning_enabled": True,
-            "include_in_benchmark_results_messages": True,
+            "publish_benchmark_results": True,
         },
         # "ursa-i9-9960x": {
         #     "info": "langs = Python, R, JavaScript",

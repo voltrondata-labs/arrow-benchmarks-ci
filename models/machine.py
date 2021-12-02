@@ -23,7 +23,7 @@ class Machine(Base, BaseMixin):
     supported_filters = NotNull(postgresql.ARRAY(s.String))
     supported_langs = NotNull(postgresql.ARRAY(s.String))
     offline_warning_enabled = NotNull(s.Boolean, server_default="false")
-    include_in_benchmark_results_messages = NotNull(s.Boolean, server_default="false")
+    publish_benchmark_results = NotNull(s.Boolean, server_default="false")
     hostname = Nullable(s.String)
     ip_address = Nullable(s.String)
     port = Nullable(s.Integer)

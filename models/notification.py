@@ -39,11 +39,11 @@ class Notification(Base, BaseMixin):
     def pull_number(self):
         return self.benchmarkable.pull_number
 
-    def all_runs_finished(self):
+    def all_runs_with_publishable_benchmark_results_finished(self):
         return (
-            self.benchmarkable.all_runs_finished()
+            self.benchmarkable.all_runs_with_publishable_benchmark_results_finished()
             and self.benchmarkable.baseline is not None
-            and self.benchmarkable.baseline.all_runs_finished()
+            and self.benchmarkable.baseline.all_runs_with_publishable_benchmark_results_finished()
         )
 
     def generate_comment_with_compare_runs_links(self):
