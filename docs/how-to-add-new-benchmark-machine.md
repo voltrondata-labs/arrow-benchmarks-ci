@@ -54,10 +54,23 @@ curl -LO https://raw.githubusercontent.com/ursacomputing/arrow-benchmarks-ci/mai
 chmod +x setup-benchmark-machine-ubuntu-20.04.sh
 source ./setup-benchmark-machine-ubuntu-20.04.sh
 
+# Verify you have at least these versions of java, javac, mvn, node and yarn
+$ java -version
+openjdk version "1.8.0_292"
+$ javac -version
+javac 1.8.0_292
+$ mvn -version
+Apache Maven 3.6.3
+$ node --version
+v14.18.2
+$ yarn --version
+1.22.17
+
 # Install Conda for buildkite-agent user
 su - buildkite-agent
 curl -LO https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
 bash Miniconda3-latest-Linux-x86_64.sh -b -p "$HOME/miniconda3"
+bash 
 "$HOME/miniconda3/bin/conda" init
 exit
 exit
