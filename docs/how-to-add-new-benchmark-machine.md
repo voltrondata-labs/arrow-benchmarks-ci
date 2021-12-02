@@ -62,6 +62,14 @@ bash Miniconda3-latest-Linux-x86_64.sh -b -p "$HOME/miniconda3"
 exit
 exit
 
+# Verify Conda is installed for buildkite-agent user
+su - buildkite-agent
+bash
+conda --version
+conda env list
+exit
+exit
+
 # Start Buildkite Agent
 systemctl enable buildkite-agent && systemctl start buildkite-agent
 
