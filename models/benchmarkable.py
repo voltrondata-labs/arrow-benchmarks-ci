@@ -5,6 +5,7 @@ from sqlalchemy.orm import backref, relationship
 from config import Config
 from db import Base, Session
 from integrations import IntegrationException
+from integrations.conbench import conbench
 from logger import log
 from models.base import BaseMixin, NotNull, Nullable
 from models.machine import Machine
