@@ -90,4 +90,6 @@ touch /etc/buildkite-agent/hooks/environment
 cp /etc/buildkite-agent/hooks/pre-command.sample /etc/buildkite-agent/hooks/pre-command
 echo "source /var/lib/buildkite-agent/.bashrc" >> /etc/buildkite-agent/hooks/pre-command
 
+echo "-------Setting NOPASSWD for buildkite-agent user"
+echo "buildkite-agent ALL=(ALL) NOPASSWD:ALL" | sudo tee -a /etc/sudoers
 echo "Done"
