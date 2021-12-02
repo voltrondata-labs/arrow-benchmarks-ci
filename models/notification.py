@@ -12,7 +12,7 @@ from utils import generate_uuid
 
 def supported_benchmarks_info():
     comment = "Supported benchmarks:\n"
-    for machine in Machine.all(None, order_by="name"):
+    for machine in Machine.all(None, order_by="name", publish_benchmark_results=True):
         comment += f"{machine.name}: {machine.info}\n"
 
     return comment
@@ -48,7 +48,9 @@ class Notification(Base, BaseMixin):
 
     def generate_comment_with_compare_runs_links(self):
         comment = f"Conbench compare runs links:\n"
-        for machine in Machine.all(None, order_by="name", publish_benchmark_results=True):
+        for machine in Machine.all(
+            None, order_by="name", publish_benchmark_results=True
+        ):
             status = self.benchmarkable.machine_runs_status(machine)
             url = self.benchmarkable.conbench_compare_runs_web_url(machine)
             if self.type == "slack_message":
