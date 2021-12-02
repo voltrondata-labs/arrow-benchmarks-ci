@@ -48,7 +48,7 @@ class Config:
         "machine1": {
             "info": "langs = R, JavaScript",
             "default_filters": {
-                "arrow-commit": {"lang": "R,JavaScript"},
+                "arrow-commit": {"lang": "JavaScript"},
                 "pyarrow-apache-wheel": {"lang": "Python"},
             },
             "supported_filters": ["lang", "name"],
@@ -67,7 +67,7 @@ class Config:
         "machine3": {
             "info": "langs = Python, R, JavaScript",
             "default_filters": {
-                "arrow-commit": {"lang": "Python,R,JavaScript"},
+                "arrow-commit": {"lang": "Python,JavaScript"},
                 "pyarrow-apache-wheel": {"lang": "Python"},
             },
             "supported_filters": ["lang", "name"],
