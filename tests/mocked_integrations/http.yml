@@ -98,6 +98,16 @@
     - reply_http:
         status_code: 200
         body_from_file: './buildkite/get_scheduled_builds.json'
+- key: get_scheduled_builds_for_new_machine
+  kind: Behavior
+  expect:
+    http:
+      method: GET
+      path: /buildkite/v2/organizations/apache-arrow/pipelines/arrow-bci-benchmark-on-new-machine/builds
+  actions:
+    - reply_http:
+        status_code: 200
+        body_from_file: './buildkite/get_scheduled_builds.json'
 - key: create_build_for_ursa_i9_9960x
   kind: Behavior
   expect:
