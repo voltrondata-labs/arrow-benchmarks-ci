@@ -4,7 +4,7 @@ from sqlalchemy.orm import backref, relationship
 
 from config import Config
 from db import Base, Session
-from integrations.conbench import ConbenchNotFoundException, conbench
+from integrations import IntegrationException
 from logger import log
 from models.base import BaseMixin, NotNull, Nullable
 from models.machine import Machine
@@ -163,7 +163,7 @@ class Benchmarkable(Base, BaseMixin):
                     )
 
                 return runs_status
-            except ConbenchNotFoundException:
+            except IntegrationException:
                 return "Failed"
             except Exception as e:
                 raise e
