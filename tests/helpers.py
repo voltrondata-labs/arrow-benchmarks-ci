@@ -35,6 +35,16 @@ machine_configs = {
         "offline_warning_enabled": True,
         "publish_benchmark_results": True,
     },
+    "new-machine": {
+        "info": "langs = C++, Java",
+        "default_filters": {
+            "arrow-commit": {"lang": "C++,Java"},
+        },
+        "supported_filters": ["lang", "command"],
+        "supported_langs": ["C++", "Java"],
+        "offline_warning_enabled": False,
+        "publish_benchmark_results": False,
+    },
 }
 
 
