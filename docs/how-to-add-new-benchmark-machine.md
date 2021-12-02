@@ -113,15 +113,22 @@ Suggested Reviewers:
 - [Elena Henderson](https://github.com/elenahenderson)
 - [Jonathan Keane](https://github.com/jonkeane)
 
-##### 7. Verify benchmark builds on your machine are running as expected
+##### 7. Request Buildkite pipeline for your benchmark machine to be made public
+- Add a comment to your Pull Request:
+```
+@ElenaHenderson Will you please make Buildkite pipeline for benchmark machine ... public?
+```
+This step can not be automated right now because Buildkite REST API fails to set pipeline visibility to public. 
+
+##### 8. Verify benchmark builds on your machine are running as expected
 - Go to [Apache Arrow CI Buildkite organization](https://buildkite.com/apache-arrow)
 - Click on **"Arrow BCI Benchmark on ..."** Buildkite pipeline for your machine and 
 verify benchmark builds are running as expected
 
-##### 8. Verify benchmark results from your machine are logged into Conbench
+##### 9. Verify benchmark results from your machine are logged into Conbench
 - Go to [Conbench](https://conbench.ursa.dev/)
 - Enter your machine name into Search box
 - Click on a few runs and verify that all benchmark results form your machine are logged
 
-##### 9. Create Pull Request to enable `publish_benchmark_results` for your machine
+##### 10. Create Pull Request to enable `publish_benchmark_results` for your machine
 - Update `MACHINES` in [config.py](../config.py) and set `publish_benchmark_results` to `True` for your machine
