@@ -46,22 +46,23 @@ class Config:
 
     MACHINES = {
         "machine1": {
-            "info": "name = wide-dateframe",
+            "info": "langs = R, JavaScript",
             "default_filters": {
-                "arrow-commit": {"name": "wide-dataframe"},
+                "arrow-commit": {"lang": "R,JavaScript"},
+                "pyarrow-apache-wheel": {"lang": "Python"},
             },
-            "supported_filters": ["name"],
-            "supported_langs": ["Python"],
-            "offline_warning_enabled": False,
+            "supported_filters": ["lang", "name"],
+            "supported_langs": ["R", "JavaScript"],
+            "offline_warning_enabled": True,
         },
         "machine2": {
-            "info": "name = wide-dataframe",
+            "info": "langs = Java",
             "default_filters": {
-                "arrow-commit": {"name": "wide-dataframe"},
+                "arrow-commit": {"lang": "Java"},
             },
-            "supported_filters": ["name"],
-            "supported_langs": ["Python"],
-            "offline_warning_enabled": False,
+            "supported_filters": ["lang"],
+            "supported_langs": ["Java"],
+            "offline_warning_enabled": True,
         },
         "machine3": {
             "info": "langs = Python, R, JavaScript",

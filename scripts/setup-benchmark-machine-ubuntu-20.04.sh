@@ -1,9 +1,9 @@
 #!/bin/bash
 
 apt-get upgrade
-apt-get update -y -q
 
 echo "-------Installing C++ dependencies"
+apt-get update -y -q && \
 apt-get install -y -q --no-install-recommends \
     autoconf \
     ca-certificates \
@@ -43,6 +43,7 @@ apt-get clean && \
 rm -rf /var/lib/apt/lists*
 
 echo "-------Installing Python dependencies"
+apt-get update -y -q && \
 apt-get install -y -q \
     python3 \
     python3-pip \
@@ -51,11 +52,13 @@ apt-get clean && \
 rm -rf /var/lib/apt/lists/*
 
 echo "-------Installing R dependencies"
+apt-get update -y -q && \
 apt-get install -y -q --no-install-recommends r-base && \
 apt-get clean && \
 rm -rf /var/lib/apt/lists*
 
 echo "-------Installing JavaScript dependencies"
+apt-get update -y -q && \
 wget -q -O - https://deb.nodesource.com/setup_14.x | bash - && \
 apt-get install -y nodejs && \
 apt-get clean && \
@@ -63,6 +66,7 @@ rm -rf /var/lib/apt/lists* && \
 npm install -g yarn
 
 echo "-------Installing Java dependencies"
+apt-get update -y -q && \
 apt-get install -y -q --no-install-recommends openjdk-8-jdk maven && \
 apt-get clean && \
 rm -rf /var/lib/apt/lists*
