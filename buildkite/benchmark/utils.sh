@@ -88,6 +88,7 @@ install_java_script_project_dependencies() {
 
 create_data_dir() {
   mkdir -p "${BENCHMARKS_DATA_DIR}"
+  mkdir -p "${BENCHMARKS_DATA_DIR}/temp"
 }
 
 build_arrow_and_run_benchmark_groups() {
