@@ -122,7 +122,11 @@ class Benchmarkable(Base, BaseMixin):
 
     @property
     def runs_with_buildkite_builds(self):
-        return [run for run in self.runs if run.buildkite_data]
+        return [
+            run
+            for run in self.runs
+            if run.buildkite_data and run.machine.publish_benchmark_results
+        ]
 
     def machine_run(self, machine):
         for run in self.runs:
