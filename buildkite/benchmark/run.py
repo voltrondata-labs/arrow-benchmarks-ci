@@ -309,9 +309,9 @@ class Run:
         for command in self.setup_commands_for_lang_benchmarks[lang]:
             self.execute_command(f"source buildkite/benchmark/utils.sh {command}")
 
-    def mark_benchmark_groups_skipped(self, lang, skip_reason):
+    def mark_benchmark_groups_failed(self, lang, stderr):
         for benchmark_group in self.benchmark_groups_for_lang(lang):
-            benchmark_group.stderr = skip_reason
+            benchmark_group.stderr = stderr
             benchmark_group.log_execution()
 
     def run_benchmark_groups(self, lang):
@@ -380,8 +380,8 @@ class Run:
                     self.additional_setup_for_benchmark_groups(lang)
                 except Exception as e:
                     logging.exception(e)
-                    skip_reason = "Unable to run because additional_setup_for_benchmark_groups failed"
-                    self.mark_benchmark_groups_skipped(lang, skip_reason)
+                    stderr = f"Setup for {lang} benchmark groups failed"
+                    self.mark_benchmark_groups_failed(lang, stderr)
                     continue
 
             self.run_benchmark_groups(lang)
