@@ -1,3 +1,4 @@
+from logger import log
 from models.notification import Notification
 
 
@@ -13,10 +14,13 @@ def publish_benchmark_results_on_slack():
     messages = []
 
     for notification in notifications:
-        if notification.all_runs_finished():
-            text = notification.generate_slack_message_text()
-            notification.post_slack_message(text)
-            notification.mark_finished()
-            messages.append(text)
+        try:
+            if notification.all_runs_finished():
+                text = notification.generate_slack_message_text()
+                notification.post_slack_message(text)
+                notification.mark_finished()
+                messages.append(text)
+        except Exception as e:
+            log(e)
 
     return messages
