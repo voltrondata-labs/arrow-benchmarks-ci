@@ -42,14 +42,14 @@ def test_publish_benchmark_results_on_slack():
 
     # Iteration 1
     create_benchmark_builds()
-    assert len(Run.all(status="scheduled")) == 2
+    assert len(Run.all(status="scheduled")) == 3
     assert len(Run.all(status="finished")) == 0
     assert len(Run.all(status="failed")) == 0
 
     update_benchmark_builds_status()
     assert len(Run.all(status="scheduled")) == 0
     assert len(Run.all(status="finished")) == 1
-    assert len(Run.all(status="failed")) == 1
+    assert len(Run.all(status="failed")) == 2
 
     messages = publish_benchmark_results_on_slack()
     assert messages == []
@@ -58,12 +58,12 @@ def test_publish_benchmark_results_on_slack():
     create_benchmark_builds()
     assert len(Run.all(status="scheduled")) == 2
     assert len(Run.all(status="finished")) == 1
-    assert len(Run.all(status="failed")) == 1
+    assert len(Run.all(status="failed")) == 2
 
     update_benchmark_builds_status()
     assert len(Run.all(status="scheduled")) == 0
     assert len(Run.all(status="finished")) == 2
-    assert len(Run.all(status="failed")) == 2
+    assert len(Run.all(status="failed")) == 4
 
     messages = publish_benchmark_results_on_slack()
     assert messages == [expected_slack_message()]
