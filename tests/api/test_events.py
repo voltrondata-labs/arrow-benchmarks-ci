@@ -107,7 +107,7 @@ pull_comments_with_expected_machine_run_filters_and_skip_reason = {
         ),
         "new-machine": (
             {"lang": "Python", "name": "file-write"},
-            "Only ['C++', 'Java'] filters are supported on new-machine",
+            "Only ['C++', 'Java'] langs are supported on new-machine",
         ),
     },
     "@ursabot please benchmark    name=file-write  lang=Python ": {
@@ -118,7 +118,7 @@ pull_comments_with_expected_machine_run_filters_and_skip_reason = {
         ),
         "new-machine": (
             {"lang": "Python", "name": "file-write"},
-            "Only ['C++', 'Java'] filters are supported on new-machine",
+            "Only ['C++', 'Java'] langs are supported on new-machine",
         ),
     },
     "@ursabot please benchmark name=file-*": {
