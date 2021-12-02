@@ -56,7 +56,7 @@ def test_publish_benchmark_results_on_slack():
 
     # Iteration 2
     create_benchmark_builds()
-    assert len(Run.all(status="scheduled")) == 2
+    assert len(Run.all(status="scheduled")) == 3
     assert len(Run.all(status="finished")) == 1
     assert len(Run.all(status="failed")) == 2
 
