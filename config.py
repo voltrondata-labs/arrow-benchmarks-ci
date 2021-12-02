@@ -63,6 +63,25 @@ class Config:
             "supported_langs": ["Python"],
             "offline_warning_enabled": False,
         },
+        "machine3": {
+            "info": "langs = Python, R, JavaScript",
+            "default_filters": {
+                "arrow-commit": {"lang": "Python,R,JavaScript"},
+                "pyarrow-apache-wheel": {"lang": "Python"},
+            },
+            "supported_filters": ["lang", "name"],
+            "supported_langs": ["Python", "R", "JavaScript"],
+            "offline_warning_enabled": True,
+        },
+        "machine4": {
+            "info": "langs = C++, Java",
+            "default_filters": {
+                "arrow-commit": {"lang": "C++,Java"},
+            },
+            "supported_filters": ["lang", "command"],
+            "supported_langs": ["C++", "Java"],
+            "offline_warning_enabled": True,
+        },
         # "ursa-i9-9960x": {
         #     "info": "langs = Python, R, JavaScript",
         #     "default_filters": {
