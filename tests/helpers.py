@@ -23,6 +23,7 @@ machine_configs = {
         "supported_filters": ["lang", "name"],
         "supported_langs": ["Python", "R", "JavaScript"],
         "offline_warning_enabled": True,
+        "publish_benchmark_results": True,
     },
     "ursa-thinkcentre-m75q": {
         "info": "langs = C++, Java",
@@ -32,6 +33,7 @@ machine_configs = {
         "supported_filters": ["lang", "command"],
         "supported_langs": ["C++", "Java"],
         "offline_warning_enabled": True,
+        "publish_benchmark_results": True,
     },
 }
 

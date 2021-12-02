@@ -179,7 +179,13 @@ class Benchmarkable(Base, BaseMixin):
         return runs_status
 
     def all_runs_with_publishable_benchmark_results_finished(self):
-        return all([run.finished_at for run in self.runs])
+        return all(
+            [
+                run.finished_at
+                for run in self.runs
+                if run.machine.publish_benchmark_results
+            ]
+        )
 
     def slack_notification(self):
         for notification in self.notifications:
