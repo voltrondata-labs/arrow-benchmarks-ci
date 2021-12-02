@@ -4,7 +4,8 @@ from sqlalchemy.orm import backref, relationship
 
 from config import Config
 from db import Base, Session
-from integrations.conbench import ConbenchNotFoundException, conbench
+from integrations import IntegrationException
+from integrations.conbench import conbench
 from logger import log
 from models.base import BaseMixin, NotNull, Nullable
 from models.machine import Machine
@@ -121,7 +122,11 @@ class Benchmarkable(Base, BaseMixin):
 
     @property
     def runs_with_buildkite_builds(self):
-        return [run for run in self.runs if run.buildkite_data]
+        return [
+            run
+            for run in self.runs
+            if run.buildkite_data and run.machine.publish_benchmark_results
+        ]
 
     def machine_run(self, machine):
         for run in self.runs:
@@ -163,7 +168,7 @@ class Benchmarkable(Base, BaseMixin):
                     )
 
                 return runs_status
-            except ConbenchNotFoundException:
+            except IntegrationException:
                 return "Failed"
             except Exception as e:
                 raise e
@@ -177,8 +182,14 @@ class Benchmarkable(Base, BaseMixin):
             runs_status += f" :warning: {machine.name} is offline."
         return runs_status
 
-    def all_runs_finished(self):
-        return all([run.finished_at for run in self.runs])
+    def all_runs_with_publishable_benchmark_results_finished(self):
+        return all(
+            [
+                run.finished_at
+                for run in self.runs
+                if run.machine.publish_benchmark_results
+            ]
+        )
 
     def slack_notification(self):
         for notification in self.notifications:

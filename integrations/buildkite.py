@@ -64,6 +64,7 @@ class Buildkite:
                     "parallelism": None,
                 }
             ],
+            "visibility": "public",
         }
         return self.session.post(url, data=json.dumps(data)).json()
 

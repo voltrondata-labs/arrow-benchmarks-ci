@@ -1,21 +1,31 @@
 ## How to Add New Benchmark Machine
 
-### 1. Create Pull Request for adding your benchmark machine
-- Add your benchmark machine to `MACHINES` in [config.py](../config.py)
+##### 1. Create Pull Request to add your machine to `Config.MACHINES`
+Adding new machine to `Config.MACHINES` and merging your pull request into `main` branch will automatically
+- create **"Arrow BCI Benchmark on ..."** Buildkite pipeline for your machine in 
+[Apache Arrow CI Buildkite organization](https://buildkite.com/apache-arrow)
+- enable **"Arrow BCI Benchmark on ..."** Buildkite pipeline builds being created for all 
+[Apache Arrow repo](https://github.com/apache/arrow) master commits and `@ursabot` benchmark requests on pull requests.
+
+Add your benchmark machine to `MACHINES` in [config.py](../config.py) and set `publish_benchmark_results` to `False` so
+benchmark results for your machine are not published to [Apache Arrow repo](https://github.com/apache/arrow) pull requests
+until you are ready to do so.
 ```python
 MACHINES = {
     "your-benchmark-machine": {
-        "info": "langs = Python",
+        "info": "Supported langs: Python",
         "default_filters": {
             "arrow-commit": {"lang": "Python"},
         },
         "supported_filters": ["name", "lang"],
         "supported_langs": ["Python"],
         "offline_warning_enabled": False,
+        "publish_benchmark_results": False,
     },
 }
 ```
-### 2. Get environment vars for Buildkite Agent that will run on your benchmark machine
+
+##### 2. Get environment vars for Buildkite Agent your benchmark machine
 - Add a comment to your Pull Request
 ```
 @ElenaHenderson Will you please provide environment vars for Buildkite Agent for our benchmark machine 
@@ -31,10 +41,11 @@ with name = your-benchmark-machine:
 ```
 - Please also let us know how you would like environment vars to be shared with you.
 
-### 3. Setup your benchmark machine
-- Note that `setup-benchmark-machine-ubuntu-20.04.sh` only installs dependencies for Apache Arrow C++, Python, R, Java and JavaScript.
-- If you need to install additional dependencies, please update `setup-benchmark-machine-ubuntu-20.04.sh`. 
-- If your machine is running OS other than Ubuntu, please create a new setup script and use `setup-benchmark-machine-ubuntu-20.04.sh` as a reference.
+##### 3. Setup your benchmark machine
+Note:
+- [setup-benchmark-machine-ubuntu-20.04.sh](../scripts/setup-benchmark-machine-ubuntu-20.04.sh) only installs dependencies for Apache Arrow C++, Python, R, Java and JavaScript.
+- If you need to install additional dependencies, please update [setup-benchmark-machine-ubuntu-20.04.sh](../scripts/setup-benchmark-machine-ubuntu-20.04.sh). 
+- If your machine is running OS other than Ubuntu, please create a new setup script and use [setup-benchmark-machine-ubuntu-20.04.sh](../scripts/setup-benchmark-machine-ubuntu-20.04.sh) as a reference.
 
 ```shell script
 sudo su
@@ -91,7 +102,26 @@ ps aux | grep buildkite
 journalctl -f -u buildkite-agent
 ```
 
-### 4. Get your Pull Request reviewed and merged
+##### 4. Test benchmark build on your machine
+TODO
+
+##### 5. Disable Swap, Boost, CPU frequency scaling and Hyper-Threading on your machine
+TODO
+
+##### 6. Get Pull Request reviewed and merged
 Suggested Reviewers: 
 - [Elena Henderson](https://github.com/elenahenderson)
 - [Jonathan Keane](https://github.com/jonkeane)
+
+##### 7. Verify benchmark builds on your machine are running as expected
+- Go to [Apache Arrow CI Buildkite organization](https://buildkite.com/apache-arrow)
+- Click on **"Arrow BCI Benchmark on ..."** Buildkite pipeline for your machine and 
+verify benchmark builds are running as expected
+
+##### 8. Verify benchmark results from your machine are logged into Conbench
+- Go to [Conbench](https://conbench.ursa.dev/)
+- Enter your machine name into Search box
+- Click on a few runs and verify that all benchmark results form your machine are logged
+
+##### 9. Create Pull Request to enable `publish_benchmark_results` for your machine
+- Update `MACHINES` in [config.py](../config.py) and set `publish_benchmark_results` to `True` for your machine

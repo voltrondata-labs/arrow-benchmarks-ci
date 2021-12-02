@@ -15,7 +15,7 @@ def publish_benchmark_results_on_slack():
 
     for notification in notifications:
         try:
-            if notification.all_runs_finished():
+            if notification.all_runs_with_publishable_benchmark_results_finished():
                 text = notification.generate_slack_message_text()
                 notification.post_slack_message(text)
                 notification.mark_finished()

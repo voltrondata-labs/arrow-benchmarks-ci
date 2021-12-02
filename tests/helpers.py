@@ -15,7 +15,7 @@ test_benchmarkable_id = "sha2"
 test_baseline_benchmarkable_id = "sha1"
 machine_configs = {
     "ursa-i9-9960x": {
-        "info": "langs = Python, R, JavaScript",
+        "info": "Supported benchmark langs: Python, R, JavaScript",
         "default_filters": {
             "arrow-commit": {"lang": "Python,R,JavaScript"},
             "pyarrow-apache-wheel": {"lang": "Python"},
@@ -23,15 +23,27 @@ machine_configs = {
         "supported_filters": ["lang", "name"],
         "supported_langs": ["Python", "R", "JavaScript"],
         "offline_warning_enabled": True,
+        "publish_benchmark_results": True,
     },
     "ursa-thinkcentre-m75q": {
-        "info": "langs = C++, Java",
+        "info": "Supported benchmark langs: C++, Java",
         "default_filters": {
             "arrow-commit": {"lang": "C++,Java"},
         },
         "supported_filters": ["lang", "command"],
         "supported_langs": ["C++", "Java"],
         "offline_warning_enabled": True,
+        "publish_benchmark_results": True,
+    },
+    "new-machine": {
+        "info": "Supported benchmark langs: C++, Java",
+        "default_filters": {
+            "arrow-commit": {"lang": "C++,Java"},
+        },
+        "supported_filters": ["lang", "command"],
+        "supported_langs": ["C++", "Java"],
+        "offline_warning_enabled": False,
+        "publish_benchmark_results": False,
     },
 }
 

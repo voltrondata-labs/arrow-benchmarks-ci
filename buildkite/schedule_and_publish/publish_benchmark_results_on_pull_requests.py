@@ -25,5 +25,5 @@ def publish_benchmark_results_on_pull_requests():
         if notification.pull_comment_body != new_comment_body:
             notification.update_pull_comment(new_comment_body)
 
-        if notification.all_runs_finished():
+        if notification.all_runs_with_publishable_benchmark_results_finished():
             notification.mark_finished()

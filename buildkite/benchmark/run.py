@@ -130,7 +130,7 @@ class BenchmarkGroup:
             "machine": machine,
             "process_pid": psutil.Process().pid,
             "command": self.command,
-            "started_at": str(self.started_at),
+            "started_at": str(self.started_at) if self.started_at else None,
             "finished_at": str(self.finished_at) if self.finished_at else None,
             "total_run_time": str(self.total_run_time) if self.total_run_time else None,
             "failed": self.failed,
@@ -309,6 +309,11 @@ class Run:
         for command in self.setup_commands_for_lang_benchmarks[lang]:
             self.execute_command(f"source buildkite/benchmark/utils.sh {command}")
 
+    def mark_benchmark_groups_failed(self, lang, stderr):
+        for benchmark_group in self.benchmark_groups_for_lang(lang):
+            benchmark_group.stderr = stderr
+            benchmark_group.log_execution()
+
     def run_benchmark_groups(self, lang):
         self.print_env_vars()
         for benchmark_group in self.benchmark_groups_for_lang(lang):
@@ -366,12 +371,18 @@ class Run:
         self.set_benchmark_groups()
         self.filter_benchmark_groups()
 
-        for lang in ["C++", "Java", "Python", "JavaScript", "R"]:
+        for lang in ["C++", "Java", "Python", "R", "JavaScript"]:
             if not self.benchmark_groups_for_lang(lang):
                 continue
 
             if self.benchmarkable_type == "arrow-commit":
-                self.additional_setup_for_benchmark_groups(lang)
+                try:
+                    self.additional_setup_for_benchmark_groups(lang)
+                except Exception as e:
+                    logging.exception(e)
+                    stderr = f"Setup for {lang} benchmark groups failed"
+                    self.mark_benchmark_groups_failed(lang, stderr)
+                    continue
 
             self.run_benchmark_groups(lang)
 

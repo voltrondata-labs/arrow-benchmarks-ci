@@ -71,6 +71,12 @@ def upgrade():
             server_default="false",
             nullable=False,
         ),
+        sa.Column(
+            "publish_benchmark_results",
+            sa.Boolean(),
+            server_default="false",
+            nullable=False,
+        ),
         sa.Column("hostname", sa.String(), nullable=True),
         sa.Column("ip_address", sa.String(), nullable=True),
         sa.Column("port", sa.Integer(), nullable=True),

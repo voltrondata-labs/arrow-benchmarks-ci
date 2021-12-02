@@ -7,7 +7,7 @@ from authlib.jose import jwt
 from sqlalchemy.dialects import postgresql
 from sqlalchemy.orm import backref, relationship
 
-from buildkite.benchmark.run import repos_with_benchmark_groups, MockRun
+from buildkite.benchmark.run import MockRun, repos_with_benchmark_groups
 from config import Config
 from db import Base
 from integrations.buildkite import buildkite
@@ -23,6 +23,7 @@ class Machine(Base, BaseMixin):
     supported_filters = NotNull(postgresql.ARRAY(s.String))
     supported_langs = NotNull(postgresql.ARRAY(s.String))
     offline_warning_enabled = NotNull(s.Boolean, server_default="false")
+    publish_benchmark_results = NotNull(s.Boolean, server_default="false")
     hostname = Nullable(s.String)
     ip_address = Nullable(s.String)
     port = Nullable(s.Integer)

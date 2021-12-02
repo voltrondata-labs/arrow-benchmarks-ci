@@ -85,7 +85,9 @@ update_benchmark_builds_status()
 for benchmarkable in Benchmarkable.all():
     print(
         benchmarkable.id,
-        benchmarkable.all_runs_finished(),
-        benchmarkable.baseline.all_runs_finished() if benchmarkable.baseline else "",
+        benchmarkable.all_runs_with_publishable_benchmark_results_finished(),
+        benchmarkable.baseline.all_runs_with_publishable_benchmark_results_finished()
+        if benchmarkable.baseline
+        else "",
     )
 publish_benchmark_results_on_slack()
