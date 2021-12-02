@@ -64,7 +64,7 @@ class Buildkite:
                     "parallelism": None,
                 }
             ],
-            "visibility": "public",
+            "visibility": "public",  # Buildkite REST API bug: This field is always set to 'private'
         }
         return self.session.post(url, data=json.dumps(data)).json()
 
