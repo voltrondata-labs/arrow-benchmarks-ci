@@ -24,7 +24,7 @@ pull_comments_with_expected_machine_run_filters_and_skip_reason = {
             {"lang": "Python"},
             "Only ['C++', 'Java'] langs are supported on ursa-thinkcentre-m75q",
         ),
-        "new_machine": (
+        "new-machine": (
             {"lang": "Python"},
             "Only ['C++', 'Java'] langs are supported on new-machine",
         ),
@@ -45,7 +45,7 @@ pull_comments_with_expected_machine_run_filters_and_skip_reason = {
             {"lang": "Python"},
             "Only ['C++', 'Java'] langs are supported on ursa-thinkcentre-m75q",
         ),
-        "new_machine": (
+        "new-machine": (
             {"lang": "Python"},
             "Only ['C++', 'Java'] langs are supported on new-machine",
         ),
@@ -56,7 +56,7 @@ pull_comments_with_expected_machine_run_filters_and_skip_reason = {
             {"lang": "JavaScript"},
             "Only ['C++', 'Java'] langs are supported on ursa-thinkcentre-m75q",
         ),
-        "new_machine": (
+        "new-machine": (
             {"lang": "JavaScript"},
             "Only ['C++', 'Java'] langs are supported on new-machine",
         ),
@@ -83,7 +83,7 @@ pull_comments_with_expected_machine_run_filters_and_skip_reason = {
             {"lang": "R"},
             "Only ['C++', 'Java'] langs are supported on ursa-thinkcentre-m75q",
         ),
-        "new_machine": (
+        "new-machine": (
             {"lang": "R"},
             "Only ['C++', 'Java'] langs are supported on new-machine",
         ),
