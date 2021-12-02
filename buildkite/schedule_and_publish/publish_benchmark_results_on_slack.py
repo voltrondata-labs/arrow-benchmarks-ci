@@ -21,6 +21,6 @@ def publish_benchmark_results_on_slack():
                 notification.mark_finished()
                 messages.append(text)
         except Exception as e:
-            log(e)
+            log.exception(e)
 
     return messages
