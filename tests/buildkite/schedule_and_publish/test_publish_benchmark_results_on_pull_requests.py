@@ -21,8 +21,8 @@ scheduled_status_with_warning = "Scheduled :warning: ursa-i9-9960x is offline."
 skipped_status = "Skipped :warning: Only ['C++', 'Java'] langs are supported on ursa-thinkcentre-m75q"
 
 support_benchmarks_info = """Supported benchmarks:
-ursa-i9-9960x: langs = Python, R, JavaScript
-ursa-thinkcentre-m75q: langs = C++, Java"""
+ursa-i9-9960x: Supported benchmark langs: Python, R, JavaScript
+ursa-thinkcentre-m75q: Supported benchmark langs: C++, Java"""
 
 
 def verify_pull_comment(input_run_statuses, expected_statuses):
