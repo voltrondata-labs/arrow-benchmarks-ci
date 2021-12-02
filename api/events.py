@@ -171,9 +171,9 @@ class Events(Resource):
             return e.args[0], 401
 
         event = json.loads(request.data)
-        log.info(event)
 
         if is_pull_request_comment_for_ursabot(event):
+            log.info(event)
             pull_number = event["issue"]["number"]
 
             # TODO: remove this code once done testing
