@@ -1,0 +1,126 @@
+{
+  "id": "2e4bf47c-96ee-44ea-af15-ffd395260e24",
+  "graphql_id": "QnVpbGQtLS0yZTRiZjQ3Yy05NmVlLTQ0ZWEtYWYxNS1mZmQzOTUyNjBlMjQ=",
+  "url": "http://mocked-integrations:9999/buildkite/v2/organizations/apache-arrow/pipelines/arrow-bci-benchmark-on-new-machine/builds/1",
+  "web_url": "https://buildkite.com/apache-arrow/arrow-bci-benchmark-on-new-machine/builds/1",
+  "number": 1,
+  "state": "scheduled",
+  "blocked": false,
+  "blocked_state": "",
+  "message": "arrow-commit df2d94e82a04b20d80e054414031825db40a9111 reason = arrow-commit  filters = {'flags': {'cloud': true}}",
+  "commit": "HEAD",
+  "branch": "add-schedule-and-publish-pipeline",
+  "tag": null,
+  "env": {
+    "RUN_ID": "87c1e3af0f8f483ab4598af992551175",
+    "FILTERS": "{'flags': {'cloud': true}}",
+    "MACHINE": "ursa-i9-9960x",
+    "RUN_NAME": "commit: df2d94e82a04b20d80e054414031825db40a9111",
+    "BENCHMARKABLE": "df2d94e82a04b20d80e054414031825db40a9111",
+    "PYTHON_VERSION": "3.8",
+    "BENCHMARKABLE_TYPE": "arrow-commit"
+  },
+  "source": "api",
+  "author": null,
+  "creator": {
+    "id": "1c4e1d99-a0dd-462d-aa4e-4fd593e413ab",
+    "graphql_id": "VXNlci0tLTFjNGUxZDk5LWEwZGQtNDYyZC1hYTRlLTRmZDU5M2U0MTNhYg==",
+    "name": "Elena Henderson",
+    "email": "elena@ursacomputing.com",
+    "avatar_url": "https://www.gravatar.com/avatar/f7c53390217ad677d191b70bbb3fd20f",
+    "created_at": "2020-11-30T23:36:04.763Z"
+  },
+  "created_at": "2021-10-19T21:35:03.782Z",
+  "scheduled_at": "2021-10-19T21:35:03.474Z",
+  "started_at": "2021-10-19T21:35:03.474Z",
+  "finished_at": "2021-10-19T22:35:03.782Z",
+  "meta_data": {},
+  "pull_request": null,
+  "rebuilt_from": null,
+  "pipeline": {
+    "id": "f0a10e81-9b12-439e-9c39-3050666fa349",
+    "graphql_id": "UGlwZWxpbmUtLS1mMGExMGU4MS05YjEyLTQzOWUtOWMzOS0zMDUwNjY2ZmEzNDk=",
+    "url": "http://mocked-integrations:9999/buildkite/v2/organizations/apache-arrow/pipelines/arrow-bci-benchmark-on-new-machine",
+    "web_url": "https://buildkite.com/apache-arrow/arrow-bci-benchmark-on-new-machine",
+    "name": "arrow-bci-benchmark-on-new-machine",
+    "description": null,
+    "slug": "arrow-bci-benchmark-on-new-machine",
+    "repository": "https://github.com/ursacomputing/arrow-benchmarks-ci.git",
+    "cluster_id": null,
+    "branch_configuration": null,
+    "default_branch": "main",
+    "skip_queued_branch_builds": false,
+    "skip_queued_branch_builds_filter": null,
+    "cancel_running_branch_builds": false,
+    "cancel_running_branch_builds_filter": null,
+    "allow_rebuilds": true,
+    "provider": {
+      "id": "github",
+      "settings": {
+        "trigger_mode": "null",
+        "build_pull_requests": false,
+        "pull_request_branch_filter_enabled": false,
+        "skip_builds_for_existing_commits": false,
+        "skip_pull_request_builds_for_existing_commits": true,
+        "build_pull_request_ready_for_review": false,
+        "build_pull_request_labels_changed": false,
+        "build_pull_request_forks": false,
+        "prefix_pull_request_fork_branch_names": true,
+        "build_branches": true,
+        "build_tags": false,
+        "cancel_deleted_branch_builds": false,
+        "publish_commit_status": true,
+        "publish_commit_status_per_step": false,
+        "separate_pull_request_statuses": false,
+        "publish_blocked_as_pending": false,
+        "use_step_key_as_commit_status": false,
+        "filter_enabled": true,
+        "repository": "ursacomputing/arrow-benchmarks-ci"
+      },
+      "webhook_url": "https://webhook.buildkite.com/deliver/bb5e17d3d4a4307fa49ad68b92610d49ac2a160cc8278f9307"
+    },
+    "builds_url": "http://mocked-integrations:9999/buildkite/v2/organizations/apache-arrow/pipelines/arrow-bci-benchmark-on-new-machine/builds",
+    "badge_url": "https://badge.buildkite.com/19caa5b6b2e13a61787b5420e43ccffcf2671f9600b4024611.svg",
+    "created_by": {
+      "id": "1c4e1d99-a0dd-462d-aa4e-4fd593e413ab",
+      "graphql_id": "VXNlci0tLTFjNGUxZDk5LWEwZGQtNDYyZC1hYTRlLTRmZDU5M2U0MTNhYg==",
+      "name": "John Doe",
+      "email": "test@tets.com",
+      "avatar_url": "https://www.gravatar.com/avatar/f7c53390217ad677d191b70bbb3fd20f",
+      "created_at": "2020-11-30T23:36:04.763Z"
+    },
+    "created_at": "2021-10-19T21:34:58.244Z",
+    "archived_at": null,
+    "env": null,
+    "scheduled_builds_count": 0,
+    "running_builds_count": 0,
+    "scheduled_jobs_count": 0,
+    "running_jobs_count": 0,
+    "waiting_jobs_count": 0,
+    "visibility": "private",
+    "tags": null,
+    "configuration": "agents:\n  queue: \"arrow-benchmark-ci-default\"\nsteps:\n  - label: \":pipeline: Pipeline upload\"\n    command: buildkite-agent pipeline upload buildkite/benchmark/pipeline.yml\n",
+    "steps": [
+      {
+        "type": "script",
+        "name": ":pipeline: Pipeline upload",
+        "command": "buildkite-agent pipeline upload buildkite/benchmark/pipeline.yml",
+        "artifact_paths": null,
+        "branch_configuration": null,
+        "env": {},
+        "timeout_in_minutes": null,
+        "agent_query_rules": [],
+        "concurrency": null,
+        "parallelism": null
+      }
+    ]
+  },
+  "jobs": [
+    {
+      "state": "passed"
+    },
+    {
+      "state": "failed"
+    }
+  ]
+}
