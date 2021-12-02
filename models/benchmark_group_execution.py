@@ -33,8 +33,14 @@ class BenchmarkGroupExecution(Base, BaseMixin):
     def create(cls, data):
         bge = cls.get(data["id"])
         if bge:
-            for attr in ["finished_at", "total_run_time", "failed", "return_code", "stderr"]:
-                setattr(bge, attr, data["attr"])
+            for attr in [
+                "finished_at",
+                "total_run_time",
+                "failed",
+                "return_code",
+                "stderr",
+            ]:
+                setattr(bge, attr, data[attr])
         else:
             bge = cls(**data)
         bge.save()
