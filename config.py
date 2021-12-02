@@ -46,18 +46,18 @@ class Config:
 
     MACHINES = {
         "machine1": {
-            "info": "name = dataset-filter",
+            "info": "name = wide-dateframe",
             "default_filters": {
-                "arrow-commit": {"name": "dataset-filter"},
+                "arrow-commit": {"name": "wide-dataframe"},
             },
             "supported_filters": ["name"],
             "supported_langs": ["Python"],
             "offline_warning_enabled": False,
         },
         "machine2": {
-            "info": "name = dataset-filter",
+            "info": "name = wide-dataframe",
             "default_filters": {
-                "arrow-commit": {"name": "dataset-filter"},
+                "arrow-commit": {"name": "wide-dataframe"},
             },
             "supported_filters": ["name"],
             "supported_langs": ["Python"],
