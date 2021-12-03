@@ -25,11 +25,11 @@ MACHINES = {
 }
 ```
 
-##### 2. Get environment vars for Buildkite Agent your benchmark machine
+##### 2. Get environment vars for Buildkite Agent on your benchmark machine
 - Add a comment to your Pull Request
 ```
 @ElenaHenderson Will you please provide environment vars for Buildkite Agent for our benchmark machine 
-with name = your-benchmark-machine:
+with name = <your benchmark machine>:
 - ARROW_BCI_URL
 - ARROW_BCI_API_ACCESS_TOKEN
 - BUILDKITE_AGENT_TOKEN
@@ -38,8 +38,10 @@ with name = your-benchmark-machine:
 - CONBENCH_PASSWORD
 - CONBENCH_URL
 - MACHINE
+
+Please use <your email address> to share the environment vars with us.
 ```
-- Please also let us know how you would like environment vars to be shared with you.
+- Environment vars will be shared with you using LastPass
 
 ##### 3. Setup your benchmark machine
 Note:
