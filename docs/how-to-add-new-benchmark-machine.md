@@ -105,7 +105,26 @@ journalctl -f -u buildkite-agent
 ```
 
 ##### 4. Test benchmark build on your machine
-TODO
+```shell script
+# Clone arrow-benchmarks-ci repo
+git clone https://github.com/ursacomputing/arrow-benchmarks-ci.git
+cd arrow-benchmarks-ci/
+
+# Export env vars
+export ARROW_BCI_URL=<ARROW_BCI_URL>
+export ARROW_BCI_API_ACCESS_TOKEN=<ARROW_BCI_API_ACCESS_TOKEN>
+export CONBENCH_EMAIL=<CONBENCH_EMAIL>
+export CONBENCH_PASSWORD=<CONBENCH_PASSWORD>
+export CONBENCH_URL=<CONBENCH_URL>
+export MACHINE=<MACHINE>
+export PYTHON_VERSION=3.8
+export BENCHMARKABLE=<latest arrow commit>
+export BENCHMARKABLE_TYPE=arrow-commit
+export RUN_ID=<test-random-string>
+export RUN_NAME="test"
+
+source buildkite/benchmark/utils.sh build_arrow_and_run_benchmark_groups
+```
 
 ##### 5. Disable Swap, CPU frequency scaling, Hyper-Threading & Boost on your benchmark machine
 Disabling Swap, CPU frequency scaling, Hyper-Threading & Boost will reduce benchmark results variability.

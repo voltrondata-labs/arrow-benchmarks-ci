@@ -55,3 +55,12 @@ mutation {
 - Go to https://conbench.ursa.dev/register/ and register new user with
     - Name = new-machine-name
     - User = new-machine-name@some-domain.com
+
+### Create ec2 benchmark machine (similar to `ec2-t3-xlarge-us-east-2`)
+- Go to https://us-east-2.console.aws.amazon.com/ec2/v2/home?region=us-east-2#Instances:
+- Click Launch instance from template
+- Source template = benchmark-machine
+- Select Instance type that you need
+- Click Launch instance from template
+- Go to launched ec2 instance > click Connect > click Connect
+- Follow "Step 3. Setup your benchmark machine" in [How to Add New Benchmark Machine](../docs/how-to-add-new-benchmark-machine.md)
