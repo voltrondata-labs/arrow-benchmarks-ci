@@ -45,27 +45,7 @@ class Config:
     )
 
     MACHINES = {
-        "machine1": {
-            "info": "Supported benchmark langs: R",
-            "default_filters": {
-                "arrow-commit": {"lang": "R"},
-            },
-            "supported_filters": ["lang", "name"],
-            "supported_langs": ["R", "JavaScript"],
-            "offline_warning_enabled": True,
-            "publish_benchmark_results": False,
-        },
-        "machine2": {
-            "info": "Supported benchmark langs: Java",
-            "default_filters": {
-                "arrow-commit": {"lang": "Java"},
-            },
-            "supported_filters": ["lang"],
-            "supported_langs": ["Java"],
-            "offline_warning_enabled": True,
-            "publish_benchmark_results": True,
-        },
-        "machine3": {
+        "ursa-i9-9960x": {
             "info": "Supported benchmark langs: Python, R, JavaScript",
             "default_filters": {
                 "arrow-commit": {"lang": "Python,R,JavaScript"},
@@ -76,7 +56,7 @@ class Config:
             "offline_warning_enabled": True,
             "publish_benchmark_results": True,
         },
-        "machine4": {
+        "ursa-thinkcentre-m75q": {
             "info": "Supported benchmark langs: C++, Java",
             "default_filters": {
                 "arrow-commit": {"lang": "C++,Java"},
@@ -86,36 +66,15 @@ class Config:
             "offline_warning_enabled": True,
             "publish_benchmark_results": True,
         },
-        # "ursa-i9-9960x": {
-        #     "info": "Supported benchmark langs: Python, R, JavaScript",
-        #     "default_filters": {
-        #         "arrow-commit": {"lang": "Python,R,JavaScript"},
-        #         "pyarrow-apache-wheel": {"lang": "Python"},
-        #     },
-        #     "supported_filters": ["lang", "name"],
-        #     "supported_langs": ["Python", "R", "JavaScript"],
-        #     "offline_warning_enabled": True,
-        #     "publish_benchmark_results": True,
-        # },
-        # "ursa-thinkcentre-m75q": {
-        #     "info": "Supported benchmark langs: C++, Java",
-        #     "default_filters": {
-        #         "arrow-commit": {"lang": "C++,Java"},
-        #     },
-        #     "supported_filters": ["lang", "command"],
-        #     "supported_langs": ["C++", "Java"],
-        #     "offline_warning_enabled": True,
-        #     "publish_benchmark_results": True,
-        # },
-        # "ec2-t3-xlarge-us-east-2": {
-        #     "info": "Supported benchmark langs: Python. Runs only benchmarks with cloud = True",
-        #     "default_filters": {
-        #         "arrow-commit": {"flags": {"cloud": True}},
-        #         "pyarrow-apache-wheel": {"lang": "Python", "flags": {"cloud": True}},
-        #     },
-        #     "supported_filters": ["lang", "name"],
-        #     "supported_langs": ["Python", "R", "C++"],
-        #     "offline_warning_enabled": False,
-        #     "publish_benchmark_results": True,
-        # },
+        "ec2-t3-xlarge-us-east-2": {
+            "info": "Supported benchmark langs: Python. Runs only benchmarks with cloud = True",
+            "default_filters": {
+                "arrow-commit": {"flags": {"cloud": True}},
+                "pyarrow-apache-wheel": {"lang": "Python", "flags": {"cloud": True}},
+            },
+            "supported_filters": ["lang", "name"],
+            "supported_langs": ["Python", "R", "C++"],
+            "offline_warning_enabled": False,
+            "publish_benchmark_results": True,
+        },
     }
