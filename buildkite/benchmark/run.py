@@ -348,16 +348,12 @@ class Run:
             )
 
         for benchmark_group in filter(lambda b: b.failed, self.benchmark_groups):
-            if benchmark_group.stderr and len(benchmark_group.stderr) > 200:
-                stderr = benchmark_group.stderr[-200:-1]
-            else:
-                stderr = ""
             print(
                 "FAILED",
                 benchmark_group.lang,
                 benchmark_group.name,
                 benchmark_group.return_code,
-                stderr,
+                benchmark_group.stderr[-200:-1] if benchmark_group.stderr else "",
             )
 
     def failed_benchmark_groups(self):

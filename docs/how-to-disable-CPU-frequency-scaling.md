@@ -23,7 +23,10 @@ current policy: frequency should be within 1.20 GHz and 3.60 GHz.
 ...
 ```
 
-##### 2. Verify CPU Frequency Scaling is disabled
+##### 2. Verify CPU Frequency Scaling is still disabled after reboot
+```shell script
+$ reboot
+```
 Run this script
 ```shell script
 $ for i in /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
