@@ -105,8 +105,21 @@ journalctl -f -u buildkite-agent
 ##### 4. Test benchmark build on your machine
 TODO
 
-##### 5. Disable Swap, Boost, CPU frequency scaling and Hyper-Threading on your machine
-TODO
+##### 5. Disable Swap, CPU frequency scaling, Hyper-Threading & Boost on your benchmark machine
+Disabling Swap, CPU frequency scaling, Hyper-Threading & Boost will reduce benchmark results variability.
+Note that each machine might have its own way of disabling these features or have its own name for some of these features.
+
+Here are docs on how to do this on `ThinkCentre` machines:
+- [How to Disable CPU Frequency Scaling](../docs/how-to-disable-CPU-frequency-scaling.md)
+- [How to Disable Hyper-Threading](../docs/how-to-disable-hyper-threading.md)
+- [How to Disable Swap](../docs/how-to-disable-swap.md)
+- [CPU Frequency Boost](https://www.kernel.org/doc/Documentation/cpu-freq/boost.txt)
+
+To check if Boost is already disabled (you should see 0)
+```shell script
+$ cat /sys/devices/system/cpu/cpufreq/boost
+0
+```
 
 ##### 6. Get Pull Request reviewed and merged
 Suggested Reviewers: 
@@ -118,7 +131,6 @@ Suggested Reviewers:
 ```
 @ElenaHenderson Will you please make Buildkite pipeline for benchmark machine ... public?
 ```
-This step can not be automated right now because Buildkite REST API fails to set pipeline visibility to public. 
 
 ##### 8. Verify benchmark builds on your machine are running as expected
 - Go to [Apache Arrow CI Buildkite organization](https://buildkite.com/apache-arrow)
