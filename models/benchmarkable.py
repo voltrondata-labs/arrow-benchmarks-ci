@@ -121,12 +121,15 @@ class Benchmarkable(Base, BaseMixin):
             self.notifications.append(Notification(type="pull_comment"))
 
     @property
-    def runs_with_buildkite_builds(self):
-        return [
-            run
-            for run in self.runs
-            if run.buildkite_data and run.machine.publish_benchmark_results
-        ]
+    def runs_with_buildkite_builds_and_publishable_benchmark_results(self):
+        return sorted(
+            [
+                run
+                for run in self.runs
+                if run.buildkite_data and run.machine.publish_benchmark_results
+            ],
+            key=lambda x: x.machine.name,
+        )
 
     def machine_run(self, machine):
         for run in self.runs:
