@@ -51,6 +51,11 @@ class Notification(Base, BaseMixin):
         for machine in Machine.all(
             None, order_by="name", publish_benchmark_results=True
         ):
+            if not self.benchmarkable.machine_run(
+                machine
+            ) and not self.benchmarkable.baseline_machine_run(machine):
+                continue
+
             status = self.benchmarkable.machine_runs_status(machine)
             url = self.benchmarkable.conbench_compare_runs_web_url(machine)
             if self.type == "slack_message":
@@ -94,11 +99,9 @@ class Notification(Base, BaseMixin):
 
         # Add links to buildkite builds
         text += f"Buildkite builds:\n"
-        for run in sorted(
-            self.benchmarkable.runs_with_buildkite_builds, key=lambda x: x.machine.name
-        ) + sorted(
-            self.benchmarkable.baseline.runs_with_buildkite_builds,
-            key=lambda x: x.machine.name,
+        for run in (
+            self.benchmarkable.runs_with_buildkite_builds_and_publishable_benchmark_results
+            + self.benchmarkable.baseline.runs_with_buildkite_builds_and_publishable_benchmark_results
         ):
             text += f"{run.buildkite_build_web_url_with_status}\n"
 
