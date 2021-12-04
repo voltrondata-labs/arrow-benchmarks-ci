@@ -9,11 +9,6 @@ def publish_benchmark_results_on_pull_requests():
     )
 
     for notification in notifications:
-        # TODO: remove this code once done testing
-        if notification.pull_number not in [1234, 9272]:
-            print(f"Skipping {notification.pull_number}")
-            continue
-
         if not notification.benchmarkable.baseline:
             continue
 

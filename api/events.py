@@ -176,10 +176,6 @@ class Events(Resource):
             log.info(event)
             pull_number = event["issue"]["number"]
 
-            # TODO: remove this code once done testing
-            if int(pull_number) not in [1234, 9272]:
-                return "", 202
-
             try:
                 benchmark_filters = get_pull_benchmark_filters(event["comment"]["body"])
                 pull_dict = github.get_pull(pull_number)
