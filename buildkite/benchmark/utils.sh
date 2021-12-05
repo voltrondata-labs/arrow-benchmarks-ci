@@ -75,7 +75,15 @@ install_arrowbench() {
 
 install_duckdb_r_with_tpch() {
   git clone https://github.com/duckdb/duckdb.git
-  cd duckdb/tools/rpkg
+  
+  # now fetch the latest tag to install
+  cd duckdb
+  git fetch --tags
+  latestTag=$(git describe --tags `git rev-list --tags --max-count=1`)
+  git checkout $latestTag
+  
+  # and then do the install
+  cd tools/rpkg
   R -e "remotes::install_deps()"
   DUCKDB_R_EXTENSIONS=tpch R CMD INSTALL .
 }
