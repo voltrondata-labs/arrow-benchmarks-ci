@@ -85,7 +85,7 @@ class Config:
             },
             "supported_filters": ["lang", "name"],
             "supported_langs": ["Python", "R", "JavaScript", "C++", "Java"],
-            "offline_warning_enabled": False,
+            "offline_warning_enabled": True,
             "publish_benchmark_results": False,
         },
     }
