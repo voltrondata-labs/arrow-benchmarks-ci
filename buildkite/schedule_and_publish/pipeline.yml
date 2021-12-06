@@ -1,5 +1,5 @@
 steps:
-  - label: "Pull Docker Image"
+  - label: "Pull Arrow-BCI API Service Docker Image"
     concurrency: 1
     concurrency_group: "arrow-bci-schedule-and-publish"
     command:
