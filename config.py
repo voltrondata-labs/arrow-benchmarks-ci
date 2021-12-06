@@ -77,4 +77,15 @@ class Config:
             "offline_warning_enabled": False,
             "publish_benchmark_results": True,
         },
+        "voltron-pavilion": {
+            "info": "Supported benchmark langs: Python, R, JavaScript, C++, Java",
+            "default_filters": {
+                "arrow-commit": {},
+                "pyarrow-apache-wheel": {"lang": "Python"},
+            },
+            "supported_filters": ["lang", "name"],
+            "supported_langs": ["Python", "R", "JavaScript", "C++", "Java"],
+            "offline_warning_enabled": False,
+            "publish_benchmark_results": False,
+        },
     }

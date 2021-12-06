@@ -51,6 +51,7 @@ Note:
 
 ```shell script
 sudo su
+cd ~
 
 # Export env vars to be used by setup-benchmark-machine-ubuntu-20.04.sh
 export ARROW_BCI_URL=<ARROW_BCI_URL>
@@ -134,6 +135,7 @@ Here are docs on how to do this on `ThinkCentre` machines:
 - [How to Disable CPU Frequency Scaling](../docs/how-to-disable-CPU-frequency-scaling.md)
 - [How to Disable Hyper-Threading](../docs/how-to-disable-hyper-threading.md)
 - [How to Disable Swap](../docs/how-to-disable-swap.md)
+- [How to Disable Boost](../docs/how-to-dsiable-boost.md)
 - [CPU Frequency Boost](https://www.kernel.org/doc/Documentation/cpu-freq/boost.txt)
 
 To check if Boost is already disabled (you should see 0)
