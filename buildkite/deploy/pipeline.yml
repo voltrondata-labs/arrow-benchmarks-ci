@@ -8,7 +8,7 @@ steps:
       docker-compose -f envs/test/docker-compose.yml build
       docker-compose -f envs/test/docker-compose.yml run app pytest -vv tests/
 
-  - label: "Build & Push"
+  - label: "Build & Push Arrow BCI API Service Docker Image"
     key: "build-and-push"
     depends_on: "tests"
     concurrency: 1
@@ -64,8 +64,8 @@ steps:
         s,{{PIPY_PROJECT}},${PIPY_PROJECT},g;\
         s,{{SLACK_API_BASE_URL}},${SLACK_API_BASE_URL},g" | kubectl apply -f -
 
-  - label: "Deploy App"
-    key: "deploy-app"
+  - label: "Deploy Arrow BCI API Service"
+    key: "deploy"
     depends_on: "deploy-secrets-and-config"
     concurrency: 1
     concurrency_group: "arrow-bci-deploy"
@@ -81,7 +81,7 @@ steps:
 
   - label: "Update Machine Configs"
     key: "update-machine-configs"
-    depends_on: "deploy-app"
+    depends_on: "deploy"
     concurrency: 1
     concurrency_group: "arrow-bci-deploy"
     command: |
@@ -91,7 +91,7 @@ steps:
 
   - label: "Health Check"
     key: "health-check"
-    depends_on: "deploy-app"
+    depends_on: "update-machine-configs"
     concurrency: 1
     concurrency_group: "arrow-bci-deploy"
     command: curl --retry 5 --fail https://arrow-bci.ursa.dev/health-check

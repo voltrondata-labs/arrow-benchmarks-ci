@@ -1,5 +1,5 @@
 # arrow-benchmarks-ci
-![Screenshot](diagram.png)
+![Screenshot](Arrow Benchmarks CI.png)
 
 #### How can I test benchmark builds that run on ursa-i9-9960x and ursa-thinkcentre-m75q locally
 ```bash
