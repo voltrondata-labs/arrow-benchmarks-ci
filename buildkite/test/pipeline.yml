@@ -5,17 +5,3 @@ steps:
       docker-compose -f envs/test/docker-compose.yml down
       docker-compose -f envs/test/docker-compose.yml build
       docker-compose -f envs/test/docker-compose.yml run app pytest -vv tests/
-
-  - label: "Concurrency Gate"
-    key: "concurrency-gate"
-    depends_on: "tests"
-    command: "exit 0"
-    concurrency: 1
-    concurrency_group: "arrow-bci-deploy"
-
-  - label: "Deploy"
-    depends_on: "concurrency-gate"
-    trigger: "arrow-bci-deploy"
-    if: build.branch == 'main'
-    build:
-      commit: "$BUILDKITE_COMMIT"
