@@ -1,5 +1,30 @@
 # arrow-benchmarks-ci
-![Screenshot](Arrow Benchmarks CI.png)
+Arrow Benchmarks CI is responsible for 
+- orchestrating and prioritizing benchmark builds for [Apache Arrow](https://github.com/apache/arrow) based on 
+the [list of benchmarks](https://github.com/ursacomputing/benchmarks/blob/main/benchmarks.json) in [Benchmarks repo](https://github.com/ursacomputing/benchmarks)
+- publishing benchmark results to [Apache Arrow](https://github.com/apache/arrow) pull requests associated with commits to master branch ([example](https://github.com/apache/arrow/pull/11843#issuecomment-986912639))
+- posting benchmarks results to [Conbench](https://conbench.ursa.dev/)
+
+Arrow Benchmarks CI consists of 
+- [Buildkite pipelines](https://buildkite.com/apache-arrow) and scripts for running running benchmarks on benchmark machines
+- Arrow BCI API service responsible for 
+    - listening to [apache/arrow](https://github.com/apache/arrow) Pull Request comment events 
+    so benchmark builds can be scheduled for pull requests with an `@ursabot please benchmark` comment
+    - persisting benchmark build statistics (e.g., memory usage, run time, errors, and conda packages)
+
+![Screenshot](arrow_bci_diagram.png)
+
+#### Arrow Benchmarks CI Public Buildkite Pipelines
+- [Arrow BCI Test](https://buildkite.com/apache-arrow/arrow-bci-test) is used for testing Arrow BCI API service and CI scripts
+- [Arrow BCI Benchmark on ec2-t3-xlarge-us-east-2](https://buildkite.com/apache-arrow/arrow-bci-benchmark-on-ec2-t3-xlarge-us-east-2) is used for running `cloud` benchmarks
+- [Arrow BCI Benchmark on ursa-i9-9960x](https://buildkite.com/apache-arrow/arrow-bci-benchmark-on-ursa-i9-9960x) is used for running Python, R and JavaScript benchmarks
+- [Arrow BCI Benchmark on ursa-thinkcentre-m75q](https://buildkite.com/apache-arrow/arrow-bci-benchmark-on-ursa-thinkcentre-m75q) is used for running C++ and Java benchmarks
+- [Arrow BCI Benchmark on voltron-pavilion](https://buildkite.com/apache-arrow/arrow-bci-benchmark-on-voltron-pavilion) is not used yet but will be running R TPCH benchmarks in a very near future
+
+Note that you can view builds for these pipelines but you can not manually schedule new builds.
+
+#### How can I add my own benchmark machine to Arrow Benchmarks CI
+[How to Add New Benchmark Machine](docs/how-to-add-new-benchmark-machine.md)
 
 #### How can I test benchmark builds that run on ursa-i9-9960x and ursa-thinkcentre-m75q locally
 ```bash
@@ -27,7 +52,7 @@ docker run -i \
 ```
 
 #### How can I test benchmark builds that run on ursa-i9-9960x and ursa-thinkcentre-m75q using Buildkite
-This option is only available to [Apache Arrow CI Buildkite org](https://buildkite.com/organizations/apache-arrow/) users at the moment.
+This option is only available to [Apache Arrow CI Buildkite org](https://buildkite.com/apache-arrow/) users at the moment.
 
 1. Go to https://buildkite.com/apache-arrow/arrow-bci-benchmark-build-test
 2. Click New Build
