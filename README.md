@@ -6,12 +6,12 @@ the [list of benchmarks](https://github.com/ursacomputing/benchmarks/blob/main/b
 - posting benchmarks results to [Conbench](https://conbench.ursa.dev/)
 
 Arrow Benchmarks CI consists of 
-- [Buildkite pipelines](https://buildkite.com/apache-arrow) and scripts for running running benchmarks on benchmark machines
+- [Buildkite pipelines](https://buildkite.com/apache-arrow) and scripts for running benchmarks on [benchmark machines](https://github.com/ursacomputing/arrow-benchmarks-ci/blob/main/config.py#L47)
 - Arrow BCI API service responsible for 
     - listening to [apache/arrow](https://github.com/apache/arrow) Pull Request comment events 
     so benchmark builds can be scheduled for pull requests with an `@ursabot please benchmark` comment
     - persisting benchmark build statistics (e.g., memory usage, run time, errors, and conda packages)
-
+ 
 ![Screenshot](arrow_bci_diagram.png)
 
 #### Arrow Benchmarks CI Public Buildkite Pipelines
