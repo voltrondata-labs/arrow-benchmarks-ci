@@ -24,6 +24,10 @@ Arrow Benchmarks CI consists of
 Note that you can view builds for these pipelines but you can not manually schedule new builds.
 
 #### How can I add my own benchmark machine to Arrow Benchmarks CI
+
+Benchmark machines should be bare metal machines dedicated to only running benchmarks to 
+avoid high variability in benchmark results that can result in false regression/improvements.
+
 [How to Add New Benchmark Machine](docs/how-to-add-new-benchmark-machine.md)
 
 #### How can I test benchmark builds that run on ursa-i9-9960x and ursa-thinkcentre-m75q locally

@@ -1,6 +1,13 @@
 from copy import deepcopy
 
 from buildkite.benchmark.run import MockRun, repos_with_benchmark_groups
+from tests.helpers import (
+    machine_configs,
+    filter_with_r_only_benchmarks,
+    filter_with_python_only_benchmarks,
+    filter_with_cpp_only_benchmarks,
+    filter_with_file_only_benchmarks,
+)
 
 expected_setup_commands = [
     ("git clone https://github.com/ursacomputing/benchmarks.git", ".", True),
@@ -121,22 +128,22 @@ tests = [
         + expected_commands_for_r_benchmarks,
     },
     {
-        "run_filters": {"lang": "Python"},
+        "run_filters": filter_with_python_only_benchmarks,
         "expected_commands": expected_setup_commands
         + expected_commands_for_python_benchmarks,
     },
     {
-        "run_filters": {"lang": "R"},
+        "run_filters": filter_with_r_only_benchmarks,
         "expected_commands": expected_setup_commands
         + expected_commands_for_r_benchmarks,
     },
     {
-        "run_filters": {"lang": "C++"},
+        "run_filters": filter_with_cpp_only_benchmarks,
         "expected_commands": expected_setup_commands
         + expected_commands_for_cpp_benchmarks,
     },
     {
-        "run_filters": {"name": "dataset-read"},
+        "run_filters": {"langs": {"Python": {"names": ["dataset-read"]}}},
         "expected_commands": expected_setup_commands
         + expected_setup_commands_for_python_benchmarks
         + [
@@ -148,7 +155,7 @@ tests = [
         ],
     },
     {
-        "run_filters": {"name": "file-*"},
+        "run_filters": filter_with_file_only_benchmarks,
         "expected_commands": expected_setup_commands
         + expected_setup_commands_for_python_benchmarks
         + [
@@ -185,24 +192,9 @@ tests = [
         + expected_commands_for_cpp_benchmarks_with_one_command_only,
     },
     {
-        "run_filters": {"flags": {"cloud": True}},
-        "expected_commands": expected_setup_commands
-        + expected_setup_commands_for_python_benchmarks
-        + [
-            (
-                'conbench dataset-read ALL --iterations=1 --all=true --drop-caches=true --run-id=$RUN_ID --run-name="$RUN_NAME"',
-                "benchmarks",
-                False,
-            ),
-            (
-                'conbench dataset-select ALL --iterations=3 --drop-caches=true --run-id=$RUN_ID --run-name="$RUN_NAME"',
-                "benchmarks",
-                False,
-            ),
+        "run_filters": machine_configs["ursa-i9-9960x"]["default_filters"][
+            "arrow-commit"
         ],
-    },
-    {
-        "run_filters": {"lang": "Python,R,JavaScript"},
         "expected_commands": expected_setup_commands
         + expected_commands_for_python_benchmarks
         + expected_commands_for_r_benchmarks,
@@ -218,6 +210,7 @@ def test_run_benchmarks():
         "url_for_benchmark_groups_list_json"
     ] = "https://raw.githubusercontent.com/ursacomputing/benchmarks/2b217db086260ab3bb243e26253b7c1de0180777/benchmarks.json"
     for test in tests:
+        print(test)
         run = MockRun(repo, test["run_filters"])
         run.benchmarkable_type = "arrow-commit"
         run.run_all_benchmark_groups()

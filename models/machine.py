@@ -21,7 +21,6 @@ class Machine(Base, BaseMixin):
     info = Nullable(s.String)
     default_filters = NotNull(postgresql.JSONB)
     supported_filters = NotNull(postgresql.ARRAY(s.String))
-    supported_langs = NotNull(postgresql.ARRAY(s.String))
     offline_warning_enabled = NotNull(s.Boolean, server_default="false")
     publish_benchmark_results = NotNull(s.Boolean, server_default="false")
     hostname = Nullable(s.String)
@@ -36,6 +35,10 @@ class Machine(Base, BaseMixin):
     @property
     def buildkite_agent_queue(self):
         return f"{self.name}"
+
+    @property
+    def supported_langs(self):
+        return sorted(list(self.default_filters["arrow-commit"]["langs"].keys()))
 
     def create_benchmark_pipeline(self):
         buildkite.create_pipeline(
@@ -57,23 +60,47 @@ class Machine(Base, BaseMixin):
         if not override_filters:
             return machine_run_filters, None
 
-        machine_run_filters.update(override_filters)
-
         if (
             "lang" in override_filters
             and override_filters["lang"] not in self.supported_langs
         ):
             return (
-                machine_run_filters,
+                override_filters,
                 f"Only {self.supported_langs} langs are supported on {self.name}",
             )
 
         for override_filter in override_filters.keys():
             if override_filter not in self.supported_filters:
                 return (
-                    machine_run_filters,
+                    override_filters,
                     f"Only {self.supported_filters} filters are supported on {self.name}",
                 )
+
+        # Apply override_filters to machine_run_filters
+        # override_filters can only have lang, name, command and flags filters
+        if "command" in override_filters and "C++" in self.supported_langs:
+            return override_filters, None
+
+        if "lang" in override_filters:
+            for lang in list(machine_run_filters["langs"].keys()):
+                if lang != override_filters["lang"]:
+                    machine_run_filters["langs"].pop(lang)
+
+        if "name" in override_filters:
+            benchmark_name = override_filters["name"]
+            for lang in machine_run_filters["langs"].keys():
+                benchmark_names = machine_run_filters["langs"][lang]["names"]
+                if benchmark_name[-1] == "*":
+                    filtered_benchmark_names = [
+                        name
+                        for name in benchmark_names
+                        if name.startswith(benchmark_name[:-1])
+                    ]
+                else:
+                    filtered_benchmark_names = [
+                        name for name in benchmark_names if name == benchmark_name
+                    ]
+                machine_run_filters["langs"][lang]["names"] = filtered_benchmark_names
 
         for repo_with_benchmark_groups in repos_with_benchmark_groups:
             mock_run = MockRun(repo_with_benchmark_groups, filters=machine_run_filters)

@@ -15,10 +15,25 @@ MACHINES = {
     "your-benchmark-machine": {
         "info": "Supported langs: Python",
         "default_filters": {
-            "arrow-commit": {"lang": "Python"},
+            "arrow-commit": {
+                "langs": {
+                    "Python": {
+                        "names": [
+                            "csv-read",
+                            "dataframe-to-table",
+                            "dataset-filter",
+                            "dataset-read",
+                            "dataset-select",
+                            "dataset-selectivity",
+                            "file-read",
+                            "file-write",
+                            "wide-dataframe",
+                        ]
+                    }
+                }
+            }
         },
         "supported_filters": ["name", "lang"],
-        "supported_langs": ["Python"],
         "offline_warning_enabled": False,
         "publish_benchmark_results": False,
     },

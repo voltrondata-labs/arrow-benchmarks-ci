@@ -15,7 +15,6 @@ def test_update_machine_configs_add_machines():
             "info",
             "default_filters",
             "supported_filters",
-            "supported_langs",
             "offline_warning_enabled",
         ]:
             assert getattr(machine, attribute) == machine_params[attribute]

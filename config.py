@@ -48,43 +48,84 @@ class Config:
         "ursa-i9-9960x": {
             "info": "Supported benchmark langs: Python, R, JavaScript",
             "default_filters": {
-                "arrow-commit": {"lang": "Python,R,JavaScript"},
-                "pyarrow-apache-wheel": {"lang": "Python"},
+                "arrow-commit": {
+                    "langs": {
+                        "Python": {
+                            "names": [
+                                "csv-read",
+                                "dataframe-to-table",
+                                "dataset-filter",
+                                "dataset-read",
+                                "dataset-select",
+                                "dataset-selectivity",
+                                "file-read",
+                                "file-write",
+                                "wide-dataframe",
+                            ]
+                        },
+                        "R": {
+                            "names": [
+                                "dataframe-to-table",
+                                "file-read",
+                                "file-write",
+                                "partitioned-dataset-filter",
+                                "wide-dataframe",
+                            ]
+                        },
+                        "JavaScript": {"names": ["js-micro"]},
+                    }
+                },
+                "pyarrow-apache-wheel": {
+                    "langs": {
+                        "Python": {
+                            "names": [
+                                "csv-read",
+                                "dataframe-to-table",
+                                "dataset-filter",
+                                "dataset-read",
+                                "dataset-select",
+                                "dataset-selectivity",
+                                "file-read",
+                                "file-write",
+                                "wide-dataframe",
+                            ]
+                        }
+                    },
+                },
             },
             "supported_filters": ["lang", "name"],
-            "supported_langs": ["Python", "R", "JavaScript"],
             "offline_warning_enabled": True,
             "publish_benchmark_results": True,
         },
         "ursa-thinkcentre-m75q": {
             "info": "Supported benchmark langs: C++, Java",
             "default_filters": {
-                "arrow-commit": {"lang": "C++,Java"},
+                "arrow-commit": {
+                    "langs": {
+                        "C++": {"names": ["cpp-micro"]},
+                        "Java": {"names": ["java-micro"]},
+                    }
+                }
             },
             "supported_filters": ["lang", "command"],
-            "supported_langs": ["C++", "Java"],
             "offline_warning_enabled": True,
             "publish_benchmark_results": True,
         },
         "ec2-t3-xlarge-us-east-2": {
             "info": "Supported benchmark langs: Python. Runs only benchmarks with cloud = True",
             "default_filters": {
-                "arrow-commit": {"flags": {"cloud": True}},
-                "pyarrow-apache-wheel": {"lang": "Python", "flags": {"cloud": True}},
+                "arrow-commit": {
+                    "langs": {"Python": {"names": ["dataset-read", "dataset-select"]}}
+                },
             },
             "supported_filters": ["lang", "name"],
-            "supported_langs": ["Python", "R", "C++"],
             "offline_warning_enabled": False,
             "publish_benchmark_results": True,
         },
         "voltron-pavilion": {
             "info": "Supported benchmark langs: Python, R, JavaScript, C++, Java",
-            "default_filters": {
-                "arrow-commit": {},
-                "pyarrow-apache-wheel": {"lang": "Python"},
-            },
+            "default_filters": {"arrow-commit": {"langs": {"R": {"names": ["tpch"]}}}},
             "supported_filters": ["lang", "name"],
-            "supported_langs": ["Python", "R", "JavaScript", "C++", "Java"],
             "offline_warning_enabled": True,
             "publish_benchmark_results": False,
         },
