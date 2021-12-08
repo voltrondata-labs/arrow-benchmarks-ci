@@ -17,34 +17,158 @@ machine_configs = {
     "ursa-i9-9960x": {
         "info": "Supported benchmark langs: Python, R, JavaScript",
         "default_filters": {
-            "arrow-commit": {"lang": "Python,R,JavaScript"},
-            "pyarrow-apache-wheel": {"lang": "Python"},
+            "arrow-commit": {
+                "langs": {
+                    "Python": {
+                        "names": [
+                            "csv-read",
+                            "dataframe-to-table",
+                            "dataset-filter",
+                            "dataset-read",
+                            "dataset-select",
+                            "dataset-selectivity",
+                            "file-read",
+                            "file-write",
+                            "wide-dataframe",
+                        ]
+                    },
+                    "R": {
+                        "names": [
+                            "dataframe-to-table",
+                            "file-read",
+                            "file-write",
+                            "partitioned-dataset-filter",
+                            "wide-dataframe",
+                        ]
+                    },
+                    "JavaScript": {"names": ["js-micro"]},
+                }
+            },
+            "pyarrow-apache-wheel": {
+                "langs": {
+                    "Python": {
+                        "names": [
+                            "csv-read",
+                            "dataframe-to-table",
+                            "dataset-filter",
+                            "dataset-read",
+                            "dataset-select",
+                            "dataset-selectivity",
+                            "file-read",
+                            "file-write",
+                            "wide-dataframe",
+                        ]
+                    }
+                },
+            },
         },
         "supported_filters": ["lang", "name"],
-        "supported_langs": ["Python", "R", "JavaScript"],
         "offline_warning_enabled": True,
         "publish_benchmark_results": True,
     },
     "ursa-thinkcentre-m75q": {
         "info": "Supported benchmark langs: C++, Java",
         "default_filters": {
-            "arrow-commit": {"lang": "C++,Java"},
+            "arrow-commit": {
+                "langs": {
+                    "C++": {"names": ["cpp-micro"]},
+                    "Java": {"names": ["java-micro"]},
+                }
+            }
         },
         "supported_filters": ["lang", "command"],
-        "supported_langs": ["C++", "Java"],
         "offline_warning_enabled": True,
         "publish_benchmark_results": True,
     },
     "new-machine": {
         "info": "Supported benchmark langs: C++, Java",
         "default_filters": {
-            "arrow-commit": {"lang": "C++,Java"},
+            "arrow-commit": {
+                "langs": {
+                    "C++": {"names": ["cpp-micro"]},
+                    "Java": {"names": ["java-micro"]},
+                }
+            }
         },
         "supported_filters": ["lang", "command"],
-        "supported_langs": ["C++", "Java"],
         "offline_warning_enabled": False,
         "publish_benchmark_results": False,
     },
+}
+
+filter_with_python_only_benchmarks = {
+    "langs": {
+        "Python": {
+            "names": [
+                "csv-read",
+                "dataframe-to-table",
+                "dataset-filter",
+                "dataset-read",
+                "dataset-select",
+                "dataset-selectivity",
+                "file-read",
+                "file-write",
+                "wide-dataframe",
+            ]
+        }
+    }
+}
+
+filter_with_r_only_benchmarks = {
+    "langs": {
+        "R": {
+            "names": [
+                "dataframe-to-table",
+                "file-read",
+                "file-write",
+                "partitioned-dataset-filter",
+                "wide-dataframe",
+            ]
+        }
+    }
+}
+
+
+filter_with_cpp_only_benchmarks = {
+    "langs": {
+        "C++": {"names": ["cpp-micro"]},
+    }
+}
+
+filter_with_java_script_only_benchmarks = {
+    "langs": {
+        "JavaScript": {"names": ["js-micro"]},
+    }
+}
+
+filter_with_file_write_only_benchmarks = {
+    "langs": {
+        "Python": {"names": ["file-write"]},
+        "R": {
+            "names": [
+                "file-write",
+            ]
+        },
+        "JavaScript": {"names": []},
+    }
+}
+
+filter_with_file_write_python_only_benchmarks = {
+    "langs": {
+        "Python": {
+            "names": [
+                "file-write",
+            ]
+        }
+    }
+}
+
+filter_with_file_only_benchmarks = {
+    "langs": {
+        "Python": {"names": ["file-read", "file-write"]},
+        "R": {"names": ["file-read", "file-write"]},
+        "JavaScript": {"names": []},
+    }
 }
 
 

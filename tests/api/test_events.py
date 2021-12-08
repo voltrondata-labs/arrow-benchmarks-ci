@@ -8,6 +8,13 @@ from models.machine import Machine
 from models.run import Run
 from tests.helpers import (
     delete_data,
+    filter_with_cpp_only_benchmarks,
+    filter_with_java_script_only_benchmarks,
+    filter_with_python_only_benchmarks,
+    filter_with_r_only_benchmarks,
+    filter_with_file_write_only_benchmarks,
+    filter_with_file_write_python_only_benchmarks,
+    filter_with_file_only_benchmarks,
     machine_configs,
     make_github_webhook_event_for_comment,
     mock_offline_machine,
@@ -19,7 +26,7 @@ from tests.helpers import (
 
 pull_comments_with_expected_machine_run_filters_and_skip_reason = {
     "@ursabot please benchmark lang=Python": {
-        "ursa-i9-9960x": ({"lang": "Python"}, None),
+        "ursa-i9-9960x": (filter_with_python_only_benchmarks, None),
         "ursa-thinkcentre-m75q": (
             {"lang": "Python"},
             "Only ['C++', 'Java'] langs are supported on ursa-thinkcentre-m75q",
@@ -30,17 +37,35 @@ pull_comments_with_expected_machine_run_filters_and_skip_reason = {
         ),
     },
     "@ursabot please benchmark": {
-        "ursa-i9-9960x": ({"lang": "Python,R,JavaScript"}, None),
-        "ursa-thinkcentre-m75q": ({"lang": "C++,Java"}, None),
-        "new-machine": ({"lang": "C++,Java"}, None),
+        "ursa-i9-9960x": (
+            machine_configs["ursa-i9-9960x"]["default_filters"]["arrow-commit"],
+            None,
+        ),
+        "ursa-thinkcentre-m75q": (
+            machine_configs["ursa-thinkcentre-m75q"]["default_filters"]["arrow-commit"],
+            None,
+        ),
+        "new-machine": (
+            machine_configs["new-machine"]["default_filters"]["arrow-commit"],
+            None,
+        ),
     },
     "@ursabot please benchmark    ": {
-        "ursa-i9-9960x": ({"lang": "Python,R,JavaScript"}, None),
-        "ursa-thinkcentre-m75q": ({"lang": "C++,Java"}, None),
-        "new-machine": ({"lang": "C++,Java"}, None),
+        "ursa-i9-9960x": (
+            machine_configs["ursa-i9-9960x"]["default_filters"]["arrow-commit"],
+            None,
+        ),
+        "ursa-thinkcentre-m75q": (
+            machine_configs["ursa-thinkcentre-m75q"]["default_filters"]["arrow-commit"],
+            None,
+        ),
+        "new-machine": (
+            machine_configs["new-machine"]["default_filters"]["arrow-commit"],
+            None,
+        ),
     },
     "@ursabot please benchmark lang=Python   ": {
-        "ursa-i9-9960x": ({"lang": "Python"}, None),
+        "ursa-i9-9960x": (filter_with_python_only_benchmarks, None),
         "ursa-thinkcentre-m75q": (
             {"lang": "Python"},
             "Only ['C++', 'Java'] langs are supported on ursa-thinkcentre-m75q",
@@ -51,7 +76,7 @@ pull_comments_with_expected_machine_run_filters_and_skip_reason = {
         ),
     },
     "@ursabot please benchmark lang=JavaScript   ": {
-        "ursa-i9-9960x": ({"lang": "JavaScript"}, None),
+        "ursa-i9-9960x": (filter_with_java_script_only_benchmarks, None),
         "ursa-thinkcentre-m75q": (
             {"lang": "JavaScript"},
             "Only ['C++', 'Java'] langs are supported on ursa-thinkcentre-m75q",
@@ -64,21 +89,21 @@ pull_comments_with_expected_machine_run_filters_and_skip_reason = {
     "@ursabot please benchmark lang=C++": {
         "ursa-i9-9960x": (
             {"lang": "C++"},
-            "Only ['Python', 'R', 'JavaScript'] langs are supported on ursa-i9-9960x",
+            "Only ['JavaScript', 'Python', 'R'] langs are supported on ursa-i9-9960x",
         ),
-        "ursa-thinkcentre-m75q": ({"lang": "C++"}, None),
-        "new-machine": ({"lang": "C++"}, None),
+        "ursa-thinkcentre-m75q": (filter_with_cpp_only_benchmarks, None),
+        "new-machine": (filter_with_cpp_only_benchmarks, None),
     },
     "\r\n@ursabot please benchmark   lang=C++": {
         "ursa-i9-9960x": (
             {"lang": "C++"},
-            "Only ['Python', 'R', 'JavaScript'] langs are supported on ursa-i9-9960x",
+            "Only ['JavaScript', 'Python', 'R'] langs are supported on ursa-i9-9960x",
         ),
-        "ursa-thinkcentre-m75q": ({"lang": "C++"}, None),
-        "new-machine": ({"lang": "C++"}, None),
+        "ursa-thinkcentre-m75q": (filter_with_cpp_only_benchmarks, None),
+        "new-machine": (filter_with_cpp_only_benchmarks, None),
     },
     "@ursabot please benchmark lang=R": {
-        "ursa-i9-9960x": ({"lang": "R"}, None),
+        "ursa-i9-9960x": (filter_with_r_only_benchmarks, None),
         "ursa-thinkcentre-m75q": (
             {"lang": "R"},
             "Only ['C++', 'Java'] langs are supported on ursa-thinkcentre-m75q",
@@ -89,18 +114,18 @@ pull_comments_with_expected_machine_run_filters_and_skip_reason = {
         ),
     },
     "@ursabot please benchmark name=file-write": {
-        "ursa-i9-9960x": ({"lang": "Python,R,JavaScript", "name": "file-write"}, None),
+        "ursa-i9-9960x": (filter_with_file_write_only_benchmarks, None),
         "ursa-thinkcentre-m75q": (
-            {"lang": "C++,Java", "name": "file-write"},
+            {"name": "file-write"},
             "Only ['lang', 'command'] filters are supported on ursa-thinkcentre-m75q",
         ),
         "new-machine": (
-            {"lang": "C++,Java", "name": "file-write"},
+            {"name": "file-write"},
             "Only ['lang', 'command'] filters are supported on new-machine",
         ),
     },
     "@ursabot please benchmark name=file-write lang=Python": {
-        "ursa-i9-9960x": ({"lang": "Python", "name": "file-write"}, None),
+        "ursa-i9-9960x": (filter_with_file_write_python_only_benchmarks, None),
         "ursa-thinkcentre-m75q": (
             {"lang": "Python", "name": "file-write"},
             "Only ['C++', 'Java'] langs are supported on ursa-thinkcentre-m75q",
@@ -111,7 +136,7 @@ pull_comments_with_expected_machine_run_filters_and_skip_reason = {
         ),
     },
     "@ursabot please benchmark    name=file-write  lang=Python ": {
-        "ursa-i9-9960x": ({"lang": "Python", "name": "file-write"}, None),
+        "ursa-i9-9960x": (filter_with_file_write_python_only_benchmarks, None),
         "ursa-thinkcentre-m75q": (
             {"lang": "Python", "name": "file-write"},
             "Only ['C++', 'Java'] langs are supported on ursa-thinkcentre-m75q",
@@ -122,34 +147,31 @@ pull_comments_with_expected_machine_run_filters_and_skip_reason = {
         ),
     },
     "@ursabot please benchmark name=file-*": {
-        "ursa-i9-9960x": ({"lang": "Python,R,JavaScript", "name": "file-*"}, None),
+        "ursa-i9-9960x": (filter_with_file_only_benchmarks, None),
         "ursa-thinkcentre-m75q": (
-            {"lang": "C++,Java", "name": "file-*"},
+            {"name": "file-*"},
             "Only ['lang', 'command'] filters are supported on ursa-thinkcentre-m75q",
         ),
         "new-machine": (
-            {"lang": "C++,Java", "name": "file-*"},
+            {"name": "file-*"},
             "Only ['lang', 'command'] filters are supported on new-machine",
         ),
     },
     "@ursabot please benchmark command=cpp-micro --suite-filter=arrow-compute-vector-selection-benchmark --benchmark-filter=TakeStringRandomIndicesWithNulls/262144/2 --iterations=3 --show-output=true": {
         "ursa-i9-9960x": (
             {
-                "lang": "Python,R,JavaScript",
                 "command": "cpp-micro --suite-filter=arrow-compute-vector-selection-benchmark --benchmark-filter=TakeStringRandomIndicesWithNulls/262144/2 --iterations=3 --show-output=true",
             },
             "Only ['lang', 'name'] filters are supported on ursa-i9-9960x",
         ),
         "ursa-thinkcentre-m75q": (
             {
-                "lang": "C++,Java",
                 "command": "cpp-micro --suite-filter=arrow-compute-vector-selection-benchmark --benchmark-filter=TakeStringRandomIndicesWithNulls/262144/2 --iterations=3 --show-output=true",
             },
             None,
         ),
         "new-machine": (
             {
-                "lang": "C++,Java",
                 "command": "cpp-micro --suite-filter=arrow-compute-vector-selection-benchmark --benchmark-filter=TakeStringRandomIndicesWithNulls/262144/2 --iterations=3 --show-output=true",
             },
             None,
@@ -193,6 +215,9 @@ def verify_benchmarkables_and_builds_were_created_for_pull_request_comment(
     ) in expected_runs.items():
         machine = Machine.get(machine_name)
         machine_run = benchmarkable.machine_run(machine)
+        print(machine_run.machine_name)
+        print(machine_run.skip_reason)
+        print(machine_run.filters)
         assert machine_run.filters == expected_filters
         assert machine_run.skip_reason == expected_skip_reason
         if expected_skip_reason:
@@ -210,6 +235,7 @@ def test_post_events_for_pr_with_supported_ursabot_commands(client):
         comment,
         expected_runs,
     ) in pull_comments_with_expected_machine_run_filters_and_skip_reason.items():
+        print(comment)
         delete_data()
         update_machine_configs(machine_configs)
         mock_offline_machine()

@@ -242,48 +242,21 @@ class Run:
             return json.load(f)
 
     def filter_benchmark_groups(self):
+        if not self.filters:
+            return
+
         if "command" in self.filters:
             self.benchmark_groups = [BenchmarkGroup("C++", self.filters["command"])]
             return
 
-        if "lang" in self.filters:
-            langs = self.filters["lang"].split(",")
-            self.benchmark_groups = list(
-                filter(
-                    lambda benchmark_group: benchmark_group.lang in langs,
-                    self.benchmark_groups,
-                )
+        self.benchmark_groups = list(
+            filter(
+                lambda benchmark_group: benchmark_group.lang in self.filters["langs"]
+                and benchmark_group.name
+                in self.filters["langs"][benchmark_group.lang]["names"],
+                self.benchmark_groups,
             )
-
-        if "name" in self.filters:
-            name = self.filters["name"]
-            if name[-1] == "*":
-                self.benchmark_groups = list(
-                    filter(
-                        lambda benchmark_group: benchmark_group.name.startswith(
-                            name[:-1]
-                        ),
-                        self.benchmark_groups,
-                    )
-                )
-            else:
-                self.benchmark_groups = list(
-                    filter(
-                        lambda benchmark_group: benchmark_group.name == name,
-                        self.benchmark_groups,
-                    )
-                )
-
-        if "flags" in self.filters:
-            self.benchmark_groups = list(
-                filter(
-                    lambda benchmark_group: all(
-                        benchmark_group.flags.get(flag) == value
-                        for flag, value in self.filters["flags"].items()
-                    ),
-                    self.benchmark_groups,
-                )
-            )
+        )
 
     def set_env_vars(self):
         for var, value in self.env_vars.items():
