@@ -1,7 +1,7 @@
 steps:
   - label: "Pull Arrow-BCI API Service Docker Image"
     concurrency: 1
-    concurrency_group: "arrow-bci-schedule-and-publish"
+    concurrency_group: "arrow-bci-deploy"
     command:
       - aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin ${DOCKER_REGISTRY}
       - docker pull ${DOCKER_REGISTRY}/${FLASK_APP}:${BUILDKITE_COMMIT}
@@ -10,7 +10,7 @@ steps:
 
   - label: "Get Commits"
     concurrency: 1
-    concurrency_group: "arrow-bci-schedule-and-publish"
+    concurrency_group: "arrow-bci-deploy"
     command:
       - docker-compose -f envs/prod/docker-compose.yml run app python -c 'from buildkite.schedule_and_publish.get_commits import get_commits; get_commits()'
 
@@ -18,7 +18,7 @@ steps:
 
   - label: "Get PyArrow Versions"
     concurrency: 1
-    concurrency_group: "arrow-bci-schedule-and-publish"
+    concurrency_group: "arrow-bci-deploy"
     command:
       - docker-compose -f envs/prod/docker-compose.yml run app python -c 'from buildkite.schedule_and_publish.get_pyarrow_versions import get_pyarrow_versions; get_pyarrow_versions()'
 
@@ -26,7 +26,7 @@ steps:
 
   - label: "Create Benchmark Builds"
     concurrency: 1
-    concurrency_group: "arrow-bci-schedule-and-publish"
+    concurrency_group: "arrow-bci-deploy"
     command:
       - docker-compose -f envs/prod/docker-compose.yml run app python -c 'from buildkite.schedule_and_publish.create_benchmark_builds import create_benchmark_builds; create_benchmark_builds()'
 
@@ -34,7 +34,7 @@ steps:
 
   - label: "Update Benchmark Builds Status"
     concurrency: 1
-    concurrency_group: "arrow-bci-schedule-and-publish"
+    concurrency_group: "arrow-bci-deploy"
     command:
       - docker-compose -f envs/prod/docker-compose.yml run app python -c 'from buildkite.schedule_and_publish.update_benchmark_builds_status import update_benchmark_builds_status; update_benchmark_builds_status()'
 
@@ -42,7 +42,7 @@ steps:
 
   - label: "Publish Benchmark Results on Slack"
     concurrency: 1
-    concurrency_group: "arrow-bci-schedule-and-publish"
+    concurrency_group: "arrow-bci-deploy"
     command:
       - docker-compose -f envs/prod/docker-compose.yml run app python -c 'from buildkite.schedule_and_publish.publish_benchmark_results_on_slack import publish_benchmark_results_on_slack; publish_benchmark_results_on_slack()'
 
@@ -50,7 +50,7 @@ steps:
 
   - label: "Publish Benchmark Results to Pull Requests"
     concurrency: 1
-    concurrency_group: "arrow-bci-schedule-and-publish"
+    concurrency_group: "arrow-bci-deploy"
     command:
       - docker-compose -f envs/prod/docker-compose.yml run app python -c 'from buildkite.schedule_and_publish.publish_benchmark_results_on_pull_requests import publish_benchmark_results_on_pull_requests; publish_benchmark_results_on_pull_requests()'
 
@@ -58,7 +58,7 @@ steps:
 
   - label: "Publish Warnings on Slack"
     concurrency: 1
-    concurrency_group: "arrow-bci-schedule-and-publish"
+    concurrency_group: "arrow-bci-deploy"
     command:
       - docker-compose -f envs/prod/docker-compose.yml run app python -c 'from buildkite.schedule_and_publish.publish_warnings_on_slack import publish_offline_machine_warnings_on_slack; publish_offline_machine_warnings_on_slack()'
       - docker-compose -f envs/prod/docker-compose.yml run app python -c 'from buildkite.schedule_and_publish.publish_warnings_on_slack import publish_buildkite_build_warnings_on_slack; publish_buildkite_build_warnings_on_slack()'
