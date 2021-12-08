@@ -1,4 +1,4 @@
-#### How to Disable Boost
+#### How to Disable CPU Frequency Boost
 
 These steps were used on `ThinkCentre` machine. Your benchmark machine might require a different way to do this.
 

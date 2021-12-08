@@ -142,7 +142,7 @@ export RUN_NAME="test"
 source buildkite/benchmark/utils.sh build_arrow_and_run_benchmark_groups
 ```
 
-##### 5. Disable Swap, CPU frequency scaling, Hyper-Threading & Boost on your benchmark machine
+##### 5. Disable Swap, CPU Frequency Scaling, Hyper-Threading & CPU Frequency Boost on your benchmark machine
 Disabling Swap, CPU frequency scaling, Hyper-Threading & Boost will reduce benchmark results variability.
 Note that each machine might have its own way of disabling these features or have its own name for some of these features.
 
@@ -150,14 +150,8 @@ Here are docs on how to do this on `ThinkCentre` machines:
 - [How to Disable CPU Frequency Scaling](../docs/how-to-disable-CPU-frequency-scaling.md)
 - [How to Disable Hyper-Threading](../docs/how-to-disable-hyper-threading.md)
 - [How to Disable Swap](../docs/how-to-disable-swap.md)
-- [How to Disable Boost](../docs/how-to-dsiable-boost.md)
-- [CPU Frequency Boost](https://www.kernel.org/doc/Documentation/cpu-freq/boost.txt)
+- [How to Disable CPU Frequency Boost](../docs/how-to-dsiable-boost.md)
 
-To check if Boost is already disabled (you should see 0)
-```shell script
-$ cat /sys/devices/system/cpu/cpufreq/boost
-0
-```
 
 ##### 6. Get Pull Request reviewed and merged
 Suggested Reviewers: 
