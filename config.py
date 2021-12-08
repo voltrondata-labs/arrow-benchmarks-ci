@@ -70,6 +70,7 @@ class Config:
                                 "file-write",
                                 "partitioned-dataset-filter",
                                 "wide-dataframe",
+                                "tpch"
                             ]
                         },
                         "JavaScript": {"names": ["js-micro"]},
