@@ -40,5 +40,5 @@ def test_publish_buildkite_build_warnings_on_slack():
 
     warnings = publish_buildkite_build_warnings_on_slack()
     assert warnings == [
-        ":warning: Benchmark build https://buildkite.com/apache-arrow/arrow-bci-benchmark-on-ursa-i9-9960x/builds/1 is running > 2 hours."
+        ":warning: Benchmark build https://buildkite.com/apache-arrow/arrow-bci-benchmark-on-ursa-i9-9960x/builds/1 is running > 2.45 hours."
     ]
