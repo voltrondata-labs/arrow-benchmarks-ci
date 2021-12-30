@@ -98,8 +98,8 @@ class BenchmarkGroup:
         if not arrow_bci_url or not arrow_bci_api_access_token:
             return
 
-        # Monitor memory only for Python and R benchmarks
-        if self.lang not in ["Python", "R"]:
+        # Monitor memory only for Python, R and Java benchmarks
+        if self.lang not in ["Python", "R", "Java"]:
             return
 
         self.memory_monitor = subprocess.Popen(
