@@ -171,19 +171,23 @@ class Run:
     def capture_context(self):
         post_logs_to_arrow_bci(f"runs/{run_id}", run_context())
 
-    def execute_command(self, command, path=".", exit_on_failure=True):
+    def execute_command(self, command, path=".", exit_on_failure=True, capture_output=True):
         logging.info(f"Started executing -> {command}")
         self.executed_commands.append((command, path, exit_on_failure))
 
         result = subprocess.run(
             f"cd {path}; {command}",
-            capture_output=True,
+            capture_output=capture_output,
             shell=True,
             executable="/bin/bash",
         )
         return_code = result.returncode
-        stderr = result.stderr.decode()
-        stdout = result.stdout.decode()
+        if capture_output:
+            stderr = result.stderr.decode()
+            stdout = result.stdout.decode()
+        else:
+            stderr = "stderr was not not captured"
+            stdout = "stdout was not not captured"
 
         logging.info(stderr)
         logging.info(stdout)
@@ -298,6 +302,7 @@ class Run:
                 benchmark_group.command,
                 path=self.root,
                 exit_on_failure=False,
+                capture_output=(lang != "Java")  # Java benchmarks produce 12GB+ of output
             )
 
             benchmark_group.finished_at = datetime.now()
@@ -380,7 +385,7 @@ class MockRun(Run):
     def setup_conbench_credentials(self):
         pass
 
-    def execute_command(self, command, path=".", exit_on_failure=True):
+    def execute_command(self, command, path=".", exit_on_failure=True, capture_output=True):
         logging.info(f"Started executing -> {command}")
         self.executed_commands.append((command, path, exit_on_failure))
         return 0, ""
