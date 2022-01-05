@@ -74,18 +74,23 @@ install_arrowbench() {
 }
 
 install_duckdb_r_with_tpch() {
-  git clone https://github.com/duckdb/duckdb.git
-  
-  # now fetch the latest tag to install
-  cd duckdb
-  git fetch --tags
-  latestTag=$(git describe --tags `git rev-list --tags --max-count=1`)
-  git checkout $latestTag
-  
-  # and then do the install
-  cd tools/rpkg
-  R -e "remotes::install_deps()"
-  DUCKDB_R_EXTENSIONS=tpch R CMD INSTALL .
+  # Check if duckdb is already installed
+  R -e "stopifnot(require('duckdb'))"
+  if test $? -ne 0; then
+    # If it is not already installed, then we should isntall it.
+    git clone https://github.com/duckdb/duckdb.git
+
+    # now fetch the latest tag to install
+    cd duckdb
+    git fetch --tags
+    latestTag=$(git describe --tags `git rev-list --tags --max-count=1`)
+    git checkout $latestTag
+
+    # and then do the install
+    cd tools/rpkg
+    R -e "remotes::install_deps()"
+    DUCKDB_R_EXTENSIONS=tpch R CMD INSTALL .
+  fi
 }
 
 install_java_script_project_dependencies() {
