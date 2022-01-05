@@ -2,6 +2,7 @@ import json
 import logging
 import os
 import subprocess
+import tempfile
 from datetime import datetime
 
 import psutil
@@ -171,24 +172,31 @@ class Run:
     def capture_context(self):
         post_logs_to_arrow_bci(f"runs/{run_id}", run_context())
 
-    def execute_command(self, command, path=".", exit_on_failure=True, capture_output=True):
+    def execute_command(self, command, path=".", exit_on_failure=True, log_stdout=True):
         logging.info(f"Started executing -> {command}")
         self.executed_commands.append((command, path, exit_on_failure))
 
-        result = subprocess.run(
-            f"cd {path}; {command}",
-            capture_output=capture_output,
-            shell=True,
-            executable="/bin/bash",
-        )
-        return_code = result.returncode
-        if capture_output:
+        if log_stdout:
+            result = subprocess.run(
+                f"cd {path}; {command}",
+                capture_output=True,
+                shell=True,
+                executable="/bin/bash",
+            )
             stderr = result.stderr.decode()
             stdout = result.stdout.decode()
         else:
-            stderr = "stderr was not not captured"
-            stdout = "stdout was not not captured"
+            with tempfile.NamedTemporaryFile(delete=True) as out:
+                result = subprocess.run(
+                    f"cd {path}; {command}",
+                    stdout=out,
+                    shell=True,
+                    executable="/bin/bash",
+                )
+            stderr = ""
+            stdout = ""
 
+        return_code = result.returncode
         logging.info(stderr)
         logging.info(stdout)
 
@@ -302,7 +310,7 @@ class Run:
                 benchmark_group.command,
                 path=self.root,
                 exit_on_failure=False,
-                capture_output=(lang != "Java")  # Java benchmarks produce 12GB+ of output
+                log_stdout=(lang != "Java")  # Java benchmarks produce 12GB+ of output
             )
 
             benchmark_group.finished_at = datetime.now()
@@ -385,7 +393,7 @@ class MockRun(Run):
     def setup_conbench_credentials(self):
         pass
 
-    def execute_command(self, command, path=".", exit_on_failure=True, capture_output=True):
+    def execute_command(self, command, path=".", exit_on_failure=True, log_stdout=True):
         logging.info(f"Started executing -> {command}")
         self.executed_commands.append((command, path, exit_on_failure))
         return 0, ""
