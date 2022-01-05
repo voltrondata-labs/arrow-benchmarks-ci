@@ -186,6 +186,7 @@ class Run:
             stderr = result.stderr.decode()
             stdout = result.stdout.decode()
         else:
+            # Do not log Java benchmarks stdout (12GB+)
             with tempfile.NamedTemporaryFile(delete=True) as out:
                 result = subprocess.run(
                     f"cd {path}; {command}",
