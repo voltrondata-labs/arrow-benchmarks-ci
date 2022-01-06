@@ -99,10 +99,10 @@ install_duckdb_r_with_tpch() {
   #  R -e "remotes::install_deps()"
   #  DUCKDB_R_EXTENSIONS=tpch R CMD INSTALL .
   #
-  # mkdir /tmp/duckdb
-  # cp -R /var/lib/buildkite-agent/miniconda3/envs/arrow-commit/lib/R/library/DBI /tmp/duckdb/DBI
-  # cp -R /var/lib/buildkite-agent/miniconda3/envs/arrow-commit/lib/R/library/duckdb /tmp/duckdb/duckdb
-  # ls -al /tmp/duckdb
+  #  mkdir /tmp/duckdb
+  #  cp -R /var/lib/buildkite-agent/miniconda3/envs/arrow-commit/lib/R/library/DBI /tmp/duckdb/DBI
+  #  cp -R /var/lib/buildkite-agent/miniconda3/envs/arrow-commit/lib/R/library/duckdb /tmp/duckdb/duckdb
+  #  ls -al /tmp/duckdb
 }
 
 install_java_script_project_dependencies() {
