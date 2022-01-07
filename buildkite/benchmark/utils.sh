@@ -74,35 +74,18 @@ install_arrowbench() {
 }
 
 install_duckdb_r_with_tpch() {
-  # Workaround for intermittent but frequent Duckdb R installation issues which should be fixed soon by DuckDB
-  cp -R /tmp/duckdb/DBI /var/lib/buildkite-agent/miniconda3/envs/arrow-commit/lib/R/library/DBI
-  cp -R /tmp/duckdb/duckdb /var/lib/buildkite-agent/miniconda3/envs/arrow-commit/lib/R/library/duckdb
+  git clone https://github.com/duckdb/duckdb.git
 
-  # Duckdb R was installed on voltron-pavilion and ursa-i9-9960x manually using this script:
-  #
-  #  sudo su
-  #  su - buildkite-agent
-  #
-  #  eval "$(command '/var/lib/buildkite-agent/miniconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
-  #  conda activate arrow-commit
-  #  export HOME=/var/lib/buildkite-agent/
-  #  cd ~
-  #
-  #  git clone https://github.com/duckdb/duckdb.git
-  #
-  #  cd duckdb
-  #  git fetch --tags
-  #  latestTag=$(git describe --tags `git rev-list --tags --max-count=1`)
-  #  git checkout $latestTag
-  #
-  #  cd tools/rpkg
-  #  R -e "remotes::install_deps()"
-  #  DUCKDB_R_EXTENSIONS=tpch R CMD INSTALL .
-  #
-  #  mkdir /tmp/duckdb
-  #  cp -R /var/lib/buildkite-agent/miniconda3/envs/arrow-commit/lib/R/library/DBI /tmp/duckdb/DBI
-  #  cp -R /var/lib/buildkite-agent/miniconda3/envs/arrow-commit/lib/R/library/duckdb /tmp/duckdb/duckdb
-  #  ls -al /tmp/duckdb
+  # now fetch the latest tag to install
+  cd duckdb
+  git fetch --tags
+  latestTag=$(git describe --tags `git rev-list --tags --max-count=1`)
+  git checkout $latestTag
+
+  # and then do the install
+  cd tools/rpkg
+  R -e "remotes::install_deps()"
+  DUCKDB_R_EXTENSIONS=tpch R CMD INSTALL .
 }
 
 install_java_script_project_dependencies() {
