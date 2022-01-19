@@ -51,6 +51,17 @@ repos_with_benchmark_groups = [
     }
 ]
 
+retryable_benchmark_groups = [
+    "csv-read",
+    "dataframe-to-table",
+    "dataset-read",
+    "dataset-selectivity",
+    "file-read",
+    "file-write",
+    "partitioned-dataset-filter",
+    "tpch",
+]
+
 
 class BenchmarkGroup:
     def __init__(self, lang, name, options="", flags="", mock_run=False):
@@ -90,6 +101,10 @@ class BenchmarkGroup:
     def total_run_time(self):
         if self.started_at and self.finished_at:
             return self.finished_at - self.started_at
+
+    @property
+    def retry_on_failure(self):
+        return self.name in retryable_benchmark_groups
 
     def start_memory_monitor(self):
         if self.mock_run:
@@ -303,22 +318,30 @@ class Run:
     def run_benchmark_groups(self, lang):
         self.print_env_vars()
         for benchmark_group in self.benchmark_groups_for_lang(lang):
-            benchmark_group.started_at = datetime.now()
-            benchmark_group.log_execution()
-            benchmark_group.start_memory_monitor()
+            self.run_benchmark_group(benchmark_group)
+            if benchmark_group.failed and benchmark_group.retry_on_failure:
+                print(f"Retrying {benchmark_group.command}")
+                self.run_benchmark_group(benchmark_group)
 
-            return_code, stderr = self.execute_command(
-                benchmark_group.command,
-                path=self.root,
-                exit_on_failure=False,
-                log_stdout=(lang != "Java")  # Java benchmarks produce 12GB+ of output
-            )
+    def run_benchmark_group(self, benchmark_group):
+        benchmark_group.started_at = datetime.now()
+        benchmark_group.log_execution()
+        benchmark_group.start_memory_monitor()
 
-            benchmark_group.finished_at = datetime.now()
-            benchmark_group.return_code = return_code
-            benchmark_group.stderr = stderr
-            benchmark_group.log_execution()
-            benchmark_group.stop_memory_monitor()
+        return_code, stderr = self.execute_command(
+            benchmark_group.command,
+            path=self.root,
+            exit_on_failure=False,
+            log_stdout=(
+                benchmark_group.lang != "Java"
+            ),  # Java benchmarks produce 12GB+ of output
+        )
+
+        benchmark_group.finished_at = datetime.now()
+        benchmark_group.return_code = return_code
+        benchmark_group.stderr = stderr
+        benchmark_group.log_execution()
+        benchmark_group.stop_memory_monitor()
 
     def print_results(self):
         print(
