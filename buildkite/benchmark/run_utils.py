@@ -8,7 +8,7 @@ import requests
 
 arrow_bci_url = os.getenv("ARROW_BCI_URL")
 arrow_bci_api_access_token = os.getenv("ARROW_BCI_API_ACCESS_TOKEN")
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.INFO)
 
 
 def context():
