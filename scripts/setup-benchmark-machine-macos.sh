@@ -1,10 +1,8 @@
 #!/bin/bash
 
 echo "-------Installing C++ dependencies"
-git clone https://github.com/apache/arrow.git
-pushd arrow
-brew update && brew install node && brew bundle --file=cpp/Brewfile
-popd
+curl -LO https://raw.githubusercontent.com/apache/arrow/master/cpp/Brewfile
+brew update && brew install node && brew bundle --file=Brewfile
 
 echo "-------Installing Buildkite Agent"
 brew install buildkite/buildkite/buildkite-agent
@@ -24,4 +22,4 @@ touch "$(brew --prefix)"/etc/buildkite-agent/hooks/environment
 } >> "$(brew --prefix)"/etc/buildkite-agent/hooks/environment
 
 cp "$(brew --prefix)"/etc/buildkite-agent/hooks/pre-command.sample "$(brew --prefix)"/etc/buildkite-agent/hooks/pre-command
-echo "source "$(brew --prefix)"/var/lib/buildkite-agent/.bashrc" >> "$(brew --prefix)"/etc/buildkite-agent/hooks/pre-command
+echo "source ~/.bashrc" >> "$(brew --prefix)"/etc/buildkite-agent/hooks/pre-command
