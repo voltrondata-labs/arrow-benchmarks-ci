@@ -1,0 +1,27 @@
+#!/bin/bash
+
+echo "-------Installing C++ dependencies"
+git clone https://github.com/apache/arrow.git
+pushd arrow
+brew update && brew install node && brew bundle --file=cpp/Brewfile
+popd
+
+echo "-------Installing Buildkite Agent"
+brew install buildkite/buildkite/buildkite-agent
+
+echo "-------Setting up Buildkite agent config and hooks"
+sed -i '' "s/xxx/$BUILDKITE_AGENT_TOKEN/g" "$(brew --prefix)"/etc/buildkite-agent/buildkite-agent.cfg
+echo "tags=\"queue=$BUILDKITE_QUEUE\"" >> "$(brew --prefix)"/etc/buildkite-agent/buildkite-agent.cfg
+
+touch "$(brew --prefix)"/etc/buildkite-agent/hooks/environment
+{
+  echo "export ARROW_BCI_URL=$ARROW_BCI_URL"
+  echo "export ARROW_BCI_API_ACCESS_TOKEN=$ARROW_BCI_API_ACCESS_TOKEN"
+  echo "export CONBENCH_EMAIL=$CONBENCH_EMAIL"
+  echo "export CONBENCH_PASSWORD=$CONBENCH_PASSWORD"
+  echo "export CONBENCH_URL=$CONBENCH_URL"
+  echo "export MACHINE=$MACHINE"
+} >> "$(brew --prefix)"/etc/buildkite-agent/hooks/environment
+
+cp "$(brew --prefix)"/etc/buildkite-agent/hooks/pre-command.sample "$(brew --prefix)"/etc/buildkite-agent/hooks/pre-command
+echo "source "$(brew --prefix)"/var/lib/buildkite-agent/.bashrc" >> "$(brew --prefix)"/etc/buildkite-agent/hooks/pre-command
