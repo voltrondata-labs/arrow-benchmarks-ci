@@ -142,6 +142,11 @@ curl -LO https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh
 bash Miniconda3-latest-MacOSX-x86_64.sh -b -p "$HOME/miniconda3"
 "$HOME/miniconda3/bin/conda" init
 
+# Install Conda on macos M1
+curl -LO https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-arm64.sh
+bash Miniconda3-latest-MacOSX-arm64.sh -b -p "$HOME/miniconda3"
+"$HOME/miniconda3/bin/conda" init
+
 # Restart your Terminal
 
 # Verify Conda is installed

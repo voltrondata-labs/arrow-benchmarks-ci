@@ -13,7 +13,20 @@ create_conda_env_for_arrow_commit() {
   pushd arrow
   git fetch -v --prune -- origin "${BENCHMARKABLE}"
   git checkout -f "${BENCHMARKABLE}"
-  source dev/conbench_envs/hooks.sh create_conda_env_with_arrow_python
+  conda create -y -n "${BENCHMARKABLE_TYPE}" -c conda-forge \
+  --file ci/conda_env_unix.txt \
+  --file ci/conda_env_cpp.txt \
+  --file ci/conda_env_python.txt \
+  --file ci/conda_env_gandiva.txt \
+  compilers \
+  python="${PYTHON_VERSION}" \
+  pandas \
+  aws-sdk-cpp
+  source dev/conbench_envs/hooks.sh activate_conda_env_for_benchmark_build
+  source dev/conbench_envs/hooks.sh install_arrow_python_dependencies
+  source dev/conbench_envs/hooks.sh set_arrow_build_and_run_env_vars
+  source dev/conbench_envs/hooks.sh build_arrow_cpp
+  source dev/conbench_envs/hooks.sh build_arrow_python
   popd
 }
 
