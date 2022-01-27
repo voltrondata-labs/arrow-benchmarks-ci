@@ -63,7 +63,7 @@ Please use <your email address> to share the environment vars with us.
     - enter Note
     - select `repo:status` and `public_repo` under Select scopes
     - click Generate token
-    - copy token and use it as `GITHUB_API_TOKEN`
+    - copy token and use it as `GITHUB_PAT` in this doc
 
 
 ##### 3. Setup your benchmark machine
