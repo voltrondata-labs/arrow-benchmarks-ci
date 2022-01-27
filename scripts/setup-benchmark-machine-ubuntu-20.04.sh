@@ -89,6 +89,7 @@ touch /etc/buildkite-agent/hooks/environment
   echo "export CONBENCH_PASSWORD=$CONBENCH_PASSWORD"
   echo "export CONBENCH_URL=$CONBENCH_URL"
   echo "export MACHINE=$MACHINE"
+  echo "export GITHUB_PAT=$GITHUB_PAT"
 } >> /etc/buildkite-agent/hooks/environment
 
 cp /etc/buildkite-agent/hooks/pre-command.sample /etc/buildkite-agent/hooks/pre-command

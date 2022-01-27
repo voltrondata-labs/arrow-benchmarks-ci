@@ -58,6 +58,14 @@ Please use <your email address> to share the environment vars with us.
 ```
 - Environment vars will be shared with you using LastPass
 
+- Create GITHUB_PAT 
+    - Go to https://github.com/settings/tokens/new
+    - enter Note
+    - select `repo:status` and `public_repo` under Select scopes
+    - click Generate token
+    - copy token and use it as `GITHUB_API_TOKEN`
+
+
 ##### 3. Setup your benchmark machine
 Note:
 - [setup-benchmark-machine-ubuntu-20.04.sh](../scripts/setup-benchmark-machine-ubuntu-20.04.sh) only installs dependencies for Apache Arrow C++, Python, R, Java and JavaScript.
@@ -77,6 +85,7 @@ export CONBENCH_EMAIL=<CONBENCH_EMAIL>
 export CONBENCH_PASSWORD=<CONBENCH_PASSWORD>
 export CONBENCH_URL=<CONBENCH_URL>
 export MACHINE=<MACHINE>
+export GITHUB_PAT=<GITHUB_PAT>
 
 # Install Apache Arrow C++, Python, R, Java and JavaScript dependencies and Buildkite Agent
 curl -LO https://raw.githubusercontent.com/ursacomputing/arrow-benchmarks-ci/main/scripts/setup-benchmark-machine-ubuntu-20.04.sh
@@ -133,6 +142,7 @@ export CONBENCH_EMAIL=<CONBENCH_EMAIL>
 export CONBENCH_PASSWORD=<CONBENCH_PASSWORD>
 export CONBENCH_URL=<CONBENCH_URL>
 export MACHINE=<MACHINE>
+export GITHUB_PAT=<GITHUB_PAT>
 export PYTHON_VERSION=3.8
 export BENCHMARKABLE=<latest arrow commit>
 export BENCHMARKABLE_TYPE=arrow-commit
