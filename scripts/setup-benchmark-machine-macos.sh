@@ -22,5 +22,6 @@ touch "$(brew --prefix)"/etc/buildkite-agent/hooks/environment
   echo "export GITHUB_PAT=$GITHUB_PAT"
 } >> "$(brew --prefix)"/etc/buildkite-agent/hooks/environment
 
-cp "$(brew --prefix)"/etc/buildkite-agent/hooks/pre-command.sample "$(brew --prefix)"/etc/buildkite-agent/hooks/pre-command
-echo "source ~/.bashrc" >> "$(brew --prefix)"/etc/buildkite-agent/hooks/pre-command
+echo "-------Setting NOPASSWD for voltrondata user"
+echo "voltrondata ALL=(ALL) NOPASSWD:ALL" | sudo tee -a /etc/sudoers
+echo "Done"

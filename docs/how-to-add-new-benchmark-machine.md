@@ -135,7 +135,7 @@ On macOS:
 ```shell script
 cd ~
 
-# Export env vars to be used by setup-benchmark-machine-ubuntu-20.04.sh
+# Export env vars to be used by setup-benchmark-machine-macos.sh
 export ARROW_BCI_URL=<ARROW_BCI_URL>
 export ARROW_BCI_API_ACCESS_TOKEN=<ARROW_BCI_API_ACCESS_TOKEN>
 export BUILDKITE_AGENT_TOKEN=<BUILDKITE_AGENT_TOKEN>

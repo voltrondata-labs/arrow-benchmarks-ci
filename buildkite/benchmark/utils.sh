@@ -9,29 +9,9 @@ init_conda() {
 }
 
 create_conda_env_for_arrow_commit() {
-  git clone "${ARROW_REPO}"
+  clone_arrow_repo
   pushd arrow
-  git fetch -v --prune -- origin "${BENCHMARKABLE}"
-  git checkout -f "${BENCHMARKABLE}"
   source dev/conbench_envs/hooks.sh create_conda_env_with_arrow_python
-  popd
-}
-
-create_venv_for_arrow_commit() {
-  cd ~
-  virtualenv venv --python=3.9
-  source venv/bin/activate
-  cd ~/arrow-benchmarks-ci
-  git clone "${ARROW_REPO}"
-  pushd arrow
-  git fetch -v --prune -- origin "${BENCHMARKABLE}"
-  git checkout -f "${BENCHMARKABLE}"
-  source dev/conbench_envs/hooks.sh install_arrow_python_dependencies
-  source dev/conbench_envs/hooks.sh set_arrow_build_and_run_env_vars
-  export ARROW_HOME=$(pwd)
-  export LD_LIBRARY_PATH=
-  source dev/conbench_envs/hooks.sh build_arrow_cpp
-  source dev/conbench_envs/hooks.sh build_arrow_python
   popd
 }
 
@@ -52,6 +32,29 @@ create_conda_env_with_arrow() {
     echo "Creating conda env for pyarrow apache wheel"
     create_conda_env_for_pyarrow_apache_wheel
   fi
+}
+
+create_virtualenv_with_arrow() {
+  virtualenv venv --python="${PYTHON_VERSION}"
+  source venv/bin/activate
+  clone_arrow_repo
+  pushd arrow
+  source dev/conbench_envs/hooks.sh install_arrow_python_dependencies
+  source dev/conbench_envs/hooks.sh set_arrow_build_and_run_env_vars
+  export ARROW_HOME=$(pwd)
+  export LD_LIBRARY_PATH=
+  source dev/conbench_envs/hooks.sh build_arrow_cpp
+  source dev/conbench_envs/hooks.sh build_arrow_python
+  popd
+}
+
+clone_arrow_repo() {
+  rm -rf arrow
+  git clone "${ARROW_REPO}"
+  pushd arrow
+  git fetch -v --prune -- origin "${BENCHMARKABLE}"
+  git checkout -f "${BENCHMARKABLE}"
+  popd
 }
 
 install_conbench() {
@@ -76,11 +79,8 @@ build_arrow_java() {
 }
 
 install_archery() {
-  rm -rf arrow
-  git clone "${ARROW_REPO}"
+  clone_arrow_repo
   pushd arrow
-  git fetch -v --prune -- origin "${BENCHMARKABLE}"
-  git checkout -f "${BENCHMARKABLE}"
   source dev/conbench_envs/hooks.sh install_archery
   popd
 }
@@ -119,16 +119,23 @@ create_data_dir() {
 
 build_arrow_and_run_benchmark_groups() {
   export ARROW_REPO=https://github.com/apache/arrow.git
-  source buildkite/benchmark/utils.sh create_venv_for_arrow_commi
-  source buildkite/benchmark/utils.sh install_conbench
-  python -m buildkite.benchmark.run_benchmark_groups
 
-#  export ARROW_REPO=https://github.com/apache/arrow.git
-#  source buildkite/benchmark/utils.sh init_conda
-#  source buildkite/benchmark/utils.sh create_conda_env_with_arrow
-#  source buildkite/benchmark/utils.sh install_conbench
-#  python -m buildkite.benchmark.run_benchmark_groups
-#  conda deactivate
+  case "$(uname)" in
+    Linux)
+      init_conda
+      create_conda_env_with_arrow
+      ;;
+    Darwin)
+      create_virtualenv_with_arrow
+      ;;
+    *)
+      echo "buildkite/benchmark/utils.sh supports only building Arrow and running benchmarks on Linux and MacOS. Please update this script to work for your machine's OS"
+      exit 1
+      ;;
+  esac
+
+  install_conbench
+  python -m buildkite.benchmark.run_benchmark_groups
 }
 
 "$@"
