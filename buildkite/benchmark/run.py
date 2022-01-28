@@ -118,10 +118,8 @@ class BenchmarkGroup:
         if self.lang not in ["Python", "R"]:
             return
 
-        self.memory_monitor = subprocess.Popen(
-            f"python -m buildkite.benchmark.monitor_memory {self.process_pid} {self.id}",
-            shell=True,
-            executable="/bin/bash",
+        self.memory_monitor = subprocess.Popen(['/bin/bash', '-i', '-c',
+            f"python -m buildkite.benchmark.monitor_memory {self.process_pid} {self.id}"],
         )
 
     def stop_memory_monitor(self):
@@ -202,10 +200,8 @@ class Run:
             # Do not log Java benchmarks stdout (12GB+)
             with tempfile.NamedTemporaryFile(delete=True) as out:
                 result = subprocess.run(
-                    f"cd {path}; {command}",
+                    ['/bin/bash', '-i', '-c', f"cd {path}; {command}"],
                     stdout=out,
-                    shell=True,
-                    executable="/bin/bash",
                 )
             stderr = ""
             stdout = ""
