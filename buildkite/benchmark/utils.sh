@@ -13,7 +13,44 @@ create_conda_env_for_arrow_commit() {
   pushd arrow
   git fetch -v --prune -- origin "${BENCHMARKABLE}"
   git checkout -f "${BENCHMARKABLE}"
-  source dev/conbench_envs/hooks.sh create_conda_env_with_arrow_python
+  
+  export ARROW_BUILD_TESTS=OFF
+  export ARROW_BUILD_TYPE=release
+  export ARROW_DEPENDENCY_SOURCE=AUTO
+  export ARROW_DATASET=ON
+  export ARROW_DEFAULT_MEMORY_POOL=mimalloc
+  export ARROW_ENABLE_UNSAFE_MEMORY_ACCESS=true
+  export ARROW_ENABLE_NULL_CHECK_FOR_GET=false
+  export ARROW_FLIGHT=OFF
+  export ARROW_GANDIVA=OFF
+  export ARROW_HDFS=ON
+  export ARROW_INSTALL_NAME_RPATH=OFF
+  export ARROW_MIMALLOC=ON
+  export ARROW_NO_DEPRECATED_API=ON
+  export ARROW_ORC=ON
+  export ARROW_PARQUET=ON
+  export ARROW_PLASMA=ON
+  export ARROW_PYTHON=ON
+  export ARROW_S3=ON
+  export ARROW_USE_ASAN=OFF
+  export ARROW_USE_CCACHE=ON
+  export ARROW_USE_UBSAN=OFF
+  export ARROW_WITH_BROTLI=ON
+  export ARROW_WITH_BZ2=ON
+  export ARROW_WITH_LZ4=ON
+  export ARROW_WITH_SNAPPY=ON
+  export ARROW_WITH_ZLIB=ON
+  export ARROW_WITH_ZSTD=ON
+  export ARROW_HOME=$(pwd)
+  export GTest_SOURCE=BUNDLED
+  export ORC_SOURCE=BUNDLED
+  export PARQUET_BUILD_EXAMPLES=ON
+  export PARQUET_BUILD_EXECUTABLES=ON
+  export PYTHON=python
+
+  ci/scripts/cpp_build.sh $(pwd) $(pwd)
+  ci/scripts/python_build.sh $(pwd) $(pwd)
+
   popd
 }
 
@@ -102,7 +139,7 @@ create_data_dir() {
 build_arrow_and_run_benchmark_groups() {
   export ARROW_REPO=https://github.com/apache/arrow.git
   #source buildkite/benchmark/utils.sh init_conda
-  #source buildkite/benchmark/utils.sh create_conda_env_with_arrow
+  source buildkite/benchmark/utils.sh create_conda_env_with_arrow
   source buildkite/benchmark/utils.sh install_conbench
   python -m buildkite.benchmark.run_benchmark_groups
   #conda deactivate
