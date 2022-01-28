@@ -58,7 +58,19 @@ Please use <your email address> to share the environment vars with us.
 ```
 - Environment vars will be shared with you using LastPass
 
+- Create GITHUB_PAT 
+    - Go to https://github.com/settings/tokens/new
+    - enter Note
+    - select `repo:status` and `public_repo` under Select scopes
+    - click Generate token
+    - copy token and use it as `GITHUB_PAT` in this doc
+
+
 ##### 3. Setup your benchmark machine
+Note:
+- [setup-benchmark-machine-ubuntu-20.04.sh](../scripts/setup-benchmark-machine-ubuntu-20.04.sh) only installs dependencies for Apache Arrow C++, Python, R, Java and JavaScript.
+- If you need to install additional dependencies, please update [setup-benchmark-machine-ubuntu-20.04.sh](../scripts/setup-benchmark-machine-ubuntu-20.04.sh). 
+- If your machine is running OS other than Ubuntu, please create a new setup script and use [setup-benchmark-machine-ubuntu-20.04.sh](../scripts/setup-benchmark-machine-ubuntu-20.04.sh) as a reference.
 
 On Ubuntu:
 ```shell script
@@ -74,6 +86,7 @@ export CONBENCH_EMAIL=<CONBENCH_EMAIL>
 export CONBENCH_PASSWORD=<CONBENCH_PASSWORD>
 export CONBENCH_URL=<CONBENCH_URL>
 export MACHINE=<MACHINE>
+export GITHUB_PAT=<GITHUB_PAT>
 
 # Install Apache Arrow C++, Python, R, Java and JavaScript dependencies and Buildkite Agent
 curl -LO https://raw.githubusercontent.com/ursacomputing/arrow-benchmarks-ci/main/scripts/setup-benchmark-machine-ubuntu-20.04.sh
@@ -131,27 +144,12 @@ export CONBENCH_EMAIL=<CONBENCH_EMAIL>
 export CONBENCH_PASSWORD=<CONBENCH_PASSWORD>
 export CONBENCH_URL=<CONBENCH_URL>
 export MACHINE=<MACHINE>
+export GITHUB_PAT=<GITHUB_PAT>
 
 # Install Apache Arrow C++ dependencies and Buildkite Agent
 curl -LO https://raw.githubusercontent.com/ursacomputing/arrow-benchmarks-ci/make-setup-and-benchmarks-work-on-macs/scripts/setup-benchmark-machine-macos.sh
 chmod +x setup-benchmark-machine-macos.sh
 source ./setup-benchmark-machine-macos.sh
-
-# Install Conda
-curl -LO https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh
-bash Miniconda3-latest-MacOSX-x86_64.sh -b -p "$HOME/miniconda3"
-"$HOME/miniconda3/bin/conda" init
-
-# Install Conda on macos M1
-curl -LO https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-arm64.sh
-bash Miniconda3-latest-MacOSX-arm64.sh -b -p "$HOME/miniconda3"
-"$HOME/miniconda3/bin/conda" init
-
-# Restart your Terminal
-
-# Verify Conda is installed
-conda --version
-conda env list
 
 # Start Buildkite Agent
 brew services start buildkite/buildkite/buildkite-agent
@@ -162,6 +160,8 @@ tail -f /usr/local/var/log/buildkite-agent.log
 ```
 
 ##### 4. Test benchmark build on your machine
+Note that running `build_arrow_and_run_benchmark_groups` will take for 4-5 hours.
+
 ```shell script
 # Clone arrow-benchmarks-ci repo
 git clone https://github.com/ursacomputing/arrow-benchmarks-ci.git
@@ -174,6 +174,7 @@ export CONBENCH_EMAIL=<CONBENCH_EMAIL>
 export CONBENCH_PASSWORD=<CONBENCH_PASSWORD>
 export CONBENCH_URL=<CONBENCH_URL>
 export MACHINE=<MACHINE>
+export GITHUB_PAT=<GITHUB_PAT>
 export PYTHON_VERSION=3.8
 export BENCHMARKABLE=<latest arrow commit>
 export BENCHMARKABLE_TYPE=arrow-commit
