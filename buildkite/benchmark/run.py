@@ -193,10 +193,8 @@ class Run:
 
         if log_stdout:
             result = subprocess.run(
-                f"cd {path}; {command}",
-                capture_output=True,
-                shell=True,
-                executable="/bin/bash",
+                ['/bin/bash', '-i', '-c', f"cd {path}; {command}"],
+                capture_output=True
             )
             stderr = result.stderr.decode()
             stdout = result.stdout.decode()
