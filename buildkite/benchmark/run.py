@@ -82,10 +82,7 @@ class BenchmarkGroup:
 
     @property
     def command(self):
-        if self.name == "tpch":
-            return f'conbench {self.name} --run-id=$RUN_ID --run-name="$RUN_NAME"'
-
-        command = f'conbench {self.name} --query-id=1 --scale-factor=1 --format=native --run-id=$RUN_ID --run-name="$RUN_NAME"'
+        command = f'conbench {self.name} {self.options} --run-id=$RUN_ID --run-name="$RUN_NAME"'
 
         if self.lang == "Java":
             command += f" --commit={benchmarkable_id} --src={build_dir}/arrow"
@@ -385,7 +382,7 @@ class Run:
             self.set_benchmark_groups()
             self.filter_benchmark_groups()
 
-            for lang in ["R"]:
+        for lang in ["C++", "Java", "Python", "R", "JavaScript"]:
                 if not self.benchmark_groups_for_lang(lang):
                     continue
 

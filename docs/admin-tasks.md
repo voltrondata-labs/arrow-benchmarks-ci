@@ -78,3 +78,6 @@ Type "help", "copyright", "credits" or "license" for more information.
 >>> machine.port = 1111
 >>> machine.save()
 ```
+
+### Create ec2 benchmark machine
+1. Go to https://us-east-2.console.aws.amazon.com/ec2/v2/home?region=us-east-2#LaunchTemplates:
