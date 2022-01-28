@@ -59,7 +59,6 @@ retryable_benchmark_groups = [
     "file-read",
     "file-write",
     "partitioned-dataset-filter",
-    "tpch",
 ]
 
 
