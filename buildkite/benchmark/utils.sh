@@ -13,7 +13,7 @@ create_conda_env_for_arrow_commit() {
   pushd arrow
   git fetch -v --prune -- origin "${BENCHMARKABLE}"
   git checkout -f "${BENCHMARKABLE}"
-  
+
   export ARROW_BUILD_TESTS=OFF
   export ARROW_BUILD_TYPE=release
   export ARROW_DEPENDENCY_SOURCE=AUTO
@@ -48,8 +48,8 @@ create_conda_env_for_arrow_commit() {
   export PARQUET_BUILD_EXECUTABLES=ON
   export PYTHON=python
 
-  ci/scripts/cpp_build.sh $(pwd) $(pwd)
-  ci/scripts/python_build.sh $(pwd) $(pwd)
+  source ci/scripts/cpp_build.sh $(pwd) $(pwd)
+  source ci/scripts/python_build.sh $(pwd) $(pwd)
 
   popd
 }
