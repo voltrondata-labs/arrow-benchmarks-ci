@@ -130,6 +130,8 @@ journalctl -f -u buildkite-agent
 ```
 
 ##### 4. Test benchmark build on your machine
+Note that running `build_arrow_and_run_benchmark_groups` will take for 4-5 hours.
+
 ```shell script
 # Clone arrow-benchmarks-ci repo
 git clone https://github.com/ursacomputing/arrow-benchmarks-ci.git
