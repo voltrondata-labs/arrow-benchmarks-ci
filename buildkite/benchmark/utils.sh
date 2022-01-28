@@ -48,8 +48,8 @@ create_conda_env_for_arrow_commit() {
   export PARQUET_BUILD_EXECUTABLES=ON
   export PYTHON=python
 
-  source ci/scripts/cpp_build.sh $(pwd) $(pwd)
-  source ci/scripts/python_build.sh $(pwd) $(pwd)
+  ci/scripts/cpp_build.sh $(pwd) $(pwd)
+  ci/scripts/python_build.sh $(pwd) $(pwd)
 
   popd
 }
