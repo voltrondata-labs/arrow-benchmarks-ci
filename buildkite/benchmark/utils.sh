@@ -93,7 +93,7 @@ install_archery() {
   source dev/conbench_envs/hooks.sh install_archery
   popd
   echo "------------>test after archery"
-  python -c "import pyarrow; import pyarrow.dataset as ds; print(pyarrow.__version__)"
+  python -c "print('here'); import pyarrow; import pyarrow.dataset as ds; print(pyarrow.__version__)"
   echo "------------> end test"
 }
 
