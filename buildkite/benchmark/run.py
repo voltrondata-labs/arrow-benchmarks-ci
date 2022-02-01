@@ -382,7 +382,7 @@ class Run:
             self.set_benchmark_groups()
             self.filter_benchmark_groups()
 
-            for lang in ["R", "Python", "C++"]:
+            for lang in ["C++", "Python", "R"]:
                 if not self.benchmark_groups_for_lang(lang):
                     continue
 
