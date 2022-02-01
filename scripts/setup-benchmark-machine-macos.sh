@@ -38,7 +38,3 @@ touch "$(brew --prefix)"/etc/buildkite-agent/hooks/environment
   echo "export MACHINE=$MACHINE"
   echo "export GITHUB_PAT=$GITHUB_PAT"
 } >> "$(brew --prefix)"/etc/buildkite-agent/hooks/environment
-
-echo "-------Setting NOPASSWD for voltrondata user"
-echo "voltrondata ALL=(ALL) NOPASSWD:ALL" | sudo tee -a /etc/sudoers
-echo "Done"

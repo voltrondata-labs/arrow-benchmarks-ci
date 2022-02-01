@@ -147,10 +147,13 @@ export MACHINE=<MACHINE>
 export GITHUB_PAT=<GITHUB_PAT>
 
 # Install Apache Arrow C++ dependencies and Buildkite Agent
-# TODO Update url to master
-curl -LO https://raw.githubusercontent.com/ursacomputing/arrow-benchmarks-ci/make-setup-and-benchmarks-work-on-macs/scripts/setup-benchmark-machine-macos.sh
+curl -LO https://raw.githubusercontent.com/ursacomputing/arrow-benchmarks-ci/main/scripts/setup-benchmark-machine-macos.sh
 chmod +x setup-benchmark-machine-macos.sh
 source ./setup-benchmark-machine-macos.sh
+
+# Set NOPASSWD for user which will be used to run buildkite-agent
+echo "<user-for-buildkite-agent> ALL=(ALL) NOPASSWD:ALL" | sudo tee -a /etc/sudoers
+echo "Done"
 
 # Start Buildkite Agent
 brew services start buildkite/buildkite/buildkite-agent

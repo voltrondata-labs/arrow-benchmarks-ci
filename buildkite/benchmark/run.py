@@ -188,7 +188,7 @@ class Run:
 
     def execute_command(self, command, path=".", exit_on_failure=True, log_stdout=True):
         logging.info(f"Started executing -> {command}")
-        self.executed_commands.append(f"cd {path}; {command}")
+        self.executed_commands.append((command, path, exit_on_failure))
 
         if log_stdout:
             result = subprocess.run(
@@ -365,42 +365,37 @@ class Run:
                 benchmark_group.stderr[-200:-1] if benchmark_group.stderr else "",
             )
 
-    def print_executed_commands(self):
-        print("======================= Executed Commands ==========================")
-        for executed_command in self.executed_commands:
-            print(executed_command)
-
     def failed_benchmark_groups(self):
         return list(filter(lambda b: b.failed, self.benchmark_groups))
 
     def run_all_benchmark_groups(self):
-        try:
-            self.capture_context()
-            self.setup_benchmarks_repo()
-            self.setup_conbench_credentials()
-            self.set_env_vars()
-            self.set_benchmark_groups()
-            self.filter_benchmark_groups()
+        self.capture_context()
+        self.setup_benchmarks_repo()
+        self.setup_conbench_credentials()
+        self.set_env_vars()
+        self.set_benchmark_groups()
+        self.filter_benchmark_groups()
 
-            for lang in ["R", "Java", "JavaScript"]:
-                if not self.benchmark_groups_for_lang(lang):
+        for lang in ["C++", "Java", "Python", "R", "JavaScript"]:
+            if not self.benchmark_groups_for_lang(lang):
+                continue
+
+            if self.benchmarkable_type == "arrow-commit":
+                try:
+                    self.additional_setup_for_benchmark_groups(lang)
+                except Exception as e:
+                    logging.exception(e)
+                    stderr = f"Setup for {lang} benchmark groups failed"
+                    self.mark_benchmark_groups_failed(lang, stderr)
                     continue
 
-                if self.benchmarkable_type == "arrow-commit":
-                    try:
-                        self.additional_setup_for_benchmark_groups(lang)
-                    except Exception as e:
-                        logging.exception(e)
-                        stderr = f"Setup for {lang} benchmark groups failed"
-                        self.mark_benchmark_groups_failed(lang, stderr)
-                        continue
+            self.run_benchmark_groups(lang)
 
-                self.run_benchmark_groups(lang)
-        finally:
-            self.print_executed_commands()
-            self.print_results()
-            if len(self.failed_benchmark_groups()) > 0:
-                raise Exception("Build has failed benchmarks.")
+        self.print_results()
+
+        if len(self.failed_benchmark_groups()) > 0:
+            raise Exception("Build has failed benchmarks.")
+
 
 
 # MockRun is used for:
