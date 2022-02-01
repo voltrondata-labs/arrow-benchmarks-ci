@@ -1,10 +1,4 @@
 steps:
   - label: "Run Benchmarks"
-    command: |
-      export PYTHON_VERSION=3.8
-      export BENCHMARKABLE=daa5c18e9697a6455a7a75fec19594543c17b21e
-      export BENCHMARKABLE_TYPE=arrow-commit
-      export RUN_ID="testm12"
-      export RUN_NAME="testm12"
-      source buildkite/benchmark/utils.sh build_arrow_and_run_benchmark_groups
+    command: source buildkite/benchmark/utils.sh build_arrow_and_run_benchmark_groups
     timeout_in_minutes: 210
