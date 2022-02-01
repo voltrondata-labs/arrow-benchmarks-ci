@@ -41,8 +41,8 @@ create_virtualenv_with_arrow() {
   pushd arrow
   source dev/conbench_envs/hooks.sh install_arrow_python_dependencies
   source dev/conbench_envs/hooks.sh set_arrow_build_and_run_env_vars
-  export ARROW_HOME=$(pwd)/dist
-  export LD_LIBRARY_PATH=$ARROW_HOME/lib:$LD_LIBRARY_PATH
+  export ARROW_HOME=$(pwd)
+  export LD_LIBRARY_PATH=$ARROW_HOME/lib
   source dev/conbench_envs/hooks.sh build_arrow_cpp
   source dev/conbench_envs/hooks.sh build_arrow_python
   echo "------------>test"
