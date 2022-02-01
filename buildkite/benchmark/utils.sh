@@ -37,14 +37,6 @@ create_conda_env_with_arrow() {
 create_virtualenv_with_arrow() {
   virtualenv venv --python="${PYTHON_VERSION}"
   source venv/bin/activate
-
-  # TODO: Remove this code once done testing
-  export PYTHON_VERSION=3.9
-  export BENCHMARKABLE=daa5c18e9697a6455a7a75fec19594543c17b21e
-  export BENCHMARKABLE_TYPE=arrow-commit
-  export RUN_ID="test-m1-1"
-  export RUN_NAME="test-m1-1"
-
   clone_arrow_repo
   pushd arrow
   source dev/conbench_envs/hooks.sh install_arrow_python_dependencies

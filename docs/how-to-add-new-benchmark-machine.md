@@ -147,6 +147,7 @@ export MACHINE=<MACHINE>
 export GITHUB_PAT=<GITHUB_PAT>
 
 # Install Apache Arrow C++ dependencies and Buildkite Agent
+# TODO Update url to master
 curl -LO https://raw.githubusercontent.com/ursacomputing/arrow-benchmarks-ci/make-setup-and-benchmarks-work-on-macs/scripts/setup-benchmark-machine-macos.sh
 chmod +x setup-benchmark-machine-macos.sh
 source ./setup-benchmark-machine-macos.sh
@@ -156,7 +157,7 @@ brew services start buildkite/buildkite/buildkite-agent
 
 # Verify Buildkite Agent is running
 ps aux | grep buildkite
-tail -f /usr/local/var/log/buildkite-agent.log
+tail -f "$(brew --prefix)"/var/log/buildkite-agent.log
 ```
 
 ##### 4. Test benchmark build on your machine
