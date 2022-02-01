@@ -77,3 +77,4 @@ Type "help", "copyright", "credits" or "license" for more information.
 >>> machine.ip_address = "x.x.x.x"
 >>> machine.port = 1111
 >>> machine.save()
+```

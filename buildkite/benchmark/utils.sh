@@ -38,16 +38,15 @@ create_virtualenv_with_arrow() {
   virtualenv venv --python="${PYTHON_VERSION}"
   source venv/bin/activate
   clone_arrow_repo
+  export ARROW_DIST=$(pwd)/arrow/dist
   pushd arrow
   source dev/conbench_envs/hooks.sh install_arrow_python_dependencies
   source dev/conbench_envs/hooks.sh set_arrow_build_and_run_env_vars
-  export ARROW_HOME=/opt/homebrew/var/buildkite-agent/builds/test-mac-arm/apache-arrow/test/dist
+  # Override ARROW_HOME and LD_LIBRARY_PATH since virtualenv is used instead of conda
+  export ARROW_HOME=$ARROW_DIST
   export LD_LIBRARY_PATH=$ARROW_HOME/lib
   source dev/conbench_envs/hooks.sh build_arrow_cpp
   source dev/conbench_envs/hooks.sh build_arrow_python
-  echo "------------>test"
-  python -c "import pyarrow; import pyarrow.dataset as ds; pyarrow.__version__"
-  echo "------------> end test"
   popd
 }
 
@@ -120,6 +119,12 @@ create_data_dir() {
   mkdir -p "${BENCHMARKS_DATA_DIR}/temp"
 }
 
+test_pyarrow_is_built() {
+  echo "------------>Testing pyarrow is built"
+  python -c "import pyarrow; print(pyarrow.__version__)"
+  echo "------------>End"
+}
+
 build_arrow_and_run_benchmark_groups() {
   export ARROW_REPO=https://github.com/apache/arrow.git
 
@@ -137,6 +142,7 @@ build_arrow_and_run_benchmark_groups() {
       ;;
   esac
 
+  test_pyarrow_is_built
   install_conbench
   python -m buildkite.benchmark.run_benchmark_groups
 }

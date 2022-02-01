@@ -397,7 +397,6 @@ class Run:
             raise Exception("Build has failed benchmarks.")
 
 
-
 # MockRun is used for:
 # 1. testing Run().run_all_benchmark_groups method in non-benchmark machine environment without executing any
 # shell commands

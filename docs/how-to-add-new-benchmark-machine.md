@@ -153,7 +153,6 @@ source ./setup-benchmark-machine-macos.sh
 
 # Set NOPASSWD for user which will be used to run buildkite-agent
 echo "<user-for-buildkite-agent> ALL=(ALL) NOPASSWD:ALL" | sudo tee -a /etc/sudoers
-echo "Done"
 
 # Start Buildkite Agent
 brew services start buildkite/buildkite/buildkite-agent
