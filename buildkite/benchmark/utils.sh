@@ -38,11 +38,11 @@ create_virtualenv_with_arrow() {
   virtualenv venv --python="${PYTHON_VERSION}"
   source venv/bin/activate
   clone_arrow_repo
-  export ARROW_DIST=$(pwd)/arrow/dist
+  export ARROW_DIST=$(pwd)/dist
   pushd arrow
   source dev/conbench_envs/hooks.sh install_arrow_python_dependencies
   source dev/conbench_envs/hooks.sh set_arrow_build_and_run_env_vars
-  # Override ARROW_HOME and LD_LIBRARY_PATH since virtualenv is used instead of conda
+  # Override ARROW_HOME and LD_LIBRARY_PATH set by set_arrow_build_and_run_env_vars since virtualenv is used instead of conda
   export ARROW_HOME=$ARROW_DIST
   export LD_LIBRARY_PATH=$ARROW_HOME/lib
   source dev/conbench_envs/hooks.sh build_arrow_cpp
