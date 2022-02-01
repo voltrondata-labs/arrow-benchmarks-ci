@@ -3,6 +3,7 @@
 echo "-------Installing C++ dependencies"
 curl -LO https://raw.githubusercontent.com/apache/arrow/master/cpp/Brewfile
 brew update && brew install node && brew bundle --file=Brewfile
+brew install virtualenv
 
 echo "-------Installing Buildkite Agent"
 brew install buildkite/buildkite/buildkite-agent
