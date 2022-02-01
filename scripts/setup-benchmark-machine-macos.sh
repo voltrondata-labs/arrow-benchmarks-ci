@@ -1,0 +1,40 @@
+#!/bin/bash
+
+echo "-------Installing C++ dependencies"
+curl -LO https://raw.githubusercontent.com/apache/arrow/master/cpp/Brewfile
+brew update && brew install node && brew bundle --file=Brewfile
+brew install virtualenv
+
+echo "-------Installing JavaScript dependencies"
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.37.2/install.sh | bash
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+nvm install v15
+node --version
+nvm cache clear
+brew install yarn
+yarn --version
+
+echo "-------Installing Java dependencies"
+brew install maven
+brew tap adoptopenjdk/openjdk
+brew update && brew install --cask adoptopenjdk8
+
+echo "-------Installing Buildkite Agent"
+brew install buildkite/buildkite/buildkite-agent
+
+echo "-------Setting up Buildkite agent config and hooks"
+sed -i '' "s/xxx/$BUILDKITE_AGENT_TOKEN/g" "$(brew --prefix)"/etc/buildkite-agent/buildkite-agent.cfg
+echo "tags=\"queue=$BUILDKITE_QUEUE\"" >> "$(brew --prefix)"/etc/buildkite-agent/buildkite-agent.cfg
+
+touch "$(brew --prefix)"/etc/buildkite-agent/hooks/environment
+{
+  echo "export ARROW_BCI_URL=$ARROW_BCI_URL"
+  echo "export ARROW_BCI_API_ACCESS_TOKEN=$ARROW_BCI_API_ACCESS_TOKEN"
+  echo "export CONBENCH_EMAIL=$CONBENCH_EMAIL"
+  echo "export CONBENCH_PASSWORD=$CONBENCH_PASSWORD"
+  echo "export CONBENCH_URL=$CONBENCH_URL"
+  echo "export MACHINE=$MACHINE"
+  echo "export GITHUB_PAT=$GITHUB_PAT"
+} >> "$(brew --prefix)"/etc/buildkite-agent/hooks/environment

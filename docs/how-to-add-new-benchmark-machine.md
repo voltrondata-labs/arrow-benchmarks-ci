@@ -72,6 +72,7 @@ Note:
 - If you need to install additional dependencies, please update [setup-benchmark-machine-ubuntu-20.04.sh](../scripts/setup-benchmark-machine-ubuntu-20.04.sh). 
 - If your machine is running OS other than Ubuntu, please create a new setup script and use [setup-benchmark-machine-ubuntu-20.04.sh](../scripts/setup-benchmark-machine-ubuntu-20.04.sh) as a reference.
 
+On Ubuntu:
 ```shell script
 sudo su
 cd ~
@@ -129,7 +130,41 @@ ps aux | grep buildkite
 journalctl -f -u buildkite-agent
 ```
 
+On macOS:
+
+```shell script
+cd ~
+
+# Export env vars to be used by setup-benchmark-machine-macos.sh
+export ARROW_BCI_URL=<ARROW_BCI_URL>
+export ARROW_BCI_API_ACCESS_TOKEN=<ARROW_BCI_API_ACCESS_TOKEN>
+export BUILDKITE_AGENT_TOKEN=<BUILDKITE_AGENT_TOKEN>
+export BUILDKITE_QUEUE=<BUILDKITE_QUEUE>
+export CONBENCH_EMAIL=<CONBENCH_EMAIL>
+export CONBENCH_PASSWORD=<CONBENCH_PASSWORD>
+export CONBENCH_URL=<CONBENCH_URL>
+export MACHINE=<MACHINE>
+export GITHUB_PAT=<GITHUB_PAT>
+
+# Install Apache Arrow C++ dependencies and Buildkite Agent
+curl -LO https://raw.githubusercontent.com/ursacomputing/arrow-benchmarks-ci/main/scripts/setup-benchmark-machine-macos.sh
+chmod +x setup-benchmark-machine-macos.sh
+source ./setup-benchmark-machine-macos.sh
+
+# Set NOPASSWD for user which will be used to run buildkite-agent
+echo "<user-for-buildkite-agent> ALL=(ALL) NOPASSWD:ALL" | sudo tee -a /etc/sudoers
+
+# Start Buildkite Agent
+brew services start buildkite/buildkite/buildkite-agent
+
+# Verify Buildkite Agent is running
+ps aux | grep buildkite
+tail -f "$(brew --prefix)"/var/log/buildkite-agent.log
+```
+
 ##### 4. Test benchmark build on your machine
+Note that running `build_arrow_and_run_benchmark_groups` will take for 4-5 hours.
+
 ```shell script
 # Clone arrow-benchmarks-ci repo
 git clone https://github.com/ursacomputing/arrow-benchmarks-ci.git
