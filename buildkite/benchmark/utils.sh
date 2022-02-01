@@ -45,6 +45,9 @@ create_virtualenv_with_arrow() {
   export LD_LIBRARY_PATH=$ARROW_HOME/lib:$LD_LIBRARY_PATH
   source dev/conbench_envs/hooks.sh build_arrow_cpp
   source dev/conbench_envs/hooks.sh build_arrow_python
+  echo "------------>test"
+  python -c "import pyarrow; pyarrow.__version__"
+  echo "------------> end test"
   popd
 }
 
