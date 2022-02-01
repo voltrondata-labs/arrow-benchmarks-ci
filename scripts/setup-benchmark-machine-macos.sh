@@ -5,6 +5,22 @@ curl -LO https://raw.githubusercontent.com/apache/arrow/master/cpp/Brewfile
 brew update && brew install node && brew bundle --file=Brewfile
 brew install virtualenv
 
+echo "-------Installing JavaScript dependencies"
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.37.2/install.sh | bash
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+nvm install v15
+node --version
+nvm cache clear
+brew install yarn
+yarn --version
+
+echo "-------Installing Java dependencies"
+brew install maven
+brew tap adoptopenjdk/openjdk
+brew update && brew install --cask adoptopenjdk8
+
 echo "-------Installing Buildkite Agent"
 brew install buildkite/buildkite/buildkite-agent
 

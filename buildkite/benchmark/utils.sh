@@ -67,9 +67,6 @@ install_conbench() {
   pip install -U PyYAML
   python setup.py install
   popd
-  echo "------------>test"
-  python -c "import pyarrow; import pyarrow.dataset as ds; pyarrow.__version__"
-  echo "------------> end test"
 }
 
 build_arrow_r() {
@@ -85,16 +82,10 @@ build_arrow_java() {
 }
 
 install_archery() {
-  echo "------------>test before archery"
-  python -c "import pyarrow; import pyarrow.dataset as ds; print(pyarrow.__version__)"
-  echo "------------> end test"
   clone_arrow_repo
   pushd arrow
   source dev/conbench_envs/hooks.sh install_archery
   popd
-  echo "------------>test after archery"
-  python -c "print('here'); import pyarrow; import pyarrow.dataset as ds; print(pyarrow.__version__)"
-  echo "------------> end test"
 }
 
 install_arrowbench() {
