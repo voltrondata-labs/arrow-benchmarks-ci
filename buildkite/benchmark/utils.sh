@@ -86,14 +86,14 @@ build_arrow_java() {
 
 install_archery() {
   echo "------------>test before archery"
-  python -c "import pyarrow; import pyarrow.dataset as ds; pyarrow.__version__"
+  python -c "import pyarrow; import pyarrow.dataset as ds; print(pyarrow.__version__)"
   echo "------------> end test"
   clone_arrow_repo
   pushd arrow
   source dev/conbench_envs/hooks.sh install_archery
   popd
   echo "------------>test after archery"
-  python -c "import pyarrow; import pyarrow.dataset as ds; pyarrow.__version__"
+  python -c "import pyarrow; import pyarrow.dataset as ds; print(pyarrow.__version__)"
   echo "------------> end test"
 }
 
