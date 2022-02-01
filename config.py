@@ -123,6 +123,21 @@ class Config:
             "offline_warning_enabled": False,
             "publish_benchmark_results": True,
         },
+        "test-mac-arm": {
+            "info": "Supported benchmark langs: C++, Python, R",
+            "default_filters": {
+                "arrow-commit": {
+                    "langs": {
+                        "Python": {"names": ["dataset-read", "dataset-select"]},
+                        "C++": {"names": ["cpp-micro"]},
+                        "R": {"names": ["tpch"]}
+                    }
+                },
+            },
+            "supported_filters": ["lang", "name"],
+            "offline_warning_enabled": False,
+            "publish_benchmark_results": False,
+        },
         "voltron-pavilion": {
             "info": "Supported benchmark langs: Python, R, JavaScript, C++, Java",
             "default_filters": {"arrow-commit": {"langs": {"R": {"names": ["tpch"]}}}},
