@@ -1,7 +1,7 @@
 steps:
   - label: "Run Benchmarks"
     command: |
-      export PYTHON_VERSION=3.9
+      export PYTHON_VERSION=3.8
       export BENCHMARKABLE=daa5c18e9697a6455a7a75fec19594543c17b21e
       export BENCHMARKABLE_TYPE=arrow-commit
       export RUN_ID="testm12"
