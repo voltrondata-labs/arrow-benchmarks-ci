@@ -175,7 +175,7 @@ class Run:
             "url_for_benchmark_groups_list_json"
         ]
         self.benchmarkable_type = os.getenv("BENCHMARKABLE_TYPE")
-        self.filters = {'langs': {'C++': {'names': ['cpp-micro']}}}
+        self.filters = json.loads(os.getenv("FILTERS", "{}"))
         self.setup_commands_for_lang_benchmarks = repo_params[
             "setup_commands_for_lang_benchmarks"
         ]
