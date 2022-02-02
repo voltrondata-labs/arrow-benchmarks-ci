@@ -109,18 +109,7 @@ $ yarn --version
 su - buildkite-agent
 curl -LO https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
 bash Miniconda3-latest-Linux-x86_64.sh -b -p "$HOME/miniconda3"
-bash 
-"$HOME/miniconda3/bin/conda" init
-exit
-exit
-
-# Verify Conda is installed for buildkite-agent user
-su - buildkite-agent
-bash
-conda --version
-conda env list
-exit
-exit
+"$HOME/miniconda3/bin/conda" init bash
 
 # Start Buildkite Agent
 systemctl enable buildkite-agent && systemctl start buildkite-agent
@@ -169,10 +158,7 @@ $ yarn --version
 # Install Conda
 curl -LO https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-arm64.sh
 bash Miniconda3-latest-MacOSX-arm64.sh -b -p "$HOME/miniconda3"
-bash 
 "$HOME/miniconda3/bin/conda" init bash
-exit
-exit
 
 # Start Buildkite Agent
 brew services start buildkite/buildkite/buildkite-agent
