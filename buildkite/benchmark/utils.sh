@@ -5,6 +5,8 @@ init_conda() {
     eval "$(command '/var/lib/buildkite-agent/miniconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
   elif [ -d "/root/miniconda3/bin/conda" ]; then
     eval "$(command '/root/miniconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
+  else
+    eval "$(command '/Users/voltrondata/miniconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
   fi
 }
 
