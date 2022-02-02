@@ -38,7 +38,7 @@ def run_context():
     return {
         "context": context(),
         "machine_info": machine_info(),
-        "conda_packages": conda_packages() if sys.platform != "darwin" else None,
+        "conda_packages": conda_packages(),
     }
 
 
