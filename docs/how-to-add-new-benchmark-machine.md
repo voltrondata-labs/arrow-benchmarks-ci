@@ -130,7 +130,7 @@ ps aux | grep buildkite
 journalctl -f -u buildkite-agent
 ```
 
-On macOS:
+On macOS arm64:
 
 ```shell script
 cd ~
@@ -154,8 +154,28 @@ source ./setup-benchmark-machine-macos.sh
 # Set NOPASSWD for user which will be used to run buildkite-agent
 echo "<user-for-buildkite-agent> ALL=(ALL) NOPASSWD:ALL" | sudo tee -a /etc/sudoers
 
-# Start Buildkite Agent so it starts on reboot
-sudo brew services start buildkite/buildkite/buildkite-agent
+# Verify you have at least these versions of java, javac, mvn, node and yarn
+$ java -version
+openjdk version "1.8.0_292"
+$ javac -version
+javac 1.8.0_292
+$ mvn -version
+Apache Maven 3.8.4
+$ node --version
+v15.14.0
+$ yarn --version
+1.22.17
+
+# Install Conda
+curl -LO https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-arm64.sh
+bash Miniconda3-latest-MacOSX-arm64.sh -b -p "$HOME/miniconda3"
+bash 
+"$HOME/miniconda3/bin/conda" init bash
+exit
+exit
+
+# Start Buildkite Agent
+brew services start buildkite/buildkite/buildkite-agent
 
 # Verify Buildkite Agent is running
 ps aux | grep buildkite

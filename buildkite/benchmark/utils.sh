@@ -3,7 +3,7 @@
 init_conda() {
   if [ -d "/var/lib/buildkite-agent" ]; then
     eval "$(command '/var/lib/buildkite-agent/miniconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
-  else
+  elif [ -d "/root/miniconda3/bin/conda" ]; then
     eval "$(command '/root/miniconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
   fi
 }
