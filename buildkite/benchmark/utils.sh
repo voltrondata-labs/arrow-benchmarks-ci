@@ -6,7 +6,7 @@ init_conda() {
   elif [ -d "/root/miniconda3/bin/conda" ]; then
     eval "$(command '/root/miniconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
   else
-    eval "$(command '/Users/voltrondata/miniconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
+    eval "$(command '$HOME/miniconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
   fi
 }
 
