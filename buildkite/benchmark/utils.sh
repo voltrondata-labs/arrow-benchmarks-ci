@@ -1,11 +1,7 @@
 #!/bin/bash
 
 init_conda() {
-  if [ -d "/var/lib/buildkite-agent" ]; then
-    eval "$(command '/var/lib/buildkite-agent/miniconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
-  else
-    eval "$(command '/root/miniconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
-  fi
+  eval "$(command "$HOME/miniconda3/bin/conda" 'shell.bash' 'hook' 2> /dev/null)"
 }
 
 create_conda_env_for_arrow_commit() {
@@ -28,7 +24,12 @@ create_conda_env_for_arrow_commit() {
 
   export RANLIB=`which $RANLIB`
   export AR=`which $AR`
-  export ARROW_JEMALLOC=OFF
+
+  # Can't build Arrow C++ with ARROW_JEMALLOC=ON on macos
+  if [[ "$OSTYPE" == "darwin"* ]]
+  then
+    export ARROW_JEMALLOC=OFF
+  fi
 
   source dev/conbench_envs/hooks.sh build_arrow_cpp
   source dev/conbench_envs/hooks.sh build_arrow_python

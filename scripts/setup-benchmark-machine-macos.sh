@@ -3,7 +3,6 @@
 echo "-------Installing C++ dependencies"
 curl -LO https://raw.githubusercontent.com/apache/arrow/master/cpp/Brewfile
 brew update && brew install node && brew bundle --file=Brewfile
-brew install virtualenv
 
 echo "-------Installing JavaScript dependencies"
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.37.2/install.sh | bash
@@ -38,3 +37,6 @@ touch "$(brew --prefix)"/etc/buildkite-agent/hooks/environment
   echo "export MACHINE=$MACHINE"
   echo "export GITHUB_PAT=$GITHUB_PAT"
 } >> "$(brew --prefix)"/etc/buildkite-agent/hooks/environment
+
+cp "$(brew --prefix)"/etc/buildkite-agent/hooks/pre-command.sample "$(brew --prefix)"/etc/buildkite-agent/hooks/pre-command
+echo "source  $HOME/.bash_profile" >> "$(brew --prefix)"/etc/buildkite-agent/hooks/pre-command
