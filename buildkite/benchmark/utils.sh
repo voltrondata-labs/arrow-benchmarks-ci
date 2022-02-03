@@ -7,6 +7,8 @@ init_conda() {
 create_conda_env_for_arrow_commit() {
   clone_arrow_repo
   pushd arrow
+  
+  aws_sdk_version=$(cat cpp/thirdparty/versions.txt | grep ARROW_AWSSDK_BUILD_VERSION= | sed s/"ARROW_AWSSDK_BUILD_VERSION="//)
 
   conda create -y -n "${BENCHMARKABLE_TYPE}" -c conda-forge \
   --file ci/conda_env_unix.txt \
@@ -15,24 +17,16 @@ create_conda_env_for_arrow_commit() {
   compilers \
   python="${PYTHON_VERSION}" \
   pandas \
+  aws-sdk-cpp=$aws_sdk_version \
   r
 
   source dev/conbench_envs/hooks.sh activate_conda_env_for_benchmark_build
-  
-  if [[ "$OSTYPE" == "darwin"* ]]
-  then
-    conda install -c conda-forge aws-sdk-cpp
-  else
-    conda install -c conda-forge https://anaconda.org/conda-forge/aws-sdk-cpp/1.9.185/download/linux-64/aws-sdk-cpp-1.9.185-h5b750dd_0.tar.bz2
-  fi
-  
   source dev/conbench_envs/hooks.sh install_arrow_python_dependencies
   source dev/conbench_envs/hooks.sh set_arrow_build_and_run_env_vars
 
   export RANLIB=`which $RANLIB`
   export AR=`which $AR`
   export ARROW_JEMALLOC=OFF
-  export ARROW_ORC=OFF
 
   source dev/conbench_envs/hooks.sh build_arrow_cpp
   source dev/conbench_envs/hooks.sh build_arrow_python
