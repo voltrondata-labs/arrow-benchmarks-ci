@@ -1,3 +1,5 @@
+# kubectl exec deploy/arrow-bci-deployment -- python -m scripts.rerun-failed-builds
+
 from datetime import datetime, timedelta
 
 from models.run import Run
