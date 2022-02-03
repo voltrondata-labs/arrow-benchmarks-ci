@@ -23,7 +23,7 @@ create_conda_env_for_arrow_commit() {
   then
     conda install -c conda-forge aws-sdk-cpp
   else
-    conda install -c conda-forge https://anaconda.org/conda-forge/aws-sdk-cpp/1.9.185/download/linux-64/aws-sdk-cpp-1.9.185-h5b750dd_0.tar.bz
+    conda install -c conda-forge https://anaconda.org/conda-forge/aws-sdk-cpp/1.9.185/download/linux-64/aws-sdk-cpp-1.9.185-h5b750dd_0.tar.bz2
   fi
   
   source dev/conbench_envs/hooks.sh install_arrow_python_dependencies
