@@ -24,12 +24,8 @@ create_conda_env_for_arrow_commit() {
 
   export RANLIB=`which $RANLIB`
   export AR=`which $AR`
-
-  # Can't build Arrow C++ with ARROW_JEMALLOC=ON on macos
-  if [[ "$OSTYPE" == "darwin"* ]]
-  then
-    export ARROW_JEMALLOC=OFF
-  fi
+  export ARROW_JEMALLOC=OFF
+  export ARROW_ORC=OFF
 
   source dev/conbench_envs/hooks.sh build_arrow_cpp
   source dev/conbench_envs/hooks.sh build_arrow_python
