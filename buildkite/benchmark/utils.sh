@@ -15,7 +15,7 @@ create_conda_env_for_arrow_commit() {
   compilers \
   python="${PYTHON_VERSION}" \
   pandas \
-  aws-sdk-cpp \
+  https://anaconda.org/conda-forge/aws-sdk-cpp/1.9.185/download/linux-64/aws-sdk-cpp-1.9.185-h5b750dd_0.tar.bz2 \
   r
 
   source dev/conbench_envs/hooks.sh activate_conda_env_for_benchmark_build
