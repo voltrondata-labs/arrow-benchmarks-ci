@@ -136,7 +136,7 @@ class Config:
             },
             "supported_filters": ["lang", "name"],
             "offline_warning_enabled": False,
-            "publish_benchmark_results": False,
+            "publish_benchmark_results": True,
         },
         "voltron-pavilion": {
             "info": "Supported benchmark langs: Python, R, JavaScript, C++, Java",
