@@ -36,9 +36,8 @@ class Machine(Base, BaseMixin):
     def buildkite_agent_queue(self):
         return f"{self.name}"
 
-    @property
-    def supported_langs(self):
-        return sorted(list(self.default_filters["arrow-commit"]["langs"].keys()))
+    def supported_langs(self, benchmarkable_type):
+        return sorted(list(self.default_filters[benchmarkable_type]["langs"].keys()))
 
     def create_benchmark_pipeline(self):
         buildkite.create_pipeline(
@@ -60,13 +59,12 @@ class Machine(Base, BaseMixin):
         if not override_filters:
             return machine_run_filters, None
 
-        if (
-            "lang" in override_filters
-            and override_filters["lang"] not in self.supported_langs
-        ):
+        if "lang" in override_filters and override_filters[
+            "lang"
+        ] not in self.supported_langs(benchmarkable_type):
             return (
                 override_filters,
-                f"Only {self.supported_langs} langs are supported on {self.name}",
+                f"Only {self.supported_langs(benchmarkable_type)} langs are supported on {self.name}",
             )
 
         for override_filter in override_filters.keys():
@@ -78,7 +76,9 @@ class Machine(Base, BaseMixin):
 
         # Apply override_filters to machine_run_filters
         # override_filters can only have lang, name, command and flags filters
-        if "command" in override_filters and "C++" in self.supported_langs:
+        if "command" in override_filters and "C++" in self.supported_langs(
+            benchmarkable_type
+        ):
             return override_filters, None
 
         if "lang" in override_filters:

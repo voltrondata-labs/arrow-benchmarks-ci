@@ -2,7 +2,7 @@ import sqlalchemy as s
 from sqlalchemy.dialects import postgresql
 
 from db import Base
-from integrations.github import github
+from integrations.github import Github
 from integrations.slack import slack
 from logger import log
 from models.base import BaseMixin, NotNull, Nullable
@@ -72,7 +72,7 @@ class Notification(Base, BaseMixin):
 
         # Add extra explanation when posting benchmark results for arrow master commit
         # into its originating PR.
-        if self.benchmarkable.reason == "arrow-commit":
+        if self.benchmarkable.is_commit():
             comment += (
                 f"{self.benchmarkable.id} is a master commit associated with this PR. "
             )
@@ -111,14 +111,18 @@ class Notification(Base, BaseMixin):
         log.info(
             f"Creating pull comment for pull {self.pull_number} {self.benchmarkable.type} {self.benchmarkable_id}"
         )
-        self.message = github.create_pull_comment(self.pull_number, comment_body)
+        self.message = Github(self.benchmarkable.repo).create_pull_comment(
+            self.pull_number, comment_body
+        )
         self.save()
 
     def update_pull_comment(self, comment_body):
         log.info(
             f"Updating pull comment for pull {self.pull_number} {self.benchmarkable.type} {self.benchmarkable_id}"
         )
-        self.message = github.update_pull_comment(self.pull_comment_url, comment_body)
+        self.message = Github(self.benchmarkable.repo).update_pull_comment(
+            self.pull_comment_url, comment_body
+        )
         self.save()
 
     def post_slack_message(self, text):

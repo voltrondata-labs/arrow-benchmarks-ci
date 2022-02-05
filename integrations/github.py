@@ -8,7 +8,7 @@ from logger import log
 
 
 class Github:
-    def __init__(self):
+    def __init__(self, repo):
         self.session = requests.Session()
         self.session.mount("https://", adapter)
         self.session.mount("http://", adapter)
@@ -16,7 +16,7 @@ class Github:
             self.session.headers = {
                 "Authorization": f"Bearer {Config.GITHUB_API_TOKEN}"
             }
-        self.base_url = f"{Config.GITHUB_API_BASE_URL}/repos/{Config.GITHUB_REPO_WITH_BENCHMARKABLE_COMMITS}"
+        self.base_url = f"{Config.GITHUB_API_BASE_URL}/repos/{repo}"
 
     def get_commits(self):
         return self.session.get(
@@ -39,6 +39,3 @@ class Github:
         data = {"body": comment_body}
         log.info(f"Updating {url}")
         return self.session.patch(url, data=json.dumps(data)).json()
-
-
-github = Github()

@@ -6,7 +6,7 @@ from flask import request
 from flask_restful import Resource
 
 from config import Config
-from integrations.github import github
+from integrations.github import Github
 from logger import log
 from models.benchmarkable import Benchmarkable
 
@@ -50,7 +50,7 @@ class GithubSignatureInvalid(Exception):
     pass
 
 
-def verify_github_request_signature(github_request):
+def verify_github_request_signature(github_request, github_secret):
     actual_github_request_signature = github_request.headers.get("X-Hub-Signature-256")
 
     if not actual_github_request_signature:
@@ -58,7 +58,7 @@ def verify_github_request_signature(github_request):
 
     expected_github_request_signature = "sha256=" + (
         hmac.new(
-            key=Config.GITHUB_SECRET.encode(),
+            key=github_secret.encode(),
             msg=github_request.data,
             digestmod=hashlib.sha256,
         ).hexdigest()
@@ -111,8 +111,10 @@ def get_pull_benchmark_filters(comment):
     return filters
 
 
-def create_benchmarkables_and_runs(pull_dict, pull_benchmark_filters):
-    benchmarkable_type = "arrow-commit"
+def create_benchmarkables_and_runs(pull_dict, pull_benchmark_filters, repo):
+    benchmarkable_type = reason = Config.GITHUB_REPOS_WITH_BENCHMARKABLE_COMMITS[
+        "repo"
+    ]["benchmarkable_type"]
     id = pull_dict["head"]["sha"]
 
     if Benchmarkable.get(id):
@@ -120,9 +122,9 @@ def create_benchmarkables_and_runs(pull_dict, pull_benchmark_filters):
             f"Commit {id} already has scheduled benchmark runs."
         )
 
-    data = github.get_commit(id)
+    data = Github(repo).get_commit(id)
     baseline_id = pull_dict["base"]["sha"]
-    baseline_data = github.get_commit(baseline_id)
+    baseline_data = Github(repo).get_commit(baseline_id)
 
     baseline_benchmarkable = Benchmarkable.create(
         dict(
@@ -130,7 +132,7 @@ def create_benchmarkables_and_runs(pull_dict, pull_benchmark_filters):
             type=benchmarkable_type,
             data=baseline_data,
             baseline_id=baseline_data["parents"][0]["sha"],
-            reason="arrow-commit",
+            reason=reason,
         )
     )
 
@@ -162,10 +164,31 @@ def is_pull_request_comment_for_ursabot(event):
     )
 
 
+def get_repo(github_request):
+    event = json.loads(github_request.data)
+    return event.get("repository", {}).get("full_name")
+
+
+def get_repo_github_secret(repo):
+    repo_params = Config.GITHUB_REPOS_WITH_BENCHMARKABLE_COMMITS.get(repo)
+
+    if not repo_params:
+        return
+
+    if repo_params["enable_benchmarking_for_pull_requests"]:
+        return repo_params["github_secret"]
+
+
 class Events(Resource):
     def post(self):
+        repo = get_repo(request)
+        github_secret = get_repo_github_secret(repo)
+
+        if not github_secret:
+            return "", 202
+
         try:
-            verify_github_request_signature(request)
+            verify_github_request_signature(request, github_secret)
         except GithubSignatureInvalid as e:
             log.exception(e)
             return e.args[0], 401
@@ -178,10 +201,10 @@ class Events(Resource):
 
             try:
                 benchmark_filters = get_pull_benchmark_filters(event["comment"]["body"])
-                pull_dict = github.get_pull(pull_number)
+                pull_dict = Github(repo).get_pull(pull_number)
 
                 baseline_benchmarkable, benchmarkable = create_benchmarkables_and_runs(
-                    pull_dict, benchmark_filters
+                    pull_dict, benchmark_filters, repo
                 )
 
                 for run in baseline_benchmarkable.runs + benchmarkable.runs:
@@ -193,8 +216,10 @@ class Events(Resource):
                     notification.generate_pull_comment_body()
                 )
             except UnsupportedBenchmarkCommand:
-                github.create_pull_comment(pull_number, benchmark_command_examples)
+                Github(repo).create_pull_comment(
+                    pull_number, benchmark_command_examples
+                )
             except CommitHasScheduledBenchmarkRuns as e:
-                github.create_pull_comment(pull_number, e.args[0])
+                Github(repo).create_pull_comment(pull_number, e.args[0])
 
         return "", 202

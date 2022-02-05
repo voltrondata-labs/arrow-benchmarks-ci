@@ -78,7 +78,7 @@ class Run(Base, BaseMixin):
 
     @property
     def buildkite_run_name(self):
-        if self.reason == "arrow-commit":
+        if self.reason.endswith("-commit"):
             return f"commit: {self.benchmarkable_id}"
         if self.reason == "pull-request":
             return f"pull request: {self.benchmarkable.pull_number}"

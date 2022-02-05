@@ -289,9 +289,13 @@ def test_post_events_for_pr_with_existing_results(client):
 
 
 def test_github_request_signature(client, monkeypatch):
-    Config.GITHUB_SECRET = "test"
+    Config.GITHUB_REPOS_WITH_BENCHMARKABLE_COMMITS["apache/arrow"][
+        "github_secret"
+    ] = "test"
     response = make_github_webhook_event_for_comment(client)
-    Config.GITHUB_SECRET = "github_secret"
+    Config.GITHUB_REPOS_WITH_BENCHMARKABLE_COMMITS["apache/arrow"][
+        "github_secret"
+    ] = "github_secret"
     assert response.status_code == 401
     assert (
         response.json
