@@ -74,7 +74,7 @@ install_conbench() {
   python setup.py install
   
   # Workaround until conbench is fixed
-  pip uninstall pytest
+  pip uninstall -y pytest
   pip install pytest==6.2.5
   popd
 }
