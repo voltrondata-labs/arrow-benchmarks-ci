@@ -72,7 +72,7 @@ class Notification(Base, BaseMixin):
 
         # Add extra explanation when posting benchmark results for arrow master commit
         # into its originating PR.
-        if self.benchmarkable.is_commit():
+        if self.benchmarkable.reason.endswith("-commit"):
             comment += (
                 f"{self.benchmarkable.id} is a master commit associated with this PR. "
             )
