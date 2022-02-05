@@ -79,7 +79,7 @@ class Benchmarkable(Base, BaseMixin):
 
     @property
     def repo(self):
-        for repo, params in Config.GITHUB_REPOS_WITH_BENCHMARKABLE_COMMITS:
+        for repo, params in Config.GITHUB_REPOS_WITH_BENCHMARKABLE_COMMITS.items():
             if params["benchmarkable_type"] == self.type:
                 return repo
 
