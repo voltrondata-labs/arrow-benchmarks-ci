@@ -112,9 +112,9 @@ def get_pull_benchmark_filters(comment):
 
 
 def create_benchmarkables_and_runs(pull_dict, pull_benchmark_filters, repo):
-    benchmarkable_type = reason = Config.GITHUB_REPOS_WITH_BENCHMARKABLE_COMMITS[
-        "repo"
-    ]["benchmarkable_type"]
+    benchmarkable_type = reason = Config.GITHUB_REPOS_WITH_BENCHMARKABLE_COMMITS[repo][
+        "benchmarkable_type"
+    ]
     id = pull_dict["head"]["sha"]
 
     if Benchmarkable.get(id):
