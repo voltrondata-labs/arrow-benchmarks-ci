@@ -201,7 +201,7 @@ def make_github_webhook_event_for_comment(
         "action": "created",
         "issue": {"number": 1234},
         "comment": {"body": comment_body},
-        "repository": {},
+        "repository": {"full_name": "apache/arrow"},
         "organization": {},
         "sender": {},
     }

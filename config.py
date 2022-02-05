@@ -19,11 +19,14 @@ class Config:
 
     GITHUB_API_BASE_URL = os.getenv("GITHUB_API_BASE_URL")
     GITHUB_API_TOKEN = os.getenv("GITHUB_API_TOKEN")
-    GITHUB_REPO_WITH_BENCHMARKABLE_COMMITS = os.getenv(
-        "GITHUB_REPO_WITH_BENCHMARKABLE_COMMITS"
-    )
+    GITHUB_REPOS_WITH_BENCHMARKABLE_COMMITS = {
+        "apache/arrow": {
+            "benchmarkable_type": "arrow-commit",
+            "enable_benchmarking_for_pull_requests": True,
+            "github_secret": os.getenv("GITHUB_SECRET"),
+        },
+    }
     GITHUB_REPO = os.getenv("GITHUB_REPO")
-    GITHUB_SECRET = os.getenv("GITHUB_SECRET")
     MAX_COMMITS_TO_FETCH = os.getenv("MAX_COMMITS_TO_FETCH", 20)
 
     PIPY_API_BASE_URL = os.getenv("PIPY_API_BASE_URL")
@@ -70,7 +73,7 @@ class Config:
                                 "file-write",
                                 "partitioned-dataset-filter",
                                 "wide-dataframe",
-                                "tpch"
+                                "tpch",
                             ]
                         },
                         "JavaScript": {"names": ["js-micro"]},
@@ -130,7 +133,7 @@ class Config:
                     "langs": {
                         "Python": {"names": ["dataset-read", "dataset-select"]},
                         "C++": {"names": ["cpp-micro"]},
-                        "R": {"names": ["tpch"]}
+                        "R": {"names": ["tpch"]},
                     }
                 },
             },

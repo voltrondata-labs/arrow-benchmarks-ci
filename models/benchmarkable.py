@@ -33,18 +33,18 @@ class Benchmarkable(Base, BaseMixin):
 
     @property
     def displayable_id(self):
-        if self.type == "arrow-commit":
+        if self.is_commit():
             return self.id[:8]
         return self.id
 
     @property
     def html_url(self):
-        if self.type == "arrow-commit":
+        if self.is_commit():
             return self.data["html_url"]
 
     @property
     def committer(self):
-        if self.type == "arrow-commit":
+        if self.is_commit():
             if self.data["committer"] is not None:
                 return self.data["committer"]["login"]
             else:
@@ -52,18 +52,18 @@ class Benchmarkable(Base, BaseMixin):
 
     @property
     def committer_url(self):
-        if self.type == "arrow-commit":
+        if self.is_commit():
             if self.data["committer"] is not None:
                 return self.data["committer"]["html_url"]
 
     @property
     def displayable_message(self):
-        if self.type == "arrow-commit":
+        if self.is_commit():
             return self.data["commit"]["message"].splitlines()[0][:60]
 
     @property
     def slack_text(self):
-        if self.type == "arrow-commit":
+        if self.is_commit():
             if self.data["committer"]:
                 return (
                     f"<{self.html_url}|`{self.displayable_id}`> {self.displayable_message} "
@@ -76,6 +76,15 @@ class Benchmarkable(Base, BaseMixin):
                 )
 
         return self.id
+
+    @property
+    def repo(self):
+        for repo, params in Config.GITHUB_REPOS_WITH_BENCHMARKABLE_COMMITS.items():
+            if params["benchmarkable_type"] == self.type:
+                return repo
+
+    def is_commit(self):
+        return self.type.endswith("-commit")
 
     @classmethod
     def create(cls, data):
