@@ -31,12 +31,17 @@ def get_commits_for_repo(repo, benchmarkable_type):
     for commit_dict in commit_dicts:
         pull_number = get_originating_pull_number(commit_dict)
 
+        if len(commit_dict["parents"]) > 0:
+            baseline_id = commit_dict["parents"][-1]["sha"]
+        else:
+            baseline_id = None
+
         Benchmarkable.create(
             dict(
                 id=commit_dict["sha"],
                 type=benchmarkable_type,
                 data=commit_dict,
-                baseline_id=commit_dict["parents"][-1]["sha"],
+                baseline_id=baseline_id,
                 reason=benchmarkable_type,
                 pull_number=pull_number,
             )
