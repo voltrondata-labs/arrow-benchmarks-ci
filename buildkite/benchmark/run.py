@@ -52,17 +52,14 @@ repos_with_benchmark_groups = [
     },
     {
         "benchmarkable_type": "benchmarkable-repo-commit",
-        "repo": "REPO=https://github.com/ElenaHenderson/benchmarkable-repo.git",
+        "repo": "https://github.com/ElenaHenderson/benchmarkable-repo.git",
         "root": "benchmarkable-repo",
         "branch": "master",
         "setup_commands": [],
-        "path_to_benchmark_groups_list_json": "benchmarks.json",
+        "path_to_benchmark_groups_list_json": "benchmarkable-repo/benchmarks.json",
         "url_for_benchmark_groups_list_json": "https://raw.githubusercontent.com/ElenaHenderson/benchmarkable-repo/master/benchmarks.json",
-        "setup_commands_for_lang_benchmarks": {  # These commands need to be defined as functions in buildkite/benchmark/utils.sh
-            "Python": [],
-        },
-        "env_vars": {
-        },
+        "setup_commands_for_lang_benchmarks": {},
+        "env_vars": {},
     },
 ]
 
@@ -249,6 +246,10 @@ class Run:
         return return_code, stderr
 
     def setup_benchmarks_repo(self):
+        # if benchmarks are located in the same repo as was cloned in utils.sh, do not clone it again
+        if os.getenv("REPO") == self.repo:
+            return
+
         self.execute_command(f"git clone {self.repo}")
         self.execute_command(f"git fetch && git checkout {self.branch}", self.root)
         for command in self.setup_commands:
@@ -321,7 +322,7 @@ class Run:
         )
 
     def additional_setup_for_benchmark_groups(self, lang):
-        for command in self.setup_commands_for_lang_benchmarks[lang]:
+        for command in self.setup_commands_for_lang_benchmarks.get(lang, []):
             self.execute_command(f"source buildkite/benchmark/utils.sh {command}")
 
     def mark_benchmark_groups_failed(self, lang, stderr):
@@ -395,7 +396,7 @@ class Run:
             if not self.benchmark_groups_for_lang(lang):
                 continue
 
-            if self.benchmarkable_type == "arrow-commit":
+            if self.benchmarkable_type.endswith("-commit"):
                 try:
                     self.additional_setup_for_benchmark_groups(lang)
                 except Exception as e:
