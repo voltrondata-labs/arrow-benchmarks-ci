@@ -25,11 +25,6 @@ class Config:
             "enable_benchmarking_for_pull_requests": True,
             "github_secret": os.getenv("GITHUB_SECRET"),
         },
-        "ElenaHenderson/benchmarkable-repo": {
-            "benchmarkable_type": "benchmarkable-repo-commit",
-            "enable_benchmarking_for_pull_requests": False,
-            "github_secret": None,
-        },
     }
     GITHUB_REPO = os.getenv("GITHUB_REPO")
     MAX_COMMITS_TO_FETCH = os.getenv("MAX_COMMITS_TO_FETCH", 20)
@@ -101,15 +96,6 @@ class Config:
                         }
                     },
                 },
-                "benchmarkable-repo-commit" : {
-                    "langs": {
-                        "Python": {
-                            "names": [
-                                "simple-benchmark",
-                            ]
-                        }
-                    }
-                }
             },
             "supported_filters": ["lang", "name"],
             "offline_warning_enabled": True,
@@ -123,15 +109,6 @@ class Config:
                         "C++": {"names": ["cpp-micro"]},
                         "Java": {"names": ["java-micro"]},
                     }
-                },
-                "benchmarkable-repo-commit": {
-                    "langs": {
-                        "Python": {
-                            "names": [
-                                "simple-benchmark",
-                            ]
-                        }
-                    }
                 }
             },
             "supported_filters": ["lang", "command"],
@@ -144,15 +121,6 @@ class Config:
                 "arrow-commit": {
                     "langs": {"Python": {"names": ["dataset-read", "dataset-select"]}}
                 },
-                "benchmarkable-repo-commit": {
-                    "langs": {
-                        "Python": {
-                            "names": [
-                                "simple-benchmark",
-                            ]
-                        }
-                    }
-                }
             },
             "supported_filters": ["lang", "name"],
             "offline_warning_enabled": False,

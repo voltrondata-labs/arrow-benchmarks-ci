@@ -50,17 +50,6 @@ repos_with_benchmark_groups = [
             "ARROW_SRC": f"{build_dir}/arrow",  # required by Java Script benchmarks
         },
     },
-    {
-        "benchmarkable_type": "benchmarkable-repo-commit",
-        "repo": "https://github.com/ElenaHenderson/benchmarkable-repo.git",
-        "root": "benchmarkable-repo",
-        "branch": "master",
-        "setup_commands": [],
-        "path_to_benchmark_groups_list_json": "benchmarkable-repo/benchmarks.json",
-        "url_for_benchmark_groups_list_json": "https://raw.githubusercontent.com/ElenaHenderson/benchmarkable-repo/master/benchmarks.json",
-        "setup_commands_for_lang_benchmarks": {},
-        "env_vars": {},
-    },
 ]
 
 retryable_benchmark_groups = [
