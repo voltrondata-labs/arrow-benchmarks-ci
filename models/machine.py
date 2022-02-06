@@ -107,7 +107,7 @@ class Machine(Base, BaseMixin):
             if not mock_run.has_benchmark_groups_to_execute():
                 return (
                     machine_run_filters,
-                    f"Provided benchmark filters do not have any benchmark groups to be executed on {self.machine}",
+                    f"Provided benchmark filters do not have any benchmark groups to be executed on {self.name}",
                 )
 
         return machine_run_filters, None
