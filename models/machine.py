@@ -103,12 +103,13 @@ class Machine(Base, BaseMixin):
                 machine_run_filters["langs"][lang]["names"] = filtered_benchmark_names
 
         for repo_with_benchmark_groups in repos_with_benchmark_groups:
-            mock_run = MockRun(repo_with_benchmark_groups, filters=machine_run_filters)
-            if not mock_run.has_benchmark_groups_to_execute():
-                return (
-                    machine_run_filters,
-                    f"Provided benchmark filters do not have any benchmark groups to be executed on {self.name}",
-                )
+            if repo_with_benchmark_groups["benchmarkable_type"] == benchmarkable_type:
+                mock_run = MockRun(repo_with_benchmark_groups, filters=machine_run_filters)
+                if not mock_run.has_benchmark_groups_to_execute():
+                    return (
+                        machine_run_filters,
+                        f"Provided benchmark filters do not have any benchmark groups to be executed on {self.name}",
+                    )
 
         return machine_run_filters, None
 
