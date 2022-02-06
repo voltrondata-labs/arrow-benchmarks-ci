@@ -26,6 +26,13 @@ create_conda_env_for_arrow_commit() {
 
   source dev/conbench_envs/hooks.sh activate_conda_env_for_benchmark_build
   source dev/conbench_envs/hooks.sh install_arrow_python_dependencies
+  
+  if [[ "$OSTYPE" == "darwin"* ]]
+  then
+    # archery gets SIGKILLed with cctools==973.0.1
+    conda install -y -c conda-forge cctools==949.0.1
+  fi
+  
   source dev/conbench_envs/hooks.sh set_arrow_build_and_run_env_vars
 
   export RANLIB=`which $RANLIB`
