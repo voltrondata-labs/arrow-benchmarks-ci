@@ -25,6 +25,11 @@ class Config:
             "enable_benchmarking_for_pull_requests": True,
             "github_secret": os.getenv("GITHUB_SECRET"),
         },
+        "ElenaHenderson/benchmarkable-repo": {
+            "benchmarkable_type": "benchmarkable-repo-commit",
+            "enable_benchmarking_for_pull_requests": False,
+            "github_secret": None,
+        },
     }
     GITHUB_REPO = os.getenv("GITHUB_REPO")
     MAX_COMMITS_TO_FETCH = os.getenv("MAX_COMMITS_TO_FETCH", 20)
@@ -120,6 +125,15 @@ class Config:
             "default_filters": {
                 "arrow-commit": {
                     "langs": {"Python": {"names": ["dataset-read", "dataset-select"]}}
+                },
+                "benchmarkable-repo-commit": {
+                    "langs": {
+                        "Python": {
+                            "names": [
+                                "simple-benchmark",
+                            ]
+                        }
+                    }
                 },
             },
             "supported_filters": ["lang", "name"],
