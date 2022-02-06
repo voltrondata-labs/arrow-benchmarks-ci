@@ -49,7 +49,21 @@ repos_with_benchmark_groups = [
             "ARROWBENCH_DATA_DIR": f"{os.getenv('HOME')}/data",  # allows to avoid loading R benchmarks input data from s3 for every build
             "ARROW_SRC": f"{build_dir}/arrow",  # required by Java Script benchmarks
         },
-    }
+    },
+    {
+        "benchmarkable_type": "benchmarkable-repo-commit",
+        "repo": "REPO=https://github.com/ElenaHenderson/benchmarkable-repo.git",
+        "root": "benchmarkable-repo",
+        "branch": "master",
+        "setup_commands": [],
+        "path_to_benchmark_groups_list_json": "benchmarks.json",
+        "url_for_benchmark_groups_list_json": "https://raw.githubusercontent.com/ElenaHenderson/benchmarkable-repo/master/benchmarks.json",
+        "setup_commands_for_lang_benchmarks": {  # These commands need to be defined as functions in buildkite/benchmark/utils.sh
+            "Python": [],
+        },
+        "env_vars": {
+        },
+    },
 ]
 
 retryable_benchmark_groups = [
