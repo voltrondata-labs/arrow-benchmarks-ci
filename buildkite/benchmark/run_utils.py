@@ -12,6 +12,9 @@ logging.basicConfig(level=logging.INFO)
 
 
 def context():
+    if not os.getenv("BENCHMARKABLE_TYPE") in ["arrow-commit", "pyarrow-apache-wheel"]:
+        return
+
     import pyarrow
 
     build_info = pyarrow.cpp_build_info

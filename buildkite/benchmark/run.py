@@ -24,6 +24,7 @@ logging.basicConfig(level=logging.DEBUG)
 
 repos_with_benchmark_groups = [
     {
+        "benchmarkable_type": "arrow-commit",
         "repo": "https://github.com/ursacomputing/benchmarks.git",
         "root": "benchmarks",
         "branch": "main",
@@ -48,7 +49,7 @@ repos_with_benchmark_groups = [
             "ARROWBENCH_DATA_DIR": f"{os.getenv('HOME')}/data",  # allows to avoid loading R benchmarks input data from s3 for every build
             "ARROW_SRC": f"{build_dir}/arrow",  # required by Java Script benchmarks
         },
-    }
+    },
 ]
 
 retryable_benchmark_groups = [
@@ -234,6 +235,10 @@ class Run:
         return return_code, stderr
 
     def setup_benchmarks_repo(self):
+        # if benchmarks are located in the same repo as was cloned in utils.sh, do not clone it again
+        if os.getenv("REPO") == self.repo:
+            return
+
         self.execute_command(f"git clone {self.repo}")
         self.execute_command(f"git fetch && git checkout {self.branch}", self.root)
         for command in self.setup_commands:
@@ -306,7 +311,7 @@ class Run:
         )
 
     def additional_setup_for_benchmark_groups(self, lang):
-        for command in self.setup_commands_for_lang_benchmarks[lang]:
+        for command in self.setup_commands_for_lang_benchmarks.get(lang, []):
             self.execute_command(f"source buildkite/benchmark/utils.sh {command}")
 
     def mark_benchmark_groups_failed(self, lang, stderr):
@@ -380,7 +385,7 @@ class Run:
             if not self.benchmark_groups_for_lang(lang):
                 continue
 
-            if self.benchmarkable_type == "arrow-commit":
+            if self.benchmarkable_type.endswith("-commit"):
                 try:
                     self.additional_setup_for_benchmark_groups(lang)
                 except Exception as e:
