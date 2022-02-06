@@ -5,8 +5,7 @@ init_conda() {
 }
 
 create_conda_env_for_arrow_commit() {
-  clone_arrow_repo
-  pushd arrow
+  pushd $REPO_DIR
   
   if [[ "$OSTYPE" == "darwin"* ]]
   then
@@ -46,21 +45,15 @@ create_conda_env_for_pyarrow_apache_wheel() {
   pip install "${BENCHMARKABLE}"
 }
 
-create_conda_env_with_arrow() {
-  if [ "${BENCHMARKABLE_TYPE}" = "arrow-commit" ]
-  then
-    echo "Creating conda env for arrow commit"
-    create_conda_env_for_arrow_commit
-  else
-    echo "Creating conda env for pyarrow apache wheel"
-    create_conda_env_for_pyarrow_apache_wheel
-  fi
+create_conda_env_for_benchmarkable_repo_commit() {
+  conda create -y -n "${BENCHMARKABLE_TYPE}" python="${PYTHON_VERSION}"
+  conda activate "${BENCHMARKABLE_TYPE}"
 }
 
-clone_arrow_repo() {
+clone_repo() {
   rm -rf arrow
-  git clone "${ARROW_REPO}"
-  pushd arrow
+  git clone "${REPO}"
+  pushd $REPO_DIR
   git fetch -v --prune -- origin "${BENCHMARKABLE}"
   git checkout -f "${BENCHMARKABLE}"
   popd
@@ -80,20 +73,20 @@ install_conbench() {
 }
 
 build_arrow_r() {
-  pushd arrow
+  pushd $REPO_DIR
   source dev/conbench_envs/hooks.sh build_arrow_r
   popd
 }
 
 build_arrow_java() {
-  pushd arrow
+  pushd $REPO_DIR
   source dev/conbench_envs/hooks.sh build_arrow_java
   popd
 }
 
 install_archery() {
-  clone_arrow_repo
-  pushd arrow
+  clone_repo
+  pushd $REPO_DIR
   source dev/conbench_envs/hooks.sh install_archery
   popd
 }
@@ -120,7 +113,7 @@ install_duckdb_r_with_tpch() {
 }
 
 install_java_script_project_dependencies() {
-  pushd arrow
+  pushd $REPO_DIR
   source dev/conbench_envs/hooks.sh install_java_script_project_dependencies
   popd
 }
@@ -136,11 +129,27 @@ test_pyarrow_is_built() {
   echo "------------>End"
 }
 
-build_arrow_and_run_benchmark_groups() {
-  export ARROW_REPO=https://github.com/apache/arrow.git
+create_conda_env_and_run_benchmarks() {
   init_conda
-  create_conda_env_with_arrow
-  test_pyarrow_is_built
+  case "${BENCHMARKABLE_TYPE}" in
+    "arrow-commit")
+      export REPO=https://github.com/apache/arrow.git
+      export REPO_DIR=arrow
+      clone_repo
+      create_conda_env_for_arrow_commit
+      test_pyarrow_is_built
+      ;;
+    "pyarrow-apache-wheel")
+      create_conda_env_for_pyarrow_apache_wheel
+      ;;
+    "benchmarkable-repo-commit")
+      export REPO=https://github.com/ElenaHenderson/benchmarkable-repo.git
+      export REPO_DIR=benchmarkable-repo
+      clone_repo
+      create_conda_env_for_benchmarkable_repo_commit
+      ;;
+  esac
+
   install_conbench
   python -m buildkite.benchmark.run_benchmark_groups
 }

@@ -24,6 +24,7 @@ logging.basicConfig(level=logging.DEBUG)
 
 repos_with_benchmark_groups = [
     {
+        "benchmarkable_type": "arrow-commit",
         "repo": "https://github.com/ursacomputing/benchmarks.git",
         "root": "benchmarks",
         "branch": "main",
