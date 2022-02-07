@@ -72,10 +72,6 @@ install_conbench() {
   pip install -r requirements-cli.txt
   pip install -U PyYAML
   python setup.py install
-  
-  # Workaround until conbench is fixed
-  pip uninstall -y pytest
-  pip install pytest==6.2.5
   popd
 }
 
