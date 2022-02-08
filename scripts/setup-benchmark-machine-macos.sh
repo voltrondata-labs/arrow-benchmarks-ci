@@ -40,3 +40,8 @@ touch "$(brew --prefix)"/etc/buildkite-agent/hooks/environment
 
 cp "$(brew --prefix)"/etc/buildkite-agent/hooks/pre-command.sample "$(brew --prefix)"/etc/buildkite-agent/hooks/pre-command
 echo "source  $HOME/.bash_profile" >> "$(brew --prefix)"/etc/buildkite-agent/hooks/pre-command
+
+echo "-------Installing conda"
+curl -LO https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-arm64.sh
+bash Miniconda3-latest-MacOSX-arm64.sh -b -p "$HOME/miniconda3"
+"$HOME/miniconda3/bin/conda" init bash

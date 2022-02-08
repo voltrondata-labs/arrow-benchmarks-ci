@@ -70,7 +70,13 @@ apt-get update -y -q && \
 apt-get install -y -q --no-install-recommends openjdk-8-jdk maven && \
 apt-get clean && \
 rm -rf /var/lib/apt/lists*
-update-java-alternatives -s java-1.8.0-openjdk-amd64
+case $( uname -m ) in
+  aarch64)
+    java_alternative=java-1.8.0-openjdk-arm64;;
+  *)
+    java_alternative=java-1.8.0-openjdk-amd64;;
+esac
+update-java-alternatives -s $java_alternative
 
 echo "-------Installing Buildkite Agent"
 sh -c 'echo deb https://apt.buildkite.com/buildkite-agent stable main > /etc/apt/sources.list.d/buildkite-agent.list'
@@ -98,3 +104,16 @@ echo "source /var/lib/buildkite-agent/.bashrc" >> /etc/buildkite-agent/hooks/pre
 echo "-------Setting NOPASSWD for buildkite-agent user"
 echo "buildkite-agent ALL=(ALL) NOPASSWD:ALL" | sudo tee -a /etc/sudoers
 echo "Done"
+
+echo "-------Installing conda"
+su - buildkite-agent
+case $( uname -m ) in
+  aarch64)
+    conda_installer=Miniconda3-latest-Linux-aarch64.sh;;
+  *)
+    conda_installer=Miniconda3-latest-Linux-x86_64.sh;;
+esac
+curl -LO https://repo.anaconda.com/miniconda/$conda_installer
+bash $conda_installer -b -p "$HOME/miniconda3"
+"$HOME/miniconda3/bin/conda" init bash
+exit
