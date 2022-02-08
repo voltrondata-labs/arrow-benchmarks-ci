@@ -1,9 +1,16 @@
+import os
+
 from datetime import datetime, timedelta
 
+from buildkite.schedule_and_publish.create_benchmark_builds import (
+    create_benchmark_builds,
+)
 from models.run import Run
 
 
-def rerun_failed_builds(machines, hours):
+def rerun_failed_builds():
+    machines = os.getenv("MACHINES_WITH_FAILED_BUILDS").split("/n")
+    hours = int(os.getenv("HOURS_WITH_FAILED_BUILDS"))
     runs = Run.all(status="failed")
 
     runs = [
@@ -15,7 +22,7 @@ def rerun_failed_builds(machines, hours):
 
     print(f"Found {len(runs)} failed builds")
 
-    # Trigger new Buildkite builds for all failed runs
+    # Set status to "created" for all failed builds
     for run in runs:
         run.status = "created"
         run.buildkite_data = None
@@ -27,8 +34,10 @@ def rerun_failed_builds(machines, hours):
         run.conda_packages = None
         run.save()
 
-    # Resend slack notifications and update Pull Request comments associated with failed runs
+    # Set finished_at to None for all notifications associated with failed builds
     for run in runs:
         for notification in run.benchmarkable.notifications:
             notification.finished_at = None
             notification.save()
+
+    create_benchmark_builds()

@@ -90,4 +90,6 @@ steps:
     concurrency: 1
     concurrency_group: "rerun-failed-builds"
     command: |
-      docker-compose -f envs/prod/docker-compose.yml run app python -c 'from buildkite.schedule_and_publish.rerun_failed_builds import rerun_failed_builds; rerun_failed_builds($(buildkite-agent meta-data get machines), $(buildkite-agent meta-data get hours))'
+      export MACHINES_WITH_FAILED_BUILDS=$(buildkite-agent meta-data get machines)
+      export HOURS_WITH_FAILED_BUILDS=$(buildkite-agent meta-data get hours)
+      docker-compose -f envs/prod/docker-compose.yml run app python -c 'from buildkite.schedule_and_publish.rerun_failed_builds import rerun_failed_builds; rerun_failed_builds()'
