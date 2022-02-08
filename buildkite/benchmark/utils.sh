@@ -7,13 +7,6 @@ init_conda() {
 create_conda_env_for_arrow_commit() {
   pushd $REPO_DIR
   
-  if [[ "$OSTYPE" == "darwin"* ]]
-  then
-    aws_sdk_version="1.9.185"
-  else
-    aws_sdk_version=$(cat cpp/thirdparty/versions.txt | grep ARROW_AWSSDK_BUILD_VERSION= | sed s/"ARROW_AWSSDK_BUILD_VERSION="//)
-  fi
-  
   conda create -y -n "${BENCHMARKABLE_TYPE}" -c conda-forge \
   --file ci/conda_env_unix.txt \
   --file ci/conda_env_cpp.txt \
@@ -21,7 +14,6 @@ create_conda_env_for_arrow_commit() {
   compilers \
   python="${PYTHON_VERSION}" \
   pandas \
-  aws-sdk-cpp=$aws_sdk_version \
   r
 
   source dev/conbench_envs/hooks.sh activate_conda_env_for_benchmark_build
