@@ -63,8 +63,8 @@ steps:
       - docker-compose -f envs/prod/docker-compose.yml run app python -c 'from buildkite.schedule_and_publish.publish_warnings_on_slack import publish_offline_machine_warnings_on_slack; publish_offline_machine_warnings_on_slack()'
       - docker-compose -f envs/prod/docker-compose.yml run app python -c 'from buildkite.schedule_and_publish.publish_warnings_on_slack import publish_buildkite_build_warnings_on_slack; publish_buildkite_build_warnings_on_slack()'
 
-  - block: "Rerun Failed Builds"
-    prompt: "Select machines that you want to rerun failed builds for"
+  - block: "Reschedule Failed Builds"
+    prompt: "Select machines that need failed builds rescheduled"
     fields:
       - select: "Machines"
         key: "machines"
@@ -86,7 +86,7 @@ steps:
         required: true
         default: "24"
 
-  - label: "Rerun Failed Builds"
+  - label: "Reschedule Failed Builds"
     concurrency: 1
     concurrency_group: "arrow-bci-deploy"
     command: |
