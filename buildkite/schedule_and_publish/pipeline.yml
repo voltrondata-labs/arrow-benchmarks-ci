@@ -88,8 +88,10 @@ steps:
 
   - label: "Rerun Failed Builds"
     concurrency: 1
-    concurrency_group: "rerun-failed-builds"
+    concurrency_group: "arrow-bci-deploy"
     command: |
+      aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin ${DOCKER_REGISTRY}
+      docker pull ${DOCKER_REGISTRY}/${FLASK_APP}:${BUILDKITE_COMMIT}
       export MACHINES_WITH_FAILED_BUILDS=$(buildkite-agent meta-data get machines)
       export HOURS_WITH_FAILED_BUILDS=$(buildkite-agent meta-data get hours)
-      docker-compose -f envs/prod/docker-compose.yml run app python -c 'from buildkite.schedule_and_publish.rerun_failed_builds import rerun_failed_builds; rerun_failed_builds()'
+      docker-compose -f envs/prod/docker-compose.yml run app python -c 'from buildkite.schedule_and_publish.reschedule_failed_builds import reschedule_failed_builds; reschedule_failed_builds()'
