@@ -28,7 +28,7 @@ Note that you can view builds for these pipelines but you can not manually sched
 Benchmark machines should be bare metal machines dedicated to only running benchmarks to 
 avoid high variability in benchmark results that can result in false regression/improvements.
 
-[How to Add New Benchmark Machine](docs/how-to-add-new-benchmark-machine.md)
+Please use this doc to add a new benchmark machine: [How to Add New Benchmark Machine](docs/how-to-add-new-benchmark-machine.md)
 
 #### How can I test benchmark builds that run on ursa-i9-9960x and ursa-thinkcentre-m75q locally
 ```bash
@@ -42,7 +42,7 @@ docker build -f buildkite/benchmark-test/Dockerfile . -t benchmark-test
 
 # Run benchmarks
 docker run -i \
-    --env BENCHMARKABLE=${BENCHMARKABLE:-"641554b0bcce587549bfcfd0cde3cb4bc23054aa"} \
+    --env BENCHMARKABLE=${BENCHMARKABLE:-"ac2d8ff481816299e2b047bf8a4546baccc3d050"} \
     --env BENCHMARKABLE_TYPE=${BENCHMARKABLE_TYPE:-"arrow-commit"} \
     --env BENCHMARKS_DATA_DIR="/data" \
     --env CONBENCH_EMAIL=$CONBENCH_EMAIL \
@@ -52,7 +52,7 @@ docker run -i \
     --env PYTHON_VERSION=${PYTHON_VERSION:-"3.8"} \
     --env RUN_ID=$BUILDKITE_BUILD_ID \
     --env RUN_NAME=${RUN_NAME:-"benchmark build test: $BUILDKITE_BUILD_ID"} \
-    benchmark-test bash buildkite/benchmark/utils.sh build_arrow_and_run_benchmark_groups
+    benchmark-test bash buildkite/benchmark/utils.sh create_conda_env_and_run_benchmarks
 ```
 
 #### How can I test benchmark builds that run on ursa-i9-9960x and ursa-thinkcentre-m75q using Buildkite

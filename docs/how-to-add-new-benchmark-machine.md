@@ -67,12 +67,12 @@ Please use <your email address> to share the environment vars with us.
 
 
 ##### 3. Setup your benchmark machine
+###### On Ubuntu
 Note:
 - [setup-benchmark-machine-ubuntu-20.04.sh](../scripts/setup-benchmark-machine-ubuntu-20.04.sh) only installs dependencies for Apache Arrow C++, Python, R, Java and JavaScript.
 - If you need to install additional dependencies, please update [setup-benchmark-machine-ubuntu-20.04.sh](../scripts/setup-benchmark-machine-ubuntu-20.04.sh). 
 - If your machine is running OS other than Ubuntu, please create a new setup script and use [setup-benchmark-machine-ubuntu-20.04.sh](../scripts/setup-benchmark-machine-ubuntu-20.04.sh) as a reference.
 
-On Ubuntu:
 ```shell script
 sudo su
 cd ~
@@ -105,12 +105,6 @@ v14.18.2
 $ yarn --version
 1.22.17
 
-# Install Conda for buildkite-agent user
-su - buildkite-agent
-curl -LO https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
-bash Miniconda3-latest-Linux-x86_64.sh -b -p "$HOME/miniconda3"
-"$HOME/miniconda3/bin/conda" init bash
-
 # Start Buildkite Agent
 systemctl enable buildkite-agent && systemctl start buildkite-agent
 
@@ -119,7 +113,7 @@ ps aux | grep buildkite
 journalctl -f -u buildkite-agent
 ```
 
-On macOS arm64:
+###### On macOS arm64:
 
 ```shell script
 cd ~
@@ -155,11 +149,6 @@ v15.14.0
 $ yarn --version
 1.22.17
 
-# Install Conda
-curl -LO https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-arm64.sh
-bash Miniconda3-latest-MacOSX-arm64.sh -b -p "$HOME/miniconda3"
-"$HOME/miniconda3/bin/conda" init bash
-
 # Start Buildkite Agent
 brew services start buildkite/buildkite/buildkite-agent
 
@@ -169,10 +158,15 @@ tail -f "$(brew --prefix)"/var/log/buildkite-agent.log
 ```
 
 ##### 4. Test benchmark build on your machine
-Note that running `build_arrow_and_run_benchmark_groups` will take for 4-5 hours.
+- Note that running `create_conda_env_and_run_benchmarks` will take for 4-5 hours.
+- Please make sure to run this script as a user who owns buildkite-agent process:
+    - Ubuntu: buildkite-agent
+    - MacOS: user who started buildkite-agent using `brew services start buildkite/buildkite/buildkite-agent`
 
 ```shell script
 # Clone arrow-benchmarks-ci repo
+su - buildkite-agent # or whatever user you used to start buildkite-agent on MacOS
+bash
 git clone https://github.com/ursacomputing/arrow-benchmarks-ci.git
 cd arrow-benchmarks-ci/
 
@@ -190,7 +184,7 @@ export BENCHMARKABLE_TYPE=arrow-commit
 export RUN_ID=<test-random-string>
 export RUN_NAME="test"
 
-source buildkite/benchmark/utils.sh build_arrow_and_run_benchmark_groups
+source buildkite/benchmark/utils.sh create_conda_env_and_run_benchmarks
 ```
 
 ##### 5. Disable Swap, CPU Frequency Scaling, Hyper-Threading & CPU Frequency Boost on your benchmark machine
