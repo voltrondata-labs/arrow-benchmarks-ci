@@ -28,6 +28,9 @@ create_conda_env_for_arrow_commit() {
   # Workaround for https://github.com/aws/aws-sdk-cpp/issues/1820
   conda install -y -c conda-forge cmake==3.21.3
   
+  # Archery does not work when using setuptools==60.9.0
+  conda install -y -c conda-forge setuptools==58.0.4
+  
   source dev/conbench_envs/hooks.sh set_arrow_build_and_run_env_vars
 
   export RANLIB=`which $RANLIB`
