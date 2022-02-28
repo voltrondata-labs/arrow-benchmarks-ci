@@ -12,7 +12,7 @@ from utils import generate_uuid
 
 from .run_utils import post_logs_to_arrow_bci, run_context
 
-benchmark_langs = ["C++", "Java", "Python", "R", "JavaScript"]
+benchmark_langs = ["C++", "Java", "Python", "R", "JavaScript", "Rust"]
 benchmarkable_id = os.getenv("BENCHMARKABLE")
 run_id = os.getenv("RUN_ID")
 run_name = os.getenv("RUN_NAME")
