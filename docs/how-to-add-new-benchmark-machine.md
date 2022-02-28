@@ -66,18 +66,14 @@ Please use <your email address> to share the environment vars with us.
     - copy token and use it as `GITHUB_PAT` in this doc
 
 
-##### 3. Setup your benchmark machine
-###### On Ubuntu
-Note:
-- [setup-benchmark-machine-ubuntu-20.04.sh](../scripts/setup-benchmark-machine-ubuntu-20.04.sh) only installs dependencies for Apache Arrow C++, Python, R, Java and JavaScript.
-- If you need to install additional dependencies, please update [setup-benchmark-machine-ubuntu-20.04.sh](../scripts/setup-benchmark-machine-ubuntu-20.04.sh). 
-- If your machine is running OS other than Ubuntu, please create a new setup script and use [setup-benchmark-machine-ubuntu-20.04.sh](../scripts/setup-benchmark-machine-ubuntu-20.04.sh) as a reference.
+##### 3. Setup Buildkite Agent and Conda on your benchmark machine
+Example of how Buildkite Agent should be setup and Conda could be setup on Ubuntu
 
 ```shell script
 sudo su
 cd ~
 
-# Export env vars to be used by setup-benchmark-machine-ubuntu-20.04.sh
+# Export env vars
 export ARROW_BCI_URL=<ARROW_BCI_URL>
 export ARROW_BCI_API_ACCESS_TOKEN=<ARROW_BCI_API_ACCESS_TOKEN>
 export BUILDKITE_AGENT_TOKEN=<BUILDKITE_AGENT_TOKEN>
@@ -88,22 +84,42 @@ export CONBENCH_URL=<CONBENCH_URL>
 export MACHINE=<MACHINE>
 export GITHUB_PAT=<GITHUB_PAT>
 
-# Install Apache Arrow C++, Python, R, Java and JavaScript dependencies and Buildkite Agent
-curl -LO https://raw.githubusercontent.com/ursacomputing/arrow-benchmarks-ci/main/scripts/setup-benchmark-machine-ubuntu-20.04.sh
-chmod +x setup-benchmark-machine-ubuntu-20.04.sh
-source ./setup-benchmark-machine-ubuntu-20.04.sh
+# Install Buildkite Agent
+sh -c 'echo deb https://apt.buildkite.com/buildkite-agent stable main > /etc/apt/sources.list.d/buildkite-agent.list'
+apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 32A37959C2FA5C3C99EFBC32A79206696452D198
+apt-get update && sudo apt-get install -y buildkite-agent
 
-# Verify you have at least these versions of java, javac, mvn, node and yarn
-$ java -version
-openjdk version "1.8.0_292"
-$ javac -version
-javac 1.8.0_292
-$ mvn -version
-Apache Maven 3.6.3
-$ node --version
-v14.18.2
-$ yarn --version
-1.22.17
+# Set up Buildkite agent config and hooks
+sed -i "s/xxx/$BUILDKITE_AGENT_TOKEN/g" /etc/buildkite-agent/buildkite-agent.cfg
+echo "tags=\"queue=$BUILDKITE_QUEUE\"" >>/etc/buildkite-agent/buildkite-agent.cfg
+
+touch /etc/buildkite-agent/hooks/environment
+{
+  echo "export ARROW_BCI_URL=$ARROW_BCI_URL"
+  echo "export ARROW_BCI_API_ACCESS_TOKEN=$ARROW_BCI_API_ACCESS_TOKEN"
+  echo "export CONBENCH_EMAIL=$CONBENCH_EMAIL"
+  echo "export CONBENCH_PASSWORD=$CONBENCH_PASSWORD"
+  echo "export CONBENCH_URL=$CONBENCH_URL"
+  echo "export MACHINE=$MACHINE"
+  echo "export GITHUB_PAT=$GITHUB_PAT"
+} >> /etc/buildkite-agent/hooks/environment
+
+cp /etc/buildkite-agent/hooks/pre-command.sample /etc/buildkite-agent/hooks/pre-command
+echo "source /var/lib/buildkite-agent/.bashrc" >> /etc/buildkite-agent/hooks/pre-command
+
+# Set NOPASSWD for buildkite-agent user
+echo "buildkite-agent ALL=(ALL) NOPASSWD:ALL" | sudo tee -a /etc/sudoers
+
+# Install conda
+case $( uname -m ) in
+  aarch64)
+    conda_installer=Miniconda3-latest-Linux-aarch64.sh;;
+  *)
+    conda_installer=Miniconda3-latest-Linux-x86_64.sh;;
+esac
+curl -LO https://repo.anaconda.com/miniconda/$conda_installer
+bash $conda_installer -b -p "/var/lib/buildkite-agent/miniconda3"
+su - buildkite-agent -c "/var/lib/buildkite-agent/miniconda3/bin/conda init bash"
 
 # Start Buildkite Agent
 systemctl enable buildkite-agent && systemctl start buildkite-agent
@@ -113,111 +129,27 @@ ps aux | grep buildkite
 journalctl -f -u buildkite-agent
 ```
 
-###### On macOS arm64:
 
-```shell script
-cd ~
-
-# Export env vars to be used by setup-benchmark-machine-macos.sh
-export ARROW_BCI_URL=<ARROW_BCI_URL>
-export ARROW_BCI_API_ACCESS_TOKEN=<ARROW_BCI_API_ACCESS_TOKEN>
-export BUILDKITE_AGENT_TOKEN=<BUILDKITE_AGENT_TOKEN>
-export BUILDKITE_QUEUE=<BUILDKITE_QUEUE>
-export CONBENCH_EMAIL=<CONBENCH_EMAIL>
-export CONBENCH_PASSWORD=<CONBENCH_PASSWORD>
-export CONBENCH_URL=<CONBENCH_URL>
-export MACHINE=<MACHINE>
-export GITHUB_PAT=<GITHUB_PAT>
-
-# Install Apache Arrow C++ dependencies and Buildkite Agent
-curl -LO https://raw.githubusercontent.com/ursacomputing/arrow-benchmarks-ci/main/scripts/setup-benchmark-machine-macos.sh
-chmod +x setup-benchmark-machine-macos.sh
-source ./setup-benchmark-machine-macos.sh
-
-# Set NOPASSWD for user which will be used to run buildkite-agent
-echo "<user-for-buildkite-agent> ALL=(ALL) NOPASSWD:ALL" | sudo tee -a /etc/sudoers
-
-# Verify you have at least these versions of java, javac, mvn, node and yarn
-$ java -version
-openjdk version "1.8.0_292"
-$ javac -version
-javac 1.8.0_292
-$ mvn -version
-Apache Maven 3.8.4
-$ node --version
-v15.14.0
-$ yarn --version
-1.22.17
-
-# Start Buildkite Agent
-brew services start buildkite/buildkite/buildkite-agent
-
-# Verify Buildkite Agent is running
-ps aux | grep buildkite
-tail -f "$(brew --prefix)"/var/log/buildkite-agent.log
-```
-
-##### 4. Test benchmark build on your machine
-- Note that running `create_conda_env_and_run_benchmarks` will take for 4-5 hours.
-- Please make sure to run this script as a user who owns buildkite-agent process:
-    - Ubuntu: buildkite-agent
-    - MacOS: user who started buildkite-agent using `brew services start buildkite/buildkite/buildkite-agent`
-
-```shell script
-# Clone arrow-benchmarks-ci repo
-su - buildkite-agent # or whatever user you used to start buildkite-agent on MacOS
-bash
-git clone https://github.com/ursacomputing/arrow-benchmarks-ci.git
-cd arrow-benchmarks-ci/
-
-# Export env vars
-export ARROW_BCI_URL=<ARROW_BCI_URL>
-export ARROW_BCI_API_ACCESS_TOKEN=<ARROW_BCI_API_ACCESS_TOKEN>
-export CONBENCH_EMAIL=<CONBENCH_EMAIL>
-export CONBENCH_PASSWORD=<CONBENCH_PASSWORD>
-export CONBENCH_URL=<CONBENCH_URL>
-export MACHINE=<MACHINE>
-export GITHUB_PAT=<GITHUB_PAT>
-export PYTHON_VERSION=3.8
-export BENCHMARKABLE=<latest arrow commit>
-export BENCHMARKABLE_TYPE=arrow-commit
-export RUN_ID=<test-random-string>
-export RUN_NAME="test"
-
-source buildkite/benchmark/utils.sh create_conda_env_and_run_benchmarks
-```
-
-##### 5. Disable Swap, CPU Frequency Scaling, Hyper-Threading & CPU Frequency Boost on your benchmark machine
-Disabling Swap, CPU frequency scaling, Hyper-Threading & Boost will reduce benchmark results variability.
-Note that each machine might have its own way of disabling these features or have its own name for some of these features.
-
-Here are docs on how to do this on `ThinkCentre` machines:
-- [How to Disable CPU Frequency Scaling](../docs/how-to-disable-CPU-frequency-scaling.md)
-- [How to Disable Hyper-Threading](../docs/how-to-disable-hyper-threading.md)
-- [How to Disable Swap](../docs/how-to-disable-swap.md)
-- [How to Disable CPU Frequency Boost](../docs/how-to-dsiable-boost.md)
-
-
-##### 6. Get Pull Request reviewed and merged
+##### 4. Get Pull Request reviewed and merged
 Suggested Reviewers: 
 - [Elena Henderson](https://github.com/elenahenderson)
 - [Jonathan Keane](https://github.com/jonkeane)
 
-##### 7. Request Buildkite pipeline for your benchmark machine to be made public
+##### 5. Request Buildkite pipeline for your benchmark machine to be made public
 - Add a comment to your Pull Request:
 ```
 @ElenaHenderson Will you please make Buildkite pipeline for benchmark machine ... public?
 ```
 
-##### 8. Verify benchmark builds on your machine are running as expected
+Once Pull Request is merged and pipeline is made public, you will be able 
+to see Buildkite pipeline for your machine on https://buildkite.com/apache-arrow
+
+##### 6. Verify benchmark builds on your machine are running as expected
 - Go to [Apache Arrow CI Buildkite organization](https://buildkite.com/apache-arrow)
 - Click on **"Arrow BCI Benchmark on ..."** Buildkite pipeline for your machine and 
 verify benchmark builds are running as expected
 
-##### 9. Verify benchmark results from your machine are logged into Conbench
+##### 7. Verify benchmark results from your machine are logged into Conbench
 - Go to [Conbench](https://conbench.ursa.dev/)
 - Enter your machine name into Search box
 - Click on a few runs and verify that all benchmark results form your machine are logged
-
-##### 10. Create Pull Request to enable `publish_benchmark_results` for your machine
-- Update `MACHINES` in [config.py](../config.py) and set `publish_benchmark_results` to `True` for your machine

@@ -63,7 +63,7 @@ mutation {
 - Select Instance type that you need
 - Click Launch instance from template
 - Go to launched ec2 instance > click Connect > click Connect
-- Follow "Step 3. Setup your benchmark machine" in [How to Add New Benchmark Machine](../docs/how-to-add-new-benchmark-machine.md)
+- Follow "Step 3. Setup your benchmark machine" in [How to Add New Benchmark Machine](how-to-add-new-benchmark-machine-for-running-apache-arrow-benchmarks.md)
 
 ### Setup machine offline warnings
 ```shell script
