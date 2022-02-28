@@ -3,6 +3,7 @@ authlib
 flask==1.1.2
 flask-restful
 gunicorn
+itsdangerous==2.0.1
 psutil
 psycopg2
 requests

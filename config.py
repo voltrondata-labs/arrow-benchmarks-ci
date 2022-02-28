@@ -135,6 +135,15 @@ class Config:
                         }
                     }
                 },
+                "arrow-rs-commit": {
+                    "langs": {
+                        "Rust": {
+                            "names": [
+                                "arrow-rs",
+                            ]
+                        }
+                    }
+                },
             },
             "supported_filters": ["lang", "name"],
             "offline_warning_enabled": False,
