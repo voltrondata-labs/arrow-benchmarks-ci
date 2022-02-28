@@ -73,7 +73,7 @@ Example of how Buildkite Agent should be setup and Conda could be setup on Ubunt
 sudo su
 cd ~
 
-# Export env vars to be used by setup-benchmark-machine-ubuntu-20.04-for-apache-arrow-benchmarks.sh
+# Export env vars
 export ARROW_BCI_URL=<ARROW_BCI_URL>
 export ARROW_BCI_API_ACCESS_TOKEN=<ARROW_BCI_API_ACCESS_TOKEN>
 export BUILDKITE_AGENT_TOKEN=<BUILDKITE_AGENT_TOKEN>
