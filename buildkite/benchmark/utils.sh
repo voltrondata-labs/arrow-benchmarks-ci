@@ -45,13 +45,6 @@ create_conda_env_for_arrow_commit() {
   popd
 }
 
-create_conda_env_for_arrow_rs_commit() {
-  conda create -y -n "${BENCHMARKABLE_TYPE}" -c conda-forge \
-    python="3.9" \
-    rust
-  conda activate "${BENCHMARKABLE_TYPE}"
-}
-
 create_conda_env_for_pyarrow_apache_wheel() {
   conda create -y -n "${BENCHMARKABLE_TYPE}" -c conda-forge \
     python="${PYTHON_VERSION}" \
@@ -149,12 +142,6 @@ create_conda_env_and_run_benchmarks() {
       clone_repo
       create_conda_env_for_arrow_commit
       test_pyarrow_is_built
-      ;;
-    "arrow-rs-commit")
-      export REPO=https://github.com/apache/arrow-rs.git
-      export REPO_DIR=arrow-rs
-      clone_repo
-      create_conda_env_for_arrow_rs_commit
       ;;
     "pyarrow-apache-wheel")
       create_conda_env_for_pyarrow_apache_wheel
