@@ -30,6 +30,16 @@ class Config:
             "enable_benchmarking_for_pull_requests": False,
             "github_secret": None,
         },
+        "apache/arrow-rs": {
+            "benchmarkable_type": "arrow-rs-commit",
+            "enable_benchmarking_for_pull_requests": False,
+            "github_secret": None,
+        },        
+        "apache/arrow-datafusion": {
+            "benchmarkable_type": "arrow-datafusion-commit",
+            "enable_benchmarking_for_pull_requests": False,
+            "github_secret": None,
+        },        
     }
     GITHUB_REPO = os.getenv("GITHUB_REPO")
     MAX_COMMITS_TO_FETCH = os.getenv("MAX_COMMITS_TO_FETCH", 20)
