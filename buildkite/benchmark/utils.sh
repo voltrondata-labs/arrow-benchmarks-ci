@@ -46,15 +46,17 @@ create_conda_env_for_arrow_commit() {
 }
 
 create_conda_env_for_arrow_rs_commit() {
-  conda create -y -n "${BENCHMARKABLE_TYPE}" python="3.9" -c conda-forge rust
+  conda create -y -n "${BENCHMARKABLE_TYPE}" -c conda-forge \
+    python="3.9" \
+    rust
   conda activate "${BENCHMARKABLE_TYPE}"
 }
 
 create_conda_env_for_pyarrow_apache_wheel() {
-  conda create -y -n pyarrow-apache-wheel -c conda-forge \
+  conda create -y -n "${BENCHMARKABLE_TYPE}" -c conda-forge \
     python="${PYTHON_VERSION}" \
     pandas
-  conda activate pyarrow-apache-wheel
+  conda activate "${BENCHMARKABLE_TYPE}"
   pip install "${BENCHMARKABLE}"
 }
 
