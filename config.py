@@ -25,6 +25,11 @@ class Config:
             "enable_benchmarking_for_pull_requests": True,
             "github_secret": os.getenv("GITHUB_SECRET"),
         },
+        "apache/arrow-rs": {
+            "benchmarkable_type": "arrow-rs-commit",
+            "enable_benchmarking_for_pull_requests": False,
+            "github_secret": None,
+        },
         "ElenaHenderson/benchmarkable-repo": {
             "benchmarkable_type": "benchmarkable-repo-commit",
             "enable_benchmarking_for_pull_requests": False,
