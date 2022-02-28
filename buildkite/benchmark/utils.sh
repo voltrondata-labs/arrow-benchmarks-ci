@@ -37,9 +37,6 @@ create_conda_env_for_arrow_commit() {
   export AR=`which $AR`
   export ARROW_JEMALLOC=OFF
   
-  # Workaround for Arrow C++ not building because of https://github.com/apache/arrow/pull/12454
-  export ARROW_ENGINE=OFF
-  
   source dev/conbench_envs/hooks.sh build_arrow_cpp
   source dev/conbench_envs/hooks.sh build_arrow_python
   popd
