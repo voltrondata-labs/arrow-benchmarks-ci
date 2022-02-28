@@ -28,7 +28,7 @@ Note that you can view builds for these pipelines but you can not manually sched
 Benchmark machines should be bare metal machines dedicated to only running benchmarks to 
 avoid high variability in benchmark results that can result in false regression/improvements.
 
-Please use this doc to add a new benchmark machine: [How to Add New Benchmark Machine](docs/how-to-add-new-benchmark-machine.md)
+Please use this doc to add a new benchmark machine: [How to Add New Benchmark Machine](docs/how-to-add-new-benchmark-machine-for-running-apache-arrow-benchmarks.md)
 
 #### How can I test benchmark builds that run on ursa-i9-9960x and ursa-thinkcentre-m75q locally
 ```bash
