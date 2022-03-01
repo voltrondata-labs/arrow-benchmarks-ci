@@ -12,7 +12,7 @@ from utils import generate_uuid
 
 from .run_utils import post_logs_to_arrow_bci, run_context
 
-benchmark_langs = ["C++", "Java", "Python", "R", "JavaScript"]
+benchmark_langs = ["C++", "Java", "Python", "R", "JavaScript", "Rust"]
 benchmarkable_id = os.getenv("BENCHMARKABLE")
 run_id = os.getenv("RUN_ID")
 run_name = os.getenv("RUN_NAME")
@@ -59,6 +59,28 @@ repos_with_benchmark_groups = [
         "setup_commands": [],
         "path_to_benchmark_groups_list_json": "benchmarkable-repo/benchmarks.json",
         "url_for_benchmark_groups_list_json": "https://raw.githubusercontent.com/ElenaHenderson/benchmarkable-repo/master/benchmarks.json",
+        "setup_commands_for_lang_benchmarks": {},
+        "env_vars": {},
+    },
+    {
+        "benchmarkable_type": "arrow-rs-commit",
+        "repo": "https://github.com/apache/arrow-rs.git",
+        "root": "arrow-rs/conbench",
+        "branch": "master",
+        "setup_commands": ["pip install -r requirements.txt"],
+        "path_to_benchmark_groups_list_json": "arrow-rs/conbench/benchmarks.json",
+        "url_for_benchmark_groups_list_json": "https://raw.githubusercontent.com/apache/arrow-rs/master/conbench/benchmarks.json",
+        "setup_commands_for_lang_benchmarks": {},
+        "env_vars": {},
+    },
+    {
+        "benchmarkable_type": "arrow-datafusion-commit",
+        "repo": "https://github.com/apache/arrow-datafusion.git",
+        "root": "arrow-datafusion/conbench",
+        "branch": "master",
+        "setup_commands": ["pip install -r requirements.txt"],
+        "path_to_benchmark_groups_list_json": "arrow-datafusion/conbench/benchmarks.json",
+        "url_for_benchmark_groups_list_json": "https://raw.githubusercontent.com/apache/arrow-datafusion/master/conbench/benchmarks.json",
         "setup_commands_for_lang_benchmarks": {},
         "env_vars": {},
     },

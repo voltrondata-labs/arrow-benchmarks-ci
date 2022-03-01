@@ -55,6 +55,20 @@ create_conda_env_for_benchmarkable_repo_commit() {
   conda activate "${BENCHMARKABLE_TYPE}"
 }
 
+create_conda_env_for_arrow_rs_commit() {
+  conda create -y -n "${BENCHMARKABLE_TYPE}" -c conda-forge \
+    python="3.9" \
+    rust
+  conda activate "${BENCHMARKABLE_TYPE}"
+}
+
+create_conda_env_for_arrow_datafusion_commit() {
+  conda create -y -n "${BENCHMARKABLE_TYPE}" -c conda-forge \
+    python="3.9" \
+    rust
+  conda activate "${BENCHMARKABLE_TYPE}"
+}
+
 clone_repo() {
   rm -rf arrow
   git clone "${REPO}"
@@ -148,6 +162,18 @@ create_conda_env_and_run_benchmarks() {
       export REPO_DIR=benchmarkable-repo
       clone_repo
       create_conda_env_for_benchmarkable_repo_commit
+      ;;
+    "arrow-rs-commit")
+      export REPO=https://github.com/apache/arrow-rs.git
+      export REPO_DIR=arrow-rs
+      clone_repo
+      create_conda_env_for_arrow_rs_commit
+      ;;
+    "arrow-datafusion-commit")
+      export REPO=https://github.com/apache/arrow-datafusion.git
+      export REPO_DIR=arrow-datafusion
+      clone_repo
+      create_conda_env_for_arrow_datafusion_commit
       ;;
   esac
 
