@@ -5,7 +5,7 @@ from models.machine import Machine
 from models.run import Run
 from integrations.slack import slack
 
-max_benchmark_build_run_time_hours = 2.45
+max_benchmark_build_run_time_hours = 5.0
 
 
 def publish_offline_machine_warnings_on_slack():
