@@ -24,7 +24,7 @@ def test_publish_buildkite_build_warnings_on_slack():
 
     run = Run.first(machine_name="ursa-i9-9960x", status="scheduled")
     data = deepcopy(run.buildkite_data)
-    data["started_at"] = (datetime.utcnow() - timedelta(hours=3)).strftime(
+    data["started_at"] = (datetime.utcnow() - timedelta(hours=5.5)).strftime(
         "%Y-%m-%dT%H:%M:%S.%fZ"
     )
     run.buildkite_data = data
@@ -40,5 +40,5 @@ def test_publish_buildkite_build_warnings_on_slack():
 
     warnings = publish_buildkite_build_warnings_on_slack()
     assert warnings == [
-        ":warning: Benchmark build https://buildkite.com/apache-arrow/arrow-bci-benchmark-on-ursa-i9-9960x/builds/1 is running > 2.45 hours."
+        ":warning: Benchmark build https://buildkite.com/apache-arrow/arrow-bci-benchmark-on-ursa-i9-9960x/builds/1 is running > 5.0 hours."
     ]
