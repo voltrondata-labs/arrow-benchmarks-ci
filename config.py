@@ -131,10 +131,13 @@ class Config:
             "publish_benchmark_results": True,
         },
         "ec2-t3-xlarge-us-east-2": {
-            "info": "Supported benchmark langs: Python. Runs only benchmarks with cloud = True",
+            "info": "Supported benchmark langs: Python, R. Runs only benchmarks with cloud = True",
             "default_filters": {
                 "arrow-commit": {
-                    "langs": {"Python": {"names": ["dataset-read", "dataset-select"]}}
+                    "langs": {
+                        "Python": {"names": ["dataset-read", "dataset-select"]},
+                        "R": {"names": ["tpch"]},
+                    }
                 },
                 "benchmarkable-repo-commit": {
                     "langs": {
