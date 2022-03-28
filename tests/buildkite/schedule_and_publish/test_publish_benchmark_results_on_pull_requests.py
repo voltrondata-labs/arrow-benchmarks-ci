@@ -95,8 +95,8 @@ def test_generate_pull_comment_body(client):
             ["Finished", "Finished", "Finished"],
         ),
     ]
-    for input_run_statuses, expected_statuses in test_cases:
-        verify_pull_comment(input_run_statuses, expected_statuses)
+    for input_run_statuses, expected_statuses, expected_build_statuses in test_cases:
+        verify_pull_comment(input_run_statuses, expected_statuses, expected_build_statuses)
 
 
 def test_publish_benchmark_results_on_pull_requests(client):
