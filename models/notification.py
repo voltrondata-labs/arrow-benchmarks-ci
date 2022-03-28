@@ -98,7 +98,7 @@ class Notification(Base, BaseMixin):
         text += self.generate_comment_with_compare_runs_links()
 
         # Add links to buildkite builds
-        text += self.generate_comment_with_compare_runs_links()
+        text += self.generate_text_with_buildkite_build_urls()
 
         return text
 
