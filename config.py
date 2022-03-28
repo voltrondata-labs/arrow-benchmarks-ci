@@ -136,7 +136,6 @@ class Config:
                 "arrow-commit": {
                     "langs": {
                         "Python": {"names": ["dataset-read", "dataset-select"]},
-                        "R": {"names": ["tpch"]},
                     }
                 },
                 "benchmarkable-repo-commit": {
