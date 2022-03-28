@@ -72,12 +72,12 @@ def test_generate_pull_comment_body(client):
         (
             [(benchmarkable.baseline_machine_run(machine1), "finished")],
             [scheduled_status_with_warning, skipped_status],
-            ["Finished", "Scheduled", "Scheduled"],
+            ["Scheduled", "Finished", "Scheduled"],
         ),
         (
             [(benchmarkable.machine_run(machine1), "failed")],
             [failed_status, skipped_status],
-            ["Finished", "Failed", "Scheduled"],
+            ["Failed", "Finished", "Scheduled"],
         ),
         (
             [(benchmarkable.machine_run(machine1), "finished")],
