@@ -42,9 +42,9 @@ def verify_pull_comment(input_run_statuses, expected_statuses, expected_build_st
         f"[{expected_statuses[0]}] [{machine1.name}]({benchmarkable.conbench_compare_runs_web_url(machine1)})\n"
         f"[{expected_statuses[1]}] [{machine2.name}]({benchmarkable.conbench_compare_runs_web_url(machine2)})\n"
         "Buildkite builds:\n"
-        f"[{expected_build_statuses[0]}] < https: // buildkite.com / apache-arrow / arrow-bci-benchmark-on-{machine1.name} / builds / 1 | `{test_benchmarkable_id}` {machine1.name} >"
-        f"[{expected_build_statuses[1]}] < https: // buildkite.com / apache-arrow / arrow-bci-benchmark-on-{machine1.name} / builds / 1 | `{test_baseline_benchmarkable_id}` {machine1.name} >"
-        f"[{expected_build_statuses[2]}] < https: // buildkite.com / apache-arrow / arrow-bci-benchmark-on-{machine2.name} / builds / 1 | `{test_baseline_benchmarkable_id}` {machine2.name} >"
+        f"[{expected_build_statuses[0]}] < https: // buildkite.com / apache-arrow / arrow-bci-benchmark-on-{machine1.name} / builds / 1 | `{test_benchmarkable_id}` {machine1.name} >\n"
+        f"[{expected_build_statuses[1]}] < https: // buildkite.com / apache-arrow / arrow-bci-benchmark-on-{machine1.name} / builds / 1 | `{test_baseline_benchmarkable_id}` {machine1.name} >\n"
+        f"[{expected_build_statuses[2]}] < https: // buildkite.com / apache-arrow / arrow-bci-benchmark-on-{machine2.name} / builds / 1 | `{test_baseline_benchmarkable_id}` {machine2.name} >\n"
         f"{support_benchmarks_info}\n"
     )
 
