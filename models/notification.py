@@ -84,6 +84,7 @@ class Notification(Base, BaseMixin):
         return (
             comment
             + self.generate_comment_with_compare_runs_links()
+            + self.generate_text_with_buildkite_build_urls()
             + supported_benchmarks_info()
         )
 
