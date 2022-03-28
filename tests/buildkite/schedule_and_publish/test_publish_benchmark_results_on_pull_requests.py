@@ -67,6 +67,7 @@ def test_generate_pull_comment_body(client):
         (
             [],
             [scheduled_status_with_warning, skipped_status],
+            ["Scheduled", "Scheduled", "Scheduled"],
         ),
         (
             [(benchmarkable.baseline_machine_run(machine1), "finished")],
