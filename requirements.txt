@@ -1,6 +1,6 @@
 alembic
 authlib
-flask==1.1.2
+flask==2.0.3
 flask-restful
 gunicorn
 itsdangerous==2.0.1
