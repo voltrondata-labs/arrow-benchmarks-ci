@@ -77,22 +77,22 @@ def test_generate_pull_comment_body(client):
         (
             [(benchmarkable.machine_run(machine1), "failed")],
             [failed_status, skipped_status],
-            ["Finished", "Scheduled", "Scheduled"],
+            ["Finished", "Failed", "Scheduled"],
         ),
         (
             [(benchmarkable.machine_run(machine1), "finished")],
             [finished_status, skipped_status],
-            ["Finished", "Scheduled", "Scheduled"],
+            ["Finished", "Finished", "Scheduled"],
         ),
         (
             [(benchmarkable.baseline_machine_run(machine2), "finished")],
             [finished_status, skipped_status],
-            ["Finished", "Scheduled", "Scheduled"],
+            ["Finished", "Finished", "Finished"],
         ),
         (
             [(benchmarkable.machine_run(machine2), "finished")],
             [finished_status, finished_status],
-            ["Finished", "Scheduled", "Scheduled"],
+            ["Finished", "Finished", "Finished"],
         ),
     ]
     for input_run_statuses, expected_statuses in test_cases:
