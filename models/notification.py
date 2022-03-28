@@ -94,13 +94,11 @@ class Notification(Base, BaseMixin):
             f"contender {self.benchmarkable.slack_text}\n"
             f"baseline {self.benchmarkable.baseline.slack_text}:\n"
         )
-        # Add conbench compare/runs links with status
-        text += self.generate_comment_with_compare_runs_links()
-
-        # Add links to buildkite builds
-        text += self.generate_text_with_buildkite_build_urls()
-
-        return text
+        return (
+            text
+            + self.generate_comment_with_compare_runs_links()
+            + self.generate_text_with_buildkite_build_urls()
+        )
 
     def generate_text_with_buildkite_build_urls(self):
         text = f"Buildkite builds:\n"
