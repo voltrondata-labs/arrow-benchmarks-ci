@@ -98,7 +98,12 @@ class Notification(Base, BaseMixin):
         text += self.generate_comment_with_compare_runs_links()
 
         # Add links to buildkite builds
-        text += f"Buildkite builds:\n"
+        text += self.generate_comment_with_compare_runs_links()
+
+        return text
+
+    def generate_text_with_buildkite_build_urls(self):
+        text = f"Buildkite builds:\n"
         for run in (
             self.benchmarkable.runs_with_buildkite_builds_and_publishable_benchmark_results
             + self.benchmarkable.baseline.runs_with_buildkite_builds_and_publishable_benchmark_results
