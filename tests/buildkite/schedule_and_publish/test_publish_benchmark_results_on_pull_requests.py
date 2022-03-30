@@ -25,7 +25,7 @@ ursa-i9-9960x: Supported benchmark langs: Python, R, JavaScript
 ursa-thinkcentre-m75q: Supported benchmark langs: C++, Java"""
 
 
-def verify_pull_comment(input_run_statuses, expected_statuses):
+def verify_pull_comment(input_run_statuses, expected_statuses, expected_build_statuses):
     for (run, status) in input_run_statuses:
         run.finished_at = s.sql.func.now()
         run.status = status
@@ -41,6 +41,10 @@ def verify_pull_comment(input_run_statuses, expected_statuses):
         f"Conbench compare runs links:\n"
         f"[{expected_statuses[0]}] [{machine1.name}]({benchmarkable.conbench_compare_runs_web_url(machine1)})\n"
         f"[{expected_statuses[1]}] [{machine2.name}]({benchmarkable.conbench_compare_runs_web_url(machine2)})\n"
+        "Buildkite builds:\n"
+        f"[{expected_build_statuses[0]}] <https://buildkite.com/apache-arrow/arrow-bci-benchmark-on-{machine1.name}/builds/1| `{test_benchmarkable_id}` {machine1.name}>\n"
+        f"[{expected_build_statuses[1]}] <https://buildkite.com/apache-arrow/arrow-bci-benchmark-on-{machine1.name}/builds/1| `{test_baseline_benchmarkable_id}` {machine1.name}>\n"
+        f"[{expected_build_statuses[2]}] <https://buildkite.com/apache-arrow/arrow-bci-benchmark-on-{machine2.name}/builds/1| `{test_baseline_benchmarkable_id}` {machine2.name}>\n"
         f"{support_benchmarks_info}\n"
     )
 
@@ -63,30 +67,36 @@ def test_generate_pull_comment_body(client):
         (
             [],
             [scheduled_status_with_warning, skipped_status],
+            ["Scheduled", "Scheduled", "Scheduled"],
         ),
         (
             [(benchmarkable.baseline_machine_run(machine1), "finished")],
             [scheduled_status_with_warning, skipped_status],
+            ["Scheduled", "Finished", "Scheduled"],
         ),
         (
             [(benchmarkable.machine_run(machine1), "failed")],
             [failed_status, skipped_status],
+            ["Failed", "Finished", "Scheduled"],
         ),
         (
             [(benchmarkable.machine_run(machine1), "finished")],
             [finished_status, skipped_status],
+            ["Finished", "Finished", "Scheduled"],
         ),
         (
             [(benchmarkable.baseline_machine_run(machine2), "finished")],
             [finished_status, skipped_status],
+            ["Finished", "Finished", "Finished"],
         ),
         (
             [(benchmarkable.machine_run(machine2), "finished")],
             [finished_status, finished_status],
+            ["Finished", "Finished", "Finished"],
         ),
     ]
-    for input_run_statuses, expected_statuses in test_cases:
-        verify_pull_comment(input_run_statuses, expected_statuses)
+    for input_run_statuses, expected_statuses, expected_build_statuses in test_cases:
+        verify_pull_comment(input_run_statuses, expected_statuses, expected_build_statuses)
 
 
 def test_publish_benchmark_results_on_pull_requests(client):

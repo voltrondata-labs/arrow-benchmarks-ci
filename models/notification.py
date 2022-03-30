@@ -84,6 +84,7 @@ class Notification(Base, BaseMixin):
         return (
             comment
             + self.generate_comment_with_compare_runs_links()
+            + self.generate_text_with_buildkite_build_urls()
             + supported_benchmarks_info()
         )
 
@@ -94,11 +95,14 @@ class Notification(Base, BaseMixin):
             f"contender {self.benchmarkable.slack_text}\n"
             f"baseline {self.benchmarkable.baseline.slack_text}:\n"
         )
-        # Add conbench compare/runs links with status
-        text += self.generate_comment_with_compare_runs_links()
+        return (
+            text
+            + self.generate_comment_with_compare_runs_links()
+            + self.generate_text_with_buildkite_build_urls()
+        )
 
-        # Add links to buildkite builds
-        text += f"Buildkite builds:\n"
+    def generate_text_with_buildkite_build_urls(self):
+        text = f"Buildkite builds:\n"
         for run in (
             self.benchmarkable.runs_with_buildkite_builds_and_publishable_benchmark_results
             + self.benchmarkable.baseline.runs_with_buildkite_builds_and_publishable_benchmark_results
