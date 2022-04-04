@@ -1,18 +1,15 @@
 import sqlalchemy as s
 
-from buildkite.schedule_and_publish.publish_benchmark_results_on_pull_requests import (
-    publish_benchmark_results_on_pull_requests,
-)
+from buildkite.schedule_and_publish.get_commits import get_commits
+from buildkite.schedule_and_publish.publish_benchmark_results_on_pull_requests import \
+    publish_benchmark_results_on_pull_requests
 from models.benchmarkable import Benchmarkable
 from models.machine import Machine
 from models.run import Run
-from tests.helpers import (
-    machine_configs,
-    make_github_webhook_event_for_comment,
-    outbound_requests,
-    test_baseline_benchmarkable_id,
-    test_benchmarkable_id,
-)
+from tests.helpers import (machine_configs,
+                           make_github_webhook_event_for_comment,
+                           outbound_requests, test_baseline_benchmarkable_id,
+                           test_benchmarkable_id)
 
 machines = list(machine_configs.keys())
 finished_status = "Finished :arrow_down:33.33% :arrow_up:33.33%"
@@ -96,7 +93,9 @@ def test_generate_pull_comment_body(client):
         ),
     ]
     for input_run_statuses, expected_statuses, expected_build_statuses in test_cases:
-        verify_pull_comment(input_run_statuses, expected_statuses, expected_build_statuses)
+        verify_pull_comment(
+            input_run_statuses, expected_statuses, expected_build_statuses
+        )
 
 
 def test_publish_benchmark_results_on_pull_requests(client):
@@ -160,3 +159,14 @@ def test_publish_benchmark_results_on_pull_requests(client):
 
     # Verify pull notification was marked finished since all runs have status = "finished"
     assert Benchmarkable.get(test_benchmarkable_id).pull_notification().finished_at
+
+
+def test_publish_benchmark_results_on_merged_pull_requests():
+    get_commits()
+    contender = Benchmarkable.get("f2f663be0a87e13c9cd5403dea51379deb4cf04d")
+    baseline = Benchmarkable.get("c6fdeaf9fb85622242963dc28660e9592088986c")
+    publish_benchmark_results_on_pull_requests()
+    assert (
+        outbound_requests[-1][0]
+        != "http://mocked-integrations:9999/github/repos/apache/arrow/issues/comments/1234"
+    )

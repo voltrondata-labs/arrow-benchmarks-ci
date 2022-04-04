@@ -46,6 +46,9 @@ class Notification(Base, BaseMixin):
             and self.benchmarkable.baseline.all_runs_with_publishable_benchmark_results_finished()
         )
 
+    def should_be_updated_for_each_finished_build(self):
+        return self.benchmarkable.reason == "pull-request"
+
     def generate_comment_with_compare_runs_links(self):
         comment = f"Conbench compare runs links:\n"
         for machine in Machine.all(
