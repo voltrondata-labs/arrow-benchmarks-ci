@@ -13,7 +13,7 @@ def publish_benchmark_results_on_pull_requests():
             continue
 
         if (
-            not notification.should_be_updated_for_each_finished_build()
+            not notification.should_be_updated_for_each_finished_run()
             and not notification.all_runs_with_publishable_benchmark_results_finished()
         ):
             continue

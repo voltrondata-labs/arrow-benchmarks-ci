@@ -1,15 +1,19 @@
 import sqlalchemy as s
 
 from buildkite.schedule_and_publish.get_commits import get_commits
-from buildkite.schedule_and_publish.publish_benchmark_results_on_pull_requests import \
-    publish_benchmark_results_on_pull_requests
+from buildkite.schedule_and_publish.publish_benchmark_results_on_pull_requests import (
+    publish_benchmark_results_on_pull_requests,
+)
 from models.benchmarkable import Benchmarkable
 from models.machine import Machine
 from models.run import Run
-from tests.helpers import (machine_configs,
-                           make_github_webhook_event_for_comment,
-                           outbound_requests, test_baseline_benchmarkable_id,
-                           test_benchmarkable_id)
+from tests.helpers import (
+    machine_configs,
+    make_github_webhook_event_for_comment,
+    outbound_requests,
+    test_baseline_benchmarkable_id,
+    test_benchmarkable_id,
+)
 
 machines = list(machine_configs.keys())
 finished_status = "Finished :arrow_down:33.33% :arrow_up:33.33%"
@@ -165,8 +169,34 @@ def test_publish_benchmark_results_on_merged_pull_requests():
     get_commits()
     contender = Benchmarkable.get("f2f663be0a87e13c9cd5403dea51379deb4cf04d")
     baseline = Benchmarkable.get("c6fdeaf9fb85622242963dc28660e9592088986c")
+
+    # Verify Pull Request is not updated when no runs are finished
     publish_benchmark_results_on_pull_requests()
     assert (
         outbound_requests[-1][0]
         != "http://mocked-integrations:9999/github/repos/apache/arrow/issues/comments/1234"
+    )
+
+    # Verify Pull Request is not updated when only baseline runs are finished
+    for run in baseline.runs:
+        run.finished_at = s.sql.func.now()
+        run.status = "finished"
+        run.save()
+
+    publish_benchmark_results_on_pull_requests()
+    assert (
+        outbound_requests[-1][0]
+        != "http://mocked-integrations:9999/github/repos/apache/arrow/issues/comments/1234"
+    )
+
+    # Verify Pull Request is updated when baseline and contneder runs are finished
+    for run in contender.runs:
+        run.finished_at = s.sql.func.now()
+        run.status = "finished"
+        run.save()
+
+    publish_benchmark_results_on_pull_requests()
+    assert (
+        outbound_requests[-1][0]
+        == "http://mocked-integrations:9999/github/repos/apache/arrow/issues/comments/1234"
     )
