@@ -189,7 +189,7 @@ def test_publish_benchmark_results_on_merged_pull_requests():
         != "http://mocked-integrations:9999/github/repos/apache/arrow/issues/comments/1234"
     )
 
-    # Verify Pull Request is updated when baseline and contneder runs are finished
+    # Verify Pull Request is updated when baseline and contender runs are finished
     for run in contender.runs:
         run.finished_at = s.sql.func.now()
         run.status = "finished"
