@@ -21,7 +21,7 @@ def supported_benchmarks_info():
 class Notification(Base, BaseMixin):
     __tablename__ = "notification"
     id = NotNull(s.String, primary_key=True, default=generate_uuid)
-    type = NotNull(s.String)  # slack_message or pull_comment
+    type = NotNull(s.String)  # slack_message, pull_comment, pull_comment_alert
     benchmarkable_id = NotNull(s.String, s.ForeignKey("benchmarkable.id"))
     message = Nullable(postgresql.JSONB)
     finished_at = Nullable(s.DateTime(timezone=False))

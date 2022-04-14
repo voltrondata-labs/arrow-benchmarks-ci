@@ -128,6 +128,7 @@ class Benchmarkable(Base, BaseMixin):
         self.notifications.append(Notification(type="slack_message"))
         if self.pull_number:
             self.notifications.append(Notification(type="pull_comment"))
+            self.notifications.append(Notification(type="pull_comment_alert"))
 
     @property
     def runs_with_buildkite_builds_and_publishable_benchmark_results(self):
@@ -226,16 +227,35 @@ class Benchmarkable(Base, BaseMixin):
             return 0, 0
 
         regressions = round(
-            len([result for result in results if result["contender_z_regression"]])
+            len([r for r in results if r["contender_z_regression"]])
             / len(results)
             * 100,
             2,
         )
         improvements = round(
-            len([result for result in results if result["contender_z_improvement"]])
+            len([r for r in results if r["contender_z_improvement"]])
             / len(results)
             * 100,
             2,
         )
 
         return regressions, improvements
+
+    def has_high_level_of_regressions(self):
+        for run in self.runs_with_buildkite_builds_and_publishable_benchmark_results:
+            results = self.get_conbench_compare_results(run.machine)
+
+            # Filter results by Python and R benchmarks
+            results = [r for r in results if r["language"] in ["Python", "R"]]
+            if not results:
+                continue
+
+            # Check if run has at least one Python and R benchmark with z-score < -10.0
+            if [r for r in results if r["contender_z_score"] < -10.0]:
+                return True
+
+            # Check if sum of all run's Python and R benchmarks z-scores < -200.00
+            if sum([r for r in results if r["contender_z_score"] < 0]) < -200.00:
+                return True
+
+        return False
