@@ -43,8 +43,10 @@ def test_publish_benchmark_alerts_on_pull_requests(client):
             outbound_requests[-1][0]
             == f"http://mocked-integrations:9999/github/repos/apache/arrow/issues/{contender.pull_number}/comments"
     )
+    print(outbound_requests[-1][1])
+    assert (
+            outbound_requests[-1][1]
+            == {"body": "Benchmarks have high level of regressions"}
+    )
 
-    alert = contender.pull_alert_notification()
-    print("message>>>>>>", alert.message)
-    assert alert.finished_at
-    assert not alert.message
+    assert contender.pull_alert_notification().finished_at
