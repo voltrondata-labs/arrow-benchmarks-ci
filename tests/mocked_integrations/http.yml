@@ -183,7 +183,7 @@
   expect:
     http:
       method: GET
-      path: /conbench/api/compare/runs/*high/
+      path: /conbench/api/compare/runs/baseline_run_id...contender_run_id/
   actions:
     - reply_http:
         status_code: 200
