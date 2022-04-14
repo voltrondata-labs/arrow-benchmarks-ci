@@ -41,7 +41,7 @@ def test_publish_benchmark_alerts_on_pull_requests(client):
     publish_benchmark_alerts_on_pull_requests()
     assert (
             outbound_requests[-1][0]
-            == "http://mocked-integrations:9999/github/repos/apache/arrow/issues/comments/1234"
+            == f"http://mocked-integrations:9999/github/repos/apache/arrow/issues/{contender.pull_number}/comments"
     )
 
     alert = contender.pull_alert_notification()
