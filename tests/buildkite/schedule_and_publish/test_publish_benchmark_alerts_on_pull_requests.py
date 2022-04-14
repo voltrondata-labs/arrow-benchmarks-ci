@@ -29,3 +29,4 @@ def test_publish_benchmark_alerts_on_pull_requests(client):
         run.save()
 
     publish_benchmark_alerts_on_pull_requests()
+    assert 1 == 0
