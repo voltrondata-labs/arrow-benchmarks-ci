@@ -214,6 +214,11 @@ class Benchmarkable(Base, BaseMixin):
             if notification.type == "pull_comment":
                 return notification
 
+    def pull_alert_notification(self):
+        for notification in self.notifications:
+            if notification.type == "pull_comment_alert":
+                return notification
+
     def get_conbench_compare_results(self, machine):
         return conbench.get_compare_runs(
             self.baseline_machine_run(machine).id,
