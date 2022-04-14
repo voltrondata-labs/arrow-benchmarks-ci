@@ -34,12 +34,12 @@ class Config:
             "benchmarkable_type": "arrow-rs-commit",
             "enable_benchmarking_for_pull_requests": False,
             "github_secret": None,
-        },        
+        },
         "apache/arrow-datafusion": {
             "benchmarkable_type": "arrow-datafusion-commit",
             "enable_benchmarking_for_pull_requests": False,
             "github_secret": None,
-        },        
+        },
     }
     GITHUB_REPO = os.getenv("GITHUB_REPO")
     MAX_COMMITS_TO_FETCH = os.getenv("MAX_COMMITS_TO_FETCH", 20)
@@ -174,7 +174,7 @@ class Config:
                     "langs": {
                         "Python": {"names": ["dataset-read", "dataset-select"]},
                         "C++": {"names": ["cpp-micro"]},
-                        "R": {"names": ["tpch"]}
+                        "R": {"names": ["tpch"]},
                     }
                 },
             },
@@ -189,7 +189,7 @@ class Config:
                     "langs": {
                         "Python": {"names": ["dataset-read", "dataset-select"]},
                         "C++": {"names": ["cpp-micro"]},
-                        "R": {"names": ["tpch"]}
+                        "R": {"names": ["tpch"]},
                     }
                 },
             },

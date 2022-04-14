@@ -12,13 +12,10 @@ def publish_benchmark_alerts_on_pull_requests():
     )
 
     for notification in notifications:
-        print('>>>>>>>')
-        print(notification.benchmarkable.id)
         if not notification.benchmarkable.baseline:
             continue
 
         if not notification.all_runs_with_publishable_benchmark_results_finished():
-            print("Here!")
             continue
 
         if notification.benchmarkable.has_high_level_of_regressions():

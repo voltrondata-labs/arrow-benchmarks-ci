@@ -14,7 +14,6 @@ class Conbench:
 
     def get_compare_runs(self, baseline_run_id, contender_run_id):
         url = f"{self.base_url}/compare/runs/{baseline_run_id}...{contender_run_id}/"
-        print("url", url)
         return self.session.get(url).json()
 
 

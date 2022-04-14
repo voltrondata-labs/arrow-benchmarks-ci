@@ -14,7 +14,9 @@
     "contender_z_improvement": true,
     "less_is_better": true,
     "contender_z_regression": false,
-    "unit": "s"
+    "unit": "s",
+    "language": "Python",
+    "contender_z_score": 0
   },
   {
     "baseline": "10.459 s",
@@ -31,7 +33,9 @@
     "contender_z_improvement": false,
     "less_is_better": true,
     "contender_z_regression": true,
-    "unit": "s"
+    "unit": "s",
+    "language": "R",
+    "contender_z_score": -0.1
   },
   {
     "baseline": "10.459 s",
@@ -48,6 +52,8 @@
     "contender_z_improvement": false,
     "less_is_better": true,
     "contender_z_regression": false,
-    "unit": "s"
+    "unit": "s",
+    "language": "Python",
+    "contender_z_score": 0
   }
 ]

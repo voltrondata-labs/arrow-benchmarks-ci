@@ -1,3 +1,5 @@
+import json
+
 import sqlalchemy as s
 
 from buildkite.schedule_and_publish.get_commits import get_commits
@@ -5,12 +7,7 @@ from buildkite.schedule_and_publish.publish_benchmark_alerts_on_pull_requests im
     publish_benchmark_alerts_on_pull_requests,
 )
 from models.benchmarkable import Benchmarkable
-from models.run import Run
-from tests.helpers import (
-    make_github_webhook_event_for_comment,
-    outbound_requests,
-    test_benchmarkable_id,
-)
+from tests.helpers import outbound_requests
 
 
 def test_publish_benchmark_alerts_on_pull_requests(client):
@@ -40,13 +37,12 @@ def test_publish_benchmark_alerts_on_pull_requests(client):
 
     publish_benchmark_alerts_on_pull_requests()
     assert (
-            outbound_requests[-1][0]
-            == f"http://mocked-integrations:9999/github/repos/apache/arrow/issues/{contender.pull_number}/comments"
+        outbound_requests[-1][0]
+        == f"http://mocked-integrations:9999/github/repos/apache/arrow/issues/{contender.pull_number}/comments"
     )
     print(outbound_requests[-1][1])
-    assert (
-            outbound_requests[-1][1]
-            == {"body": "Benchmarks have high level of regressions"}
-    )
+    assert json.loads(outbound_requests[-1][1]) == {
+        "body": "Benchmarks have high level of regressions"
+    }
 
     assert contender.pull_alert_notification().finished_at

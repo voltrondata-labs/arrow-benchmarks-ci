@@ -56,6 +56,14 @@ steps:
 
   - wait
 
+  - label: "Publish Benchmark High Level of Regressions Alerts to Pull Requests"
+    concurrency: 1
+    concurrency_group: "arrow-bci-deploy"
+    command:
+      - docker-compose -f envs/prod/docker-compose.yml run app python -c 'from buildkite.schedule_and_publish.publish_benchmark_alerts_on_pull_requests import publish_benchmark_alerts_on_pull_requests; publish_benchmark_alerts_on_pull_requests()'
+
+  - wait
+
   - label: "Publish Warnings on Slack"
     concurrency: 1
     concurrency_group: "arrow-bci-deploy"

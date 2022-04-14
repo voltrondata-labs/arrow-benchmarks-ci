@@ -104,7 +104,9 @@ class Machine(Base, BaseMixin):
 
         for repo_with_benchmark_groups in repos_with_benchmark_groups:
             if repo_with_benchmark_groups["benchmarkable_type"] == benchmarkable_type:
-                mock_run = MockRun(repo_with_benchmark_groups, filters=machine_run_filters)
+                mock_run = MockRun(
+                    repo_with_benchmark_groups, filters=machine_run_filters
+                )
                 if not mock_run.has_benchmark_groups_to_execute():
                     return (
                         machine_run_filters,
