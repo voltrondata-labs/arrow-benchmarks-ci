@@ -19,11 +19,14 @@ def test_publish_benchmark_alerts_on_pull_requests(client):
     baseline = Benchmarkable.get("c6fdeaf9fb85622242963dc28660e9592088986c")
 
     for run in baseline.runs:
+        run.buildkite_data = {"1": "1"}
         run.finished_at = s.sql.func.now()
         run.status = "finished"
         run.save()
 
     for run in contender.runs:
+        run.id = run.id + "high"
+        run.buildkite_data = {"1": "1"}
         run.finished_at = s.sql.func.now()
         run.status = "finished"
         run.save()
