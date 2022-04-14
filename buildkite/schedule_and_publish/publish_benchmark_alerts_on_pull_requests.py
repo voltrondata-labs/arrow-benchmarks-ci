@@ -12,6 +12,8 @@ def publish_benchmark_alerts_on_pull_requests():
     )
 
     for notification in notifications:
+        print('>>>>>>>')
+        print(notification.benchmarkable.id)
         if not notification.benchmarkable.baseline:
             continue
 

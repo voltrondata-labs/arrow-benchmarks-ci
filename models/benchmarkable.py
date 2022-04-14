@@ -244,7 +244,7 @@ class Benchmarkable(Base, BaseMixin):
     def has_high_level_of_regressions(self):
         for run in self.runs_with_buildkite_builds_and_publishable_benchmark_results:
             results = self.get_conbench_compare_results(run.machine)
-            print("results")
+            print(">>>>>>>results", results)
 
             # Filter results by Python and R benchmarks
             results = [r for r in results if r["language"] in ["Python", "R"]]
