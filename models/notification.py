@@ -91,6 +91,21 @@ class Notification(Base, BaseMixin):
             + supported_benchmarks_info()
         )
 
+    def generate_pull_comment_body_for_high_regression_alert(
+        self, benchmark_langs_filter
+    ):
+        runs = self.benchmarkable.runs_with_high_regressions(benchmark_langs_filter)
+        if not runs:
+            return
+
+        comment = (
+            f"{benchmark_langs_filter} benchmarks have high level of regressions.\n"
+        )
+        for run in runs:
+            url = self.benchmarkable.conbench_compare_runs_web_url(run.machine)
+            comment += f"[{run.machine.name}]({url})\n"
+        return comment
+
     def generate_slack_message_text(self):
         # Specify baseline and contender benchmarkables (shas or wheels)
         text = (

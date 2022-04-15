@@ -156,7 +156,10 @@ class Benchmarkable(Base, BaseMixin):
         run_id = self.machine_run(machine).id
         return f"{Config.CONBENCH_URL}/compare/runs/{baseline_run_id}...{run_id}/"
 
-    def machine_runs_status(self, machine):
+    def machine_runs_status(
+        self,
+        machine,
+    ):
         run = self.machine_run(machine)
         baseline_run = self.baseline_machine_run(machine)
 
@@ -246,21 +249,19 @@ class Benchmarkable(Base, BaseMixin):
 
         return regressions, improvements
 
-    def has_high_level_of_regressions(self):
+    def runs_with_high_regressions(self, benchmark_langs_filter):
+        runs = []
         for run in self.runs_with_buildkite_builds_and_publishable_benchmark_results:
             results = self.get_conbench_compare_results(run.machine)
-
-            # Filter results by Python and R benchmarks
-            results = [r for r in results if r["language"] in ["Python", "R"]]
+            results = [r for r in results if r["language"] in benchmark_langs_filter]
             if not results:
                 continue
 
-            # Check if run has at least one Python and R benchmark with z-score < -10.0
-            if [r for r in results if r["contender_z_score"] < -10.0]:
-                return True
+            # Check if run has at least one benchmark with z-score < -10.0 or
+            # sum of all run's benchmarks z-scores < -200.00
+            if [r for r in results if r["contender_z_score"] < -10.0] or sum(
+                [r for r in results if r["contender_z_score"] < 0]
+            ) < -200.00:
+                runs.append(run)
 
-            # Check if sum of all run's Python and R benchmarks z-scores < -200.00
-            if sum([r for r in results if r["contender_z_score"] < 0]) < -200.00:
-                return True
-
-        return False
+        return runs
