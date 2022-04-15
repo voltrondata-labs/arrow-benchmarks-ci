@@ -40,9 +40,11 @@ def test_publish_benchmark_alerts_on_pull_requests(client):
         outbound_requests[-1][0]
         == f"http://mocked-integrations:9999/github/repos/apache/arrow/issues/{contender.pull_number}/comments"
     )
-    print(outbound_requests[-1][1])
-    assert json.loads(outbound_requests[-1][1]) == {
-        "body": "Benchmarks have high level of regressions"
-    }
+
+    expected_comment_body = (
+        "['Python', 'R'] benchmarks have high level of regressions.\n"
+        "[ursa-i9-9960x](http://mocked-integrations:9999/conbench/compare/runs/baseline_run_id...contender_run_id/)\n"
+    )
+    assert json.loads(outbound_requests[-1][1]) == {"body": expected_comment_body}
 
     assert contender.pull_alert_notification().finished_at
