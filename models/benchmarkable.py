@@ -260,7 +260,7 @@ class Benchmarkable(Base, BaseMixin):
             # Check if run has at least one benchmark with z-score < -10.0 or
             # sum of all run's benchmarks z-scores < -200.00
             if [r for r in results if r["contender_z_score"] < -10.0] or sum(
-                [r for r in results if r["contender_z_score"] < 0]
+                [r["contender_z_score"] for r in results if r["contender_z_score"] < 0]
             ) < -200.00:
                 runs.append(run)
 
