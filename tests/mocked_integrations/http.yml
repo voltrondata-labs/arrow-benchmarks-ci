@@ -178,6 +178,16 @@
     - reply_http:
         status_code: 200
         body_from_file: './pipy/get_pyarrow_project.json'
+- key: get_compare_runs_api_high_level_of_regressions
+  kind: Behavior
+  expect:
+    http:
+      method: GET
+      path: /conbench/api/compare/runs/baseline_run_id...contender_run_id/
+  actions:
+    - reply_http:
+        status_code: 200
+        body_from_file: './conbench/get_compare_runs_high_level_of_regressions.json'
 - key: get_compare_runs_api
   kind: Behavior
   expect:

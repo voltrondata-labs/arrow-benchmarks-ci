@@ -128,6 +128,7 @@ class Benchmarkable(Base, BaseMixin):
         self.notifications.append(Notification(type="slack_message"))
         if self.pull_number:
             self.notifications.append(Notification(type="pull_comment"))
+            self.notifications.append(Notification(type="pull_comment_alert"))
 
     @property
     def runs_with_buildkite_builds_and_publishable_benchmark_results(self):
@@ -155,7 +156,10 @@ class Benchmarkable(Base, BaseMixin):
         run_id = self.machine_run(machine).id
         return f"{Config.CONBENCH_URL}/compare/runs/{baseline_run_id}...{run_id}/"
 
-    def machine_runs_status(self, machine):
+    def machine_runs_status(
+        self,
+        machine,
+    ):
         run = self.machine_run(machine)
         baseline_run = self.baseline_machine_run(machine)
 
@@ -213,6 +217,11 @@ class Benchmarkable(Base, BaseMixin):
             if notification.type == "pull_comment":
                 return notification
 
+    def pull_alert_notification(self):
+        for notification in self.notifications:
+            if notification.type == "pull_comment_alert":
+                return notification
+
     def get_conbench_compare_results(self, machine):
         return conbench.get_compare_runs(
             self.baseline_machine_run(machine).id,
@@ -226,16 +235,33 @@ class Benchmarkable(Base, BaseMixin):
             return 0, 0
 
         regressions = round(
-            len([result for result in results if result["contender_z_regression"]])
+            len([r for r in results if r["contender_z_regression"]])
             / len(results)
             * 100,
             2,
         )
         improvements = round(
-            len([result for result in results if result["contender_z_improvement"]])
+            len([r for r in results if r["contender_z_improvement"]])
             / len(results)
             * 100,
             2,
         )
 
         return regressions, improvements
+
+    def runs_with_high_regressions(self, benchmark_langs_filter):
+        runs = []
+        for run in self.runs_with_buildkite_builds_and_publishable_benchmark_results:
+            results = self.get_conbench_compare_results(run.machine)
+            results = [r for r in results if r["language"] in benchmark_langs_filter]
+            if not results:
+                continue
+
+            # Check if run has at least one benchmark with z-score < -10.0 or
+            # sum of all run's benchmarks z-scores < -200.00
+            if [r for r in results if r["contender_z_score"] < -10.0] or sum(
+                [r["contender_z_score"] for r in results if r["contender_z_score"] < 0]
+            ) < -200.00:
+                runs.append(run)
+
+        return runs

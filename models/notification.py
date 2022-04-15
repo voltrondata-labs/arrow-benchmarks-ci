@@ -21,7 +21,7 @@ def supported_benchmarks_info():
 class Notification(Base, BaseMixin):
     __tablename__ = "notification"
     id = NotNull(s.String, primary_key=True, default=generate_uuid)
-    type = NotNull(s.String)  # slack_message or pull_comment
+    type = NotNull(s.String)  # slack_message, pull_comment, pull_comment_alert
     benchmarkable_id = NotNull(s.String, s.ForeignKey("benchmarkable.id"))
     message = Nullable(postgresql.JSONB)
     finished_at = Nullable(s.DateTime(timezone=False))
@@ -90,6 +90,21 @@ class Notification(Base, BaseMixin):
             + self.generate_text_with_buildkite_build_urls()
             + supported_benchmarks_info()
         )
+
+    def generate_pull_comment_body_for_high_regression_alert(
+        self, benchmark_langs_filter
+    ):
+        runs = self.benchmarkable.runs_with_high_regressions(benchmark_langs_filter)
+        if not runs:
+            return
+
+        comment = (
+            f"{benchmark_langs_filter} benchmarks have high level of regressions.\n"
+        )
+        for run in runs:
+            url = self.benchmarkable.conbench_compare_runs_web_url(run.machine)
+            comment += f"[{run.machine.name}]({url})\n"
+        return comment
 
     def generate_slack_message_text(self):
         # Specify baseline and contender benchmarkables (shas or wheels)
