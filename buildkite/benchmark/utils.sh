@@ -19,12 +19,6 @@ create_conda_env_for_arrow_commit() {
   source dev/conbench_envs/hooks.sh activate_conda_env_for_benchmark_build
   source dev/conbench_envs/hooks.sh install_arrow_python_dependencies
   
-  if [[ "$OSTYPE" == "darwin"* ]]
-  then
-    # archery gets SIGKILLed with cctools==973.0.1
-    conda install -y -c conda-forge cctools==949.0.1
-  fi
-  
   # Workaround for https://github.com/aws/aws-sdk-cpp/issues/1820
   conda install -y -c conda-forge cmake==3.21.3
   
