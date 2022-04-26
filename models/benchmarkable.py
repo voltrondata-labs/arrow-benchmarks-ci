@@ -253,7 +253,11 @@ class Benchmarkable(Base, BaseMixin):
         runs = []
         for run in self.runs_with_buildkite_builds_and_publishable_benchmark_results:
             results = self.get_conbench_compare_results(run.machine)
-            results = [r for r in results if r["language"] in benchmark_langs_filter and r["contender_z_score"]]
+            results = [
+                r
+                for r in results
+                if r["language"] in benchmark_langs_filter and r["contender_z_score"]
+            ]
             if not results:
                 continue
 
