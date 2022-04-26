@@ -1,3 +1,5 @@
+import traceback
+
 import sqlalchemy as s
 from sqlalchemy.dialects import postgresql
 from sqlalchemy.orm import backref, relationship
@@ -252,7 +254,15 @@ class Benchmarkable(Base, BaseMixin):
     def runs_with_high_regressions(self, benchmark_langs_filter):
         runs = []
         for run in self.runs_with_buildkite_builds_and_publishable_benchmark_results:
-            results = self.get_conbench_compare_results(run.machine)
+            try:
+                results = self.get_conbench_compare_results(run.machine)
+            except IntegrationException:
+                # Handle a case when no benchmarks were run for either contender or baseline run
+                log.info(traceback.format_exc())
+                continue
+            except Exception as e:
+                raise e
+
             results = [
                 r
                 for r in results
