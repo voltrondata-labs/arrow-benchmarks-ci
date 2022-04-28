@@ -125,7 +125,7 @@ class Notification(Base, BaseMixin):
             self.benchmarkable.runs_with_buildkite_builds_and_publishable_benchmark_results
             + self.benchmarkable.baseline.runs_with_buildkite_builds_and_publishable_benchmark_results
         ):
-            text += f"{run.buildkite_build_web_url_with_status}\n"
+            text += f"{run.buildkite_build_web_url_with_status(format=self.type)}\n"
 
         return text
 

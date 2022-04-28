@@ -51,11 +51,16 @@ class Run(Base, BaseMixin):
     def buildkite_build_web_url(self):
         return self.buildkite_data.get("web_url")
 
-    @property
-    def buildkite_build_web_url_with_status(self):
+    def buildkite_build_web_url_with_status(self, format):
+        if format == "slack_message":
+            return (
+                f"[{self.status.capitalize()}] <{self.buildkite_build_web_url}| "
+                f"`{self.benchmarkable.displayable_id}` {self.machine_name}>"
+            )
+
         return (
-            f"[{self.status.capitalize()}] <{self.buildkite_build_web_url}| "
-            f"`{self.benchmarkable.displayable_id}` {self.machine_name}>"
+            f"[{self.status.capitalize()}] "
+            f"[`{self.benchmarkable.displayable_id}` {self.machine_name}]({self.buildkite_build_web_url})"
         )
 
     @property
