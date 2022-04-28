@@ -197,6 +197,19 @@ class Config:
             "offline_warning_enabled": False,
             "publish_benchmark_results": False,
         },
+        "ec2-m5-4xlarge-us-east-2": {
+            "info": "Supported benchmark langs: R",
+            "default_filters": {
+                "arrow-commit": {
+                    "langs": {
+                        "R": {"names": ["tpch"]},
+                    }
+                },
+            },
+            "supported_filters": ["lang", "name"],
+            "offline_warning_enabled": False,
+            "publish_benchmark_results": False,
+        },
         "voltron-pavilion": {
             "info": "Supported benchmark langs: Python, R, JavaScript, C++, Java",
             "default_filters": {"arrow-commit": {"langs": {"R": {"names": ["tpch"]}}}},
