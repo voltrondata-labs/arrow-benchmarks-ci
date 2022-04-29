@@ -26,6 +26,7 @@ class Machine(Base, BaseMixin):
     hostname = Nullable(s.String)
     ip_address = Nullable(s.String)
     port = Nullable(s.Integer)
+    max_builds = NotNull(s.Integer, server_default="1")
     runs = relationship("Run", backref=backref("machine", lazy="joined"))
 
     @property
