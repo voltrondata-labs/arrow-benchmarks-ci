@@ -95,7 +95,7 @@ machine_configs = {
         "supported_filters": ["lang", "command"],
         "offline_warning_enabled": False,
         "publish_benchmark_results": False,
-        "max_builds": 1,
+        "max_builds": 3,
     },
 }
 
