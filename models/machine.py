@@ -116,8 +116,8 @@ class Machine(Base, BaseMixin):
 
         return machine_run_filters, None
 
-    def has_scheduled_or_running_builds(self):
-        return len(buildkite.get_scheduled_builds(self.buildkite_pipeline_name)) > 0
+    def scheduled_or_running_builds(self):
+        return buildkite.get_scheduled_builds(self.buildkite_pipeline_name)
 
     def is_reachable(self):
         socket_timeout = 5
