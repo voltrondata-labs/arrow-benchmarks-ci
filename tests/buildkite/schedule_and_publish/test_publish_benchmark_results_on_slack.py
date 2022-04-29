@@ -63,7 +63,7 @@ def test_publish_benchmark_results_on_slack():
     update_benchmark_builds_status()
     assert len(Run.all(status="scheduled")) == 0
     assert len(Run.all(status="finished")) == 2
-    assert len(Run.all(status="failed")) == 5
+    assert len(Run.all(status="failed")) == 6
 
     messages = publish_benchmark_results_on_slack()
     assert messages == [expected_slack_message()]
