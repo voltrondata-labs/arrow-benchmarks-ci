@@ -65,6 +65,7 @@ machine_configs = {
         "supported_filters": ["lang", "name"],
         "offline_warning_enabled": True,
         "publish_benchmark_results": True,
+        "max_builds": 1,
     },
     "ursa-thinkcentre-m75q": {
         "info": "Supported benchmark langs: C++, Java",
@@ -79,6 +80,7 @@ machine_configs = {
         "supported_filters": ["lang", "command"],
         "offline_warning_enabled": True,
         "publish_benchmark_results": True,
+        "max_builds": 1,
     },
     "new-machine": {
         "info": "Supported benchmark langs: C++, Java",
@@ -93,6 +95,7 @@ machine_configs = {
         "supported_filters": ["lang", "command"],
         "offline_warning_enabled": False,
         "publish_benchmark_results": False,
+        "max_builds": 3,
     },
 }
 

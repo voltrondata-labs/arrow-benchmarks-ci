@@ -30,13 +30,14 @@ def create_benchmark_builds():
     for machine in Machine.all():
         create_benchmark_builds_for_pulls(machine.name)
 
-        if machine.has_scheduled_or_running_builds():
+        scheduled_builds_count = len(machine.scheduled_or_running_builds())
+
+        if scheduled_builds_count >= machine.max_builds:
             continue
 
-        unscheduled_runs = Run.all(
-            limit=1,
+        for unscheduled_run in Run.all(
+            limit=machine.max_builds - scheduled_builds_count,
             order_by="created_at",
             **dict(machine_name=machine.name, status="created"),
-        )
-        if len(unscheduled_runs) > 0:
-            unscheduled_runs[0].create_benchmark_build()
+        ):
+            unscheduled_run.create_benchmark_build()

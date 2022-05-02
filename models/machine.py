@@ -26,6 +26,7 @@ class Machine(Base, BaseMixin):
     hostname = Nullable(s.String)
     ip_address = Nullable(s.String)
     port = Nullable(s.Integer)
+    max_builds = NotNull(s.Integer, server_default="1")
     runs = relationship("Run", backref=backref("machine", lazy="joined"))
 
     @property
@@ -115,8 +116,8 @@ class Machine(Base, BaseMixin):
 
         return machine_run_filters, None
 
-    def has_scheduled_or_running_builds(self):
-        return len(buildkite.get_scheduled_builds(self.buildkite_pipeline_name)) > 0
+    def scheduled_or_running_builds(self):
+        return buildkite.get_scheduled_builds(self.buildkite_pipeline_name)
 
     def is_reachable(self):
         socket_timeout = 5
