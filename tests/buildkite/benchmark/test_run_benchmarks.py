@@ -21,7 +21,6 @@ expected_setup_commands_for_cpp_benchmarks = [
 
 expected_setup_commands_for_r_benchmarks = [
     ("source buildkite/benchmark/utils.sh build_arrow_r", ".", True),
-    ("source buildkite/benchmark/utils.sh install_duckdb_r_with_tpch", ".", True),
     ("source buildkite/benchmark/utils.sh install_arrowbench", ".", True),
     ("source buildkite/benchmark/utils.sh create_data_dir", ".", True),
 ]

@@ -53,7 +53,6 @@ Examples of `benchmarks.json` in repos with benchmarks integrated with Conbench:
         "setup_commands_for_lang_benchmarks": {
             "R": [
                 "build_arrow_r",
-                "install_duckdb_r_with_tpch",
                 "install_arrowbench",
                 "create_data_dir",
             ]

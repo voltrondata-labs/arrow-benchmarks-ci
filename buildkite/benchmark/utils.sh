@@ -106,21 +106,6 @@ install_arrowbench() {
   R -e "remotes::install_local('./arrowbench')"
 }
 
-install_duckdb_r_with_tpch() {
-  git clone https://github.com/duckdb/duckdb.git
-
-  # now fetch the latest tag to install
-  cd duckdb
-  git fetch --tags
-  latestTag=$(git describe --tags `git rev-list --tags --max-count=1`)
-  git checkout $latestTag
-
-  # and then do the install
-  cd tools/rpkg
-  R -e "remotes::install_deps()"
-  DUCKDB_R_EXTENSIONS=tpch R CMD INSTALL .
-}
-
 install_java_script_project_dependencies() {
   pushd $REPO_DIR
   source dev/conbench_envs/hooks.sh install_java_script_project_dependencies
