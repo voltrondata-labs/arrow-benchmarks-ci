@@ -37,7 +37,6 @@ repos_with_benchmark_groups = [
             "Python": ["create_data_dir"],
             "R": [
                 "build_arrow_r",
-                "install_duckdb_r_with_tpch",
                 "install_arrowbench",
                 "create_data_dir",
             ],
