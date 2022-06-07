@@ -41,7 +41,11 @@ class Run(Base, BaseMixin):
             if self.reason == "pull-request"
             else ""
         )
-        return f"{self.benchmarkable.type} {self.benchmarkable.id} reason = {self.reason} {pull_request_info} filters = {self.filters}"
+        return (
+            f"{self.benchmarkable.type} {self.benchmarkable.id} reason = {self.reason} {pull_request_info} "
+            f"filters = {self.filters} message {self.benchmarkable.displayable_message} "
+            f"timestamp={self.benchmarkable.created_at}"
+        )
 
     @property
     def buildkite_build_url(self):
