@@ -94,6 +94,15 @@ class Run(Base, BaseMixin):
 
         return f"{self.benchmarkable.type}: {self.benchmarkable_id}"
 
+    @property
+    def conbench_run_reason(self):
+        if self.reason.endswith("-commit"):
+            return "commit"
+        if self.reason == "pull-request":
+            return "pull request"
+
+        return self.reason
+
     def create_benchmark_build(self):
         env = {
             "BENCHMARKABLE": self.benchmarkable_id,
@@ -102,7 +111,7 @@ class Run(Base, BaseMixin):
             "MACHINE": self.machine_name,
             "RUN_ID": self.id,
             "RUN_NAME": self.buildkite_run_name,
-            "RUN_REASON": self.reason,
+            "RUN_REASON": self.conbench_run_reason,
             "PYTHON_VERSION": Config.PYTHON_VERSION_FOR_BENCHMARK_BUILDS,
         }
 
