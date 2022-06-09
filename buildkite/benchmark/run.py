@@ -116,7 +116,7 @@ class BenchmarkGroup:
 
     @property
     def command(self):
-        command = f'conbench {self.name} {self.options} --run-id=$RUN_ID --run-name="$RUN_NAME"'
+        command = f'conbench {self.name} {self.options} --run-id=$RUN_ID --run-name="$RUN_NAME" --run-reason="$RUN_REASON"'
 
         if self.lang == "Java":
             command += f" --commit={benchmarkable_id} --src={build_dir}/arrow"
