@@ -32,47 +32,47 @@ expected_setup_commands_for_python_benchmarks = [
 
 expected_commands_for_python_benchmarks = expected_setup_commands_for_python_benchmarks + [
     (
-        'conbench csv-read ALL --iterations=3 --drop-caches=true --run-id=$RUN_ID --run-name="$RUN_NAME"',
+        'conbench csv-read ALL --iterations=3 --drop-caches=true --run-id=$RUN_ID --run-name="$RUN_NAME" --run-reason="$RUN_REASON"',
         "benchmarks",
         False,
     ),
     (
-        'conbench dataframe-to-table ALL --iterations=3 --drop-caches=true --run-id=$RUN_ID --run-name="$RUN_NAME"',
+        'conbench dataframe-to-table ALL --iterations=3 --drop-caches=true --run-id=$RUN_ID --run-name="$RUN_NAME" --run-reason="$RUN_REASON"',
         "benchmarks",
         False,
     ),
     (
-        'conbench dataset-filter ALL --iterations=3 --drop-caches=true --run-id=$RUN_ID --run-name="$RUN_NAME"',
+        'conbench dataset-filter ALL --iterations=3 --drop-caches=true --run-id=$RUN_ID --run-name="$RUN_NAME" --run-reason="$RUN_REASON"',
         "benchmarks",
         False,
     ),
     (
-        'conbench dataset-read ALL --iterations=1 --all=true --drop-caches=true --run-id=$RUN_ID --run-name="$RUN_NAME"',
+        'conbench dataset-read ALL --iterations=1 --all=true --drop-caches=true --run-id=$RUN_ID --run-name="$RUN_NAME" --run-reason="$RUN_REASON"',
         "benchmarks",
         False,
     ),
     (
-        'conbench dataset-select ALL --iterations=3 --drop-caches=true --run-id=$RUN_ID --run-name="$RUN_NAME"',
+        'conbench dataset-select ALL --iterations=3 --drop-caches=true --run-id=$RUN_ID --run-name="$RUN_NAME" --run-reason="$RUN_REASON"',
         "benchmarks",
         False,
     ),
     (
-        'conbench dataset-selectivity ALL --iterations=3 --all=true --drop-caches=true --run-id=$RUN_ID --run-name="$RUN_NAME"',
+        'conbench dataset-selectivity ALL --iterations=3 --all=true --drop-caches=true --run-id=$RUN_ID --run-name="$RUN_NAME" --run-reason="$RUN_REASON"',
         "benchmarks",
         False,
     ),
     (
-        'conbench file-read ALL --iterations=3 --all=true --drop-caches=true --run-id=$RUN_ID --run-name="$RUN_NAME"',
+        'conbench file-read ALL --iterations=3 --all=true --drop-caches=true --run-id=$RUN_ID --run-name="$RUN_NAME" --run-reason="$RUN_REASON"',
         "benchmarks",
         False,
     ),
     (
-        'conbench file-write ALL --iterations=3 --all=true --drop-caches=true --run-id=$RUN_ID --run-name="$RUN_NAME"',
+        'conbench file-write ALL --iterations=3 --all=true --drop-caches=true --run-id=$RUN_ID --run-name="$RUN_NAME" --run-reason="$RUN_REASON"',
         "benchmarks",
         False,
     ),
     (
-        'conbench wide-dataframe --iterations=3 --all=true --drop-caches=true --run-id=$RUN_ID --run-name="$RUN_NAME"',
+        'conbench wide-dataframe --iterations=3 --all=true --drop-caches=true --run-id=$RUN_ID --run-name="$RUN_NAME" --run-reason="$RUN_REASON"',
         "benchmarks",
         False,
     ),
@@ -80,22 +80,22 @@ expected_commands_for_python_benchmarks = expected_setup_commands_for_python_ben
 
 expected_commands_for_r_benchmarks = expected_setup_commands_for_r_benchmarks + [
     (
-        'conbench dataframe-to-table ALL --iterations=3 --drop-caches=true --language=R --run-id=$RUN_ID --run-name="$RUN_NAME"',
+        'conbench dataframe-to-table ALL --iterations=3 --drop-caches=true --language=R --run-id=$RUN_ID --run-name="$RUN_NAME" --run-reason="$RUN_REASON"',
         "benchmarks",
         False,
     ),
     (
-        'conbench file-read ALL --iterations=3 --all=true --drop-caches=true --language=R --run-id=$RUN_ID --run-name="$RUN_NAME"',
+        'conbench file-read ALL --iterations=3 --all=true --drop-caches=true --language=R --run-id=$RUN_ID --run-name="$RUN_NAME" --run-reason="$RUN_REASON"',
         "benchmarks",
         False,
     ),
     (
-        'conbench file-write ALL --iterations=3 --all=true --drop-caches=true --language=R --run-id=$RUN_ID --run-name="$RUN_NAME"',
+        'conbench file-write ALL --iterations=3 --all=true --drop-caches=true --language=R --run-id=$RUN_ID --run-name="$RUN_NAME" --run-reason="$RUN_REASON"',
         "benchmarks",
         False,
     ),
     (
-        'conbench partitioned-dataset-filter --iterations=3 --all=true --drop-caches=true --run-id=$RUN_ID --run-name="$RUN_NAME"',
+        'conbench partitioned-dataset-filter --iterations=3 --all=true --drop-caches=true --run-id=$RUN_ID --run-name="$RUN_NAME" --run-reason="$RUN_REASON"',
         "benchmarks",
         False,
     ),
@@ -103,7 +103,7 @@ expected_commands_for_r_benchmarks = expected_setup_commands_for_r_benchmarks + 
 
 expected_commands_for_cpp_benchmarks = expected_setup_commands_for_cpp_benchmarks + [
     (
-        'conbench cpp-micro --iterations=1 --run-id=$RUN_ID --run-name="$RUN_NAME"',
+        'conbench cpp-micro --iterations=1 --run-id=$RUN_ID --run-name="$RUN_NAME" --run-reason="$RUN_REASON"',
         "benchmarks",
         False,
     ),
@@ -111,7 +111,7 @@ expected_commands_for_cpp_benchmarks = expected_setup_commands_for_cpp_benchmark
 
 expected_commands_for_cpp_benchmarks_with_one_command_only = expected_setup_commands_for_cpp_benchmarks + [
     (
-        'conbench cpp-micro --suite-filter=arrow-compute-vector-selection-benchmark --benchmark-filter=TakeStringRandomIndicesWithNulls/262144/2 --iterations=3  --run-id=$RUN_ID --run-name="$RUN_NAME"',
+        'conbench cpp-micro --suite-filter=arrow-compute-vector-selection-benchmark --benchmark-filter=TakeStringRandomIndicesWithNulls/262144/2 --iterations=3  --run-id=$RUN_ID --run-name="$RUN_NAME" --run-reason="$RUN_REASON"',
         "benchmarks",
         False,
     ),
@@ -147,7 +147,7 @@ tests = [
         + expected_setup_commands_for_python_benchmarks
         + [
             (
-                'conbench dataset-read ALL --iterations=1 --all=true --drop-caches=true --run-id=$RUN_ID --run-name="$RUN_NAME"',
+                'conbench dataset-read ALL --iterations=1 --all=true --drop-caches=true --run-id=$RUN_ID --run-name="$RUN_NAME" --run-reason="$RUN_REASON"',
                 "benchmarks",
                 False,
             ),
@@ -159,12 +159,12 @@ tests = [
         + expected_setup_commands_for_python_benchmarks
         + [
             (
-                'conbench file-read ALL --iterations=3 --all=true --drop-caches=true --run-id=$RUN_ID --run-name="$RUN_NAME"',
+                'conbench file-read ALL --iterations=3 --all=true --drop-caches=true --run-id=$RUN_ID --run-name="$RUN_NAME" --run-reason="$RUN_REASON"',
                 "benchmarks",
                 False,
             ),
             (
-                'conbench file-write ALL --iterations=3 --all=true --drop-caches=true --run-id=$RUN_ID --run-name="$RUN_NAME"',
+                'conbench file-write ALL --iterations=3 --all=true --drop-caches=true --run-id=$RUN_ID --run-name="$RUN_NAME" --run-reason="$RUN_REASON"',
                 "benchmarks",
                 False,
             ),
@@ -172,12 +172,12 @@ tests = [
         + expected_setup_commands_for_r_benchmarks
         + [
             (
-                'conbench file-read ALL --iterations=3 --all=true --drop-caches=true --language=R --run-id=$RUN_ID --run-name="$RUN_NAME"',
+                'conbench file-read ALL --iterations=3 --all=true --drop-caches=true --language=R --run-id=$RUN_ID --run-name="$RUN_NAME" --run-reason="$RUN_REASON"',
                 "benchmarks",
                 False,
             ),
             (
-                'conbench file-write ALL --iterations=3 --all=true --drop-caches=true --language=R --run-id=$RUN_ID --run-name="$RUN_NAME"',
+                'conbench file-write ALL --iterations=3 --all=true --drop-caches=true --language=R --run-id=$RUN_ID --run-name="$RUN_NAME" --run-reason="$RUN_REASON"',
                 "benchmarks",
                 False,
             ),

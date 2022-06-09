@@ -102,6 +102,7 @@ class Run(Base, BaseMixin):
             "MACHINE": self.machine_name,
             "RUN_ID": self.id,
             "RUN_NAME": self.buildkite_run_name,
+            "RUN_REASON": self.reason,
             "PYTHON_VERSION": Config.PYTHON_VERSION_FOR_BENCHMARK_BUILDS,
         }
 
