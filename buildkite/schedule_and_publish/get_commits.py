@@ -11,11 +11,9 @@ pattern = "\nCloses #(.*) from"
 compiled_pattern = re.compile(pattern)
 
 
-def get_originating_pull_number(commit_dict):
+def get_originating_pull_number(github, commit_dict):
     try:
-        return (
-            compiled_pattern.search(commit_dict["commit"]["message"]).group(1).strip()
-        )
+        return github.get_pulls(commit_dict["sha"])[0]["number"]
     except Exception as e:
         log.error(
             f"Unable to get originating pull number for commit = {commit_dict['sha']} "
@@ -25,11 +23,12 @@ def get_originating_pull_number(commit_dict):
 
 
 def get_commits_for_repo(repo, benchmarkable_type):
-    commit_dicts = Github(repo).get_commits()
+    github = Github(repo)
+    commit_dicts = github.get_commits()
     commit_dicts.reverse()
 
     for commit_dict in commit_dicts:
-        pull_number = get_originating_pull_number(commit_dict)
+        pull_number = get_originating_pull_number(github, commit_dict)
 
         if len(commit_dict["parents"]) > 0:
             baseline_id = commit_dict["parents"][-1]["sha"]

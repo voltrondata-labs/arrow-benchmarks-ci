@@ -29,6 +29,9 @@ class Github:
     def get_pull(self, pull_number):
         return self.session.get(f"{self.base_url}/pulls/{pull_number}").json()
 
+    def get_pulls(self, sha):
+        return self.session.get(f"{self.base_url}/commits/{sha}/pulls").json()
+
     def create_pull_comment(self, pull_number, comment_body):
         data = {"body": comment_body}
         return self.session.post(
