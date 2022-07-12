@@ -10,7 +10,7 @@ def get_originating_pull_number(github, commit_dict):
     except Exception as e:
         log.error(
             f"Unable to get originating pull number for commit = {commit_dict['sha']} "
-            f"from message = {commit_dict['commit']['message']}"
+            f"with message = {commit_dict['commit']['message']}"
         )
         log.exception(e)
 
