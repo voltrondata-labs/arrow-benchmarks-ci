@@ -1,14 +1,7 @@
-import re
-
 from config import Config
 from models.benchmarkable import Benchmarkable
 from integrations.github import Github
 from logger import log
-
-# apache/arrow commits into master branch have messages
-# that contain originating pull request number in phrases like "\n\nCloses #10973 from ..."
-pattern = "\nCloses #(.*) from"
-compiled_pattern = re.compile(pattern)
 
 
 def get_originating_pull_number(github, commit_dict):
