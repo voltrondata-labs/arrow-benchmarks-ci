@@ -39,6 +39,16 @@
     - reply_http:
         status_code: 200
         body_from_file: './github/get_pulls_1234.json'
+- key: get_pulls_for_sha
+  kind: Behavior
+  expect:
+    http:
+      method: GET
+      path: /github/repos/apache/arrow/commits/*/pulls
+  actions:
+    - reply_http:
+        status_code: 200
+        body_from_file: './github/get_pulls_for_sha.json'
 - key: post_issues_comments
   kind: Behavior
   expect:
