@@ -137,7 +137,19 @@ class Config:
             "default_filters": {
                 "arrow-commit": {
                     "langs": {
-                        "Python": {"names": ["dataset-read", "dataset-select"]},
+                        "Python": {
+                            "names": [
+                                "csv-read",
+                                "dataframe-to-table",
+                                "dataset-filter",
+                                "dataset-read",
+                                "dataset-select",
+                                "dataset-selectivity",
+                                "file-read",
+                                "file-write",
+                                "wide-dataframe",
+                            ]
+                        },
                     }
                 },
                 "benchmarkable-repo-commit": {
