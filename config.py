@@ -229,12 +229,12 @@ class Config:
             "publish_benchmark_results": False,
             "max_builds": 2,
         },
-#         "voltron-pavilion": {
-#             "info": "Supported benchmark langs: Python, R, JavaScript, C++, Java",
-#             "default_filters": {"arrow-commit": {"langs": {"R": {"names": ["tpch"]}}}},
-#             "supported_filters": ["lang", "name"],
-#             "offline_warning_enabled": True,
-#             "publish_benchmark_results": False,
-#             "max_builds": 1,
-#         },
+        "voltron-pavilion": {
+            "info": "Supported benchmark langs: Python, R, JavaScript, C++, Java",
+            "default_filters": {"arrow-commit": {"langs": {"R": {"names": ["tpch"]}}}},
+            "supported_filters": ["lang", "name"],
+            "offline_warning_enabled": True,
+            "publish_benchmark_results": False,
+            "max_builds": 1,
+        },
     }
