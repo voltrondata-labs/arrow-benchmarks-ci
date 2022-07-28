@@ -1,5 +1,4 @@
 # arrow-benchmarks-ci
-
 Arrow Benchmarks CI is responsible for 
 - orchestrating and prioritizing benchmark builds for [Apache Arrow](https://github.com/apache/arrow) based on 
 the [list of benchmarks](https://github.com/ursacomputing/benchmarks/blob/main/benchmarks.json) in [Benchmarks repo](https://github.com/ursacomputing/benchmarks)
