@@ -10,7 +10,7 @@ from tests.helpers import (
 )
 
 expected_setup_commands = [
-    ("git clone https://github.com/ursacomputing/benchmarks.git", ".", True),
+    ("git clone https://github.com/voltrondata-labs/benchmarks.git", ".", True),
     ("git fetch && git checkout main", "benchmarks", True),
     ("python setup.py develop", "benchmarks", True),
 ]
@@ -207,7 +207,7 @@ def test_run_benchmarks():
     # that added since 2b217db086260ab3bb243e26253b7c1de0180777
     repo[
         "url_for_benchmark_groups_list_json"
-    ] = "https://raw.githubusercontent.com/ursacomputing/benchmarks/2b217db086260ab3bb243e26253b7c1de0180777/benchmarks.json"
+    ] = "https://raw.githubusercontent.com/voltrondata-labs/benchmarks/2b217db086260ab3bb243e26253b7c1de0180777/benchmarks.json"
     for test in tests:
         print(test)
         run = MockRun(repo, test["run_filters"])

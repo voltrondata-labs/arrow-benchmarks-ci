@@ -26,12 +26,12 @@ logging.basicConfig(level=logging.DEBUG)
 repos_with_benchmark_groups = [
     {
         "benchmarkable_type": "arrow-commit",
-        "repo": "https://github.com/ursacomputing/benchmarks.git",
+        "repo": "https://github.com/voltrondata-labs/benchmarks.git",
         "root": "benchmarks",
         "branch": "main",
         "setup_commands": ["python setup.py develop"],
         "path_to_benchmark_groups_list_json": "benchmarks/benchmarks.json",
-        "url_for_benchmark_groups_list_json": "https://raw.githubusercontent.com/ursacomputing/benchmarks/main/benchmarks.json",
+        "url_for_benchmark_groups_list_json": "https://raw.githubusercontent.com/voltrondata-labs/benchmarks/main/benchmarks.json",
         "setup_commands_for_lang_benchmarks": {  # These commands need to be defined as functions in buildkite/benchmark/utils.sh
             "C++": ["install_archery"],
             "Python": ["create_data_dir"],
@@ -439,7 +439,7 @@ class Run:
 # 1. testing Run().run_all_benchmark_groups method in non-benchmark machine environment without executing any
 # shell commands
 # 2. checking if provided benchmark filters on PR benchmark request comments do not filter out all benchmarks in
-# https://raw.githubusercontent.com/ursacomputing/benchmarks/main/benchmarks.json
+# https://raw.githubusercontent.com/voltrondata-labs/benchmarks/main/benchmarks.json
 class MockRun(Run):
     def __init__(self, repo_params, filters):
         super().__init__(repo_params)
