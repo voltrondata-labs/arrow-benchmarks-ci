@@ -102,7 +102,7 @@ install_archery() {
 
 install_arrowbench() {
   # do I need to cd into benchmarks dir?
-  git clone https://github.com/ursacomputing/arrowbench.git
+  git clone https://github.com/voltrondata-labs/arrowbench.git
   R -e "remotes::install_local('./arrowbench')"
 }
 
