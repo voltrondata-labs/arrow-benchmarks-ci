@@ -94,7 +94,6 @@ build_arrow_java() {
 }
 
 install_archery() {
-  clone_repo
   pushd $REPO_DIR
   source dev/conbench_envs/hooks.sh install_archery
   popd
