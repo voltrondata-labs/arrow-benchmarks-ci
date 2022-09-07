@@ -94,12 +94,9 @@ build_arrow_java() {
 }
 
 install_archery() {
-  if [[ "$OSTYPE" != "darwin"* ]]
-  then
-    clone_repo
-  fi
-
+  clone_repo
   pushd $REPO_DIR
+  source dev/conbench_envs/hooks.sh build_arrow_python
   source dev/conbench_envs/hooks.sh install_archery
   popd
 }
