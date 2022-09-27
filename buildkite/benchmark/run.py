@@ -29,7 +29,7 @@ repos_with_benchmark_groups = [
         "repo": "https://github.com/voltrondata-labs/benchmarks.git",
         "root": "benchmarks",
         "branch": "main",
-        "setup_commands": ["python setup.py develop"],
+        "setup_commands": ["pip install -e ."],
         "path_to_benchmark_groups_list_json": "benchmarks/benchmarks.json",
         "url_for_benchmark_groups_list_json": "https://raw.githubusercontent.com/voltrondata-labs/benchmarks/main/benchmarks.json",
         "setup_commands_for_lang_benchmarks": {  # These commands need to be defined as functions in buildkite/benchmark/utils.sh
