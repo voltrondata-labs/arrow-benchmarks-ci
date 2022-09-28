@@ -32,7 +32,7 @@ steps:
       docker run -it -e BUILDKITE_API_BASE_URL=$BUILDKITE_API_BASE_URL \
         -e BUILDKITE_ORG=$BUILDKITE_ORG \
         -e BUILDKITE_API_TOKEN=$BUILDKITE_API_TOKEN \
-        -e MACHINES_WITH_TEST_BUILDS="ursa-i9-9960x"
+        -e MACHINES_WITH_TEST_BUILDS="ursa-i9-9960x" \
         $(docker build -q .) python -m buildkite.test.run_test_builds
     agents:
       queue: "arrow-bci"
