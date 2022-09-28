@@ -1,6 +1,37 @@
 steps:
-  - label: "Test Benchmark Build"
-    command: |
-      docker-compose -f buildkite/benchmark-test/docker-compose.yml build
-      docker-compose -f buildkite/benchmark-test/docker-compose.yml run \
-        benchmark-test bash buildkite/benchmark/utils.sh create_conda_env_and_run_benchmarks
+#  - label: "Test Benchmark Build"
+#    command: |
+#      docker-compose -f buildkite/benchmark-test/docker-compose.yml build
+#      docker-compose -f buildkite/benchmark-test/docker-compose.yml run \
+#        benchmark-test bash buildkite/benchmark/utils.sh create_conda_env_and_run_benchmarks
+
+  - block: "Run Test Builds"
+    prompt: "Select machines where you want to run a test build"
+    fields:
+      - select: "Machines"
+        key: "machines"
+        required: true
+        multiple: true
+        options:
+          - label: "ursa-i9-9960x"
+            value: "ursa-i9-9960x"
+          - label: "ursa-thinkcentre-m75q"
+            value: "ursa-thinkcentre-m75q"
+          - label: "ec2-t3-xlarge-us-east-2"
+            value: "ec2-t3-xlarge-us-east-2"
+          - label: "test-mac-arm"
+            value: "test-mac-arm"
+          - label: "voltron-pavilion"
+            value: "voltron-pavilion"
+
+- label: "Run Test Builds"
+  command: |
+    # export MACHINES_WITH_TEST_BUILDS=$(buildkite-agent meta-data get machines)
+    docker run -it \
+      -e BUILDKITE_API_BASE_URL=${BUILDKITE_API_BASE_URL} \
+      -e BUILDKITE_ORG=${BUILDKITE_ORG} \
+      -e BUILDKITE_API_TOKEN=${BUILDKITE_API_TOKEN} \
+      -e MACHINES_WITH_TEST_BUILDS="ursa-i9-9960x" \
+      $(docker build -q .) python -m buildkite.benchmark-test.run_test_builds
+  agents:
+    queue: "arrow-bci"
