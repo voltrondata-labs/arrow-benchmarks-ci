@@ -30,3 +30,5 @@ steps:
       # export MACHINES_WITH_TEST_BUILDS=$(buildkite-agent meta-data get machines)
       export MACHINES_WITH_TEST_BUILDS="ursa-i9-9960x"
       python3 -m buildkite.test.run_test_builds
+    agents:
+      queue: "arrow-bci"
