@@ -6,7 +6,7 @@ steps:
 #      docker-compose -f envs/test/docker-compose.yml build
 #      docker-compose -f envs/test/docker-compose.yml run app pytest -vv tests/
 
-  - block: "Run Test Build"
+  - block: "Run Test Builds"
     prompt: "Select machines where you want to run a test build"
     fields:
       - select: "Machines"
@@ -25,11 +25,9 @@ steps:
           - label: "voltron-pavilion"
             value: "voltron-pavilion"
 
-  - label: "Run Test Build"
+  - label: "Run Test Builds"
     concurrency: 1
     concurrency_group: "arrow-bci-deploy"
     command: |
-      aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin ${DOCKER_REGISTRY}
-      docker pull ${DOCKER_REGISTRY}/${FLASK_APP}:${BUILDKITE_COMMIT}
       export MACHINES_WITH_TEST_BUILDS=$(buildkite-agent meta-data get machines)
-      docker-compose -f envs/prod/docker-compose.yml run app python -c 'from buildkite.test.run_test_builds import run_test_builds; run_test_builds()'
+      python -c 'from buildkite.test.run_test_builds import run_test_builds; run_test_builds()'
