@@ -56,10 +56,18 @@ docker run -i \
     benchmark-test bash buildkite/benchmark/utils.sh create_conda_env_and_run_benchmarks
 ```
 
-#### How can I test benchmark builds that run on ursa-i9-9960x and ursa-thinkcentre-m75q using Buildkite
+#### How can I test benchmark builds that run on Buildkite machines (ursa-i9-9960x, ursa-thinkcentre-m75q, etc)
 This option is only available to [Apache Arrow CI Buildkite org](https://buildkite.com/apache-arrow/) users at the moment.
 
 1. Go to https://buildkite.com/apache-arrow/arrow-bci-benchmark-build-test
 2. Click New Build
-    - Set Commit and Branch for arrow-benchmarks-ci repo that you would like to test
-    - Click Create Build
+    - Set `Commit` and `Branch` for `arrow-benchmarks-ci` repo's commit and branch that you would like to test
+    - Click `Create Build`
+    - Wait for `Pipeline upload` step to finish
+    - Click on `Test Benchmark Builds` button
+    - Select machines you want to run test builds on on
+    ![Screenshot](test-benchmark-builds-popup.png)
+    - Click `Continue`
+    - Once `Test Benchmark Builds`, you will be able to monitor scheduled builds for selected 
+    `arrow-benchmarks-ci` repo's commit and branch 
+    under machines' `Arrow BCI Benchmark on ...` pipelines.

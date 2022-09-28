@@ -24,7 +24,7 @@ class Buildkite:
             "name": pipeline_name,
             "repository": f"https://github.com/{Config.GITHUB_REPO}.git",
             "default_branch": "main",
-            "branch_configuration": "main",
+            "branch_configuration": None,
             "provider": {
                 "id": "github",
                 "settings": {
