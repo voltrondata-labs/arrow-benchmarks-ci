@@ -7,7 +7,7 @@ from utils import generate_uuid
 
 
 def run_test_builds():
-    machines = os.getenv("MACHINES").split(",")
+    machines = os.getenv("MACHINES").split("\n")
     branch = os.getenv("BRANCH")
     commit = os.getenv("COMMIT")
     message = os.getenv("MESSAGE")
