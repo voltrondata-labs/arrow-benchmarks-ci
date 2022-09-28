@@ -1,7 +1,35 @@
 steps:
-  - label: "Run Tests"
-    key: "tests"
+#  - label: "Run Tests"
+#    key: "tests"
+#    command: |
+#      docker-compose -f envs/test/docker-compose.yml down
+#      docker-compose -f envs/test/docker-compose.yml build
+#      docker-compose -f envs/test/docker-compose.yml run app pytest -vv tests/
+
+  - block: "Run Test Build"
+    prompt: "Select machines where you want to run a test build"
+    fields:
+      - select: "Machines"
+        key: "machines"
+        required: true
+        multiple: true
+        options:
+          - label: "ursa-i9-9960x"
+            value: "ursa-i9-9960x"
+          - label: "ursa-thinkcentre-m75q"
+            value: "ursa-thinkcentre-m75q"
+          - label: "ec2-t3-xlarge-us-east-2"
+            value: "ec2-t3-xlarge-us-east-2"
+          - label: "test-mac-arm"
+            value: "test-mac-arm"
+          - label: "voltron-pavilion"
+            value: "voltron-pavilion"
+
+  - label: "Run Test Build"
+    concurrency: 1
+    concurrency_group: "arrow-bci-deploy"
     command: |
-      docker-compose -f envs/test/docker-compose.yml down
-      docker-compose -f envs/test/docker-compose.yml build
-      docker-compose -f envs/test/docker-compose.yml run app pytest -vv tests/
+      aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin ${DOCKER_REGISTRY}
+      docker pull ${DOCKER_REGISTRY}/${FLASK_APP}:${BUILDKITE_COMMIT}
+      export MACHINES_WITH_TEST_BUILDS=$(buildkite-agent meta-data get machines)
+      docker-compose -f envs/prod/docker-compose.yml run app python -c 'from buildkite.test.run_test_builds import run_test_builds; run_test_builds()'
