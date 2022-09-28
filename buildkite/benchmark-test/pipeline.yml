@@ -21,7 +21,7 @@ steps:
   - label: "Test Benchmark Builds"
     command: |
       docker run -it \
-        -e MACHINES=$(buildkite-agent meta-data get machines) \
+        -e MACHINES="$(buildkite-agent meta-data get machines)" \
         -e BUILDKITE_API_BASE_URL=${BUILDKITE_API_BASE_URL} \
         -e BUILDKITE_ORG=${BUILDKITE_ORG} \
         -e BUILDKITE_API_TOKEN=${BUILDKITE_API_TOKEN} \
