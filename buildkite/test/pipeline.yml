@@ -30,4 +30,5 @@ steps:
     concurrency_group: "arrow-bci-deploy"
     command: |
       export MACHINES_WITH_TEST_BUILDS=$(buildkite-agent meta-data get machines)
-      python -m buildkite.test.run_test_builds
+      python --version
+      python3 -m buildkite.test.run_test_builds
