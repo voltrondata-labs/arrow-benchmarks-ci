@@ -10,9 +10,8 @@ def run_test_builds():
     machines = os.getenv("MACHINES").split("\n")
     branch = os.getenv("BRANCH")
     commit = os.getenv("COMMIT")
-    message = os.getenv("MESSAGE")
+    message = run_name = f"Test Build for branch={branch} and commit={commit}"
     benchmarkable_type = "arrow-commit"
-    print(machines, branch, commit, message)
 
     for machine in machines:
         env = {
@@ -23,15 +22,18 @@ def run_test_builds():
             ),
             "MACHINE": machine,
             "RUN_ID": generate_uuid(),
-            "RUN_NAME": f"Test Build for branch={branch} and commit={commit}",
+            "RUN_NAME": run_name,
             "RUN_REASON": "test",
             "PYTHON_VERSION": Config.PYTHON_VERSION_FOR_BENCHMARK_BUILDS,
         }
-        print(env)
-
-    print(
-        buildkite.get_scheduled_builds("arrow-bci-benchmark-on-ursa-i9-9960x")[0].keys()
-    )
+        build = buildkite.create_build(
+            pipeline_name=f"Arrow BCI Benchmark on {machine}",
+            commit=commit,
+            branch=branch,
+            message=message,
+            env=env,
+        )
+        print(f"Created {run_name}: {build['web_url']}")
 
 
 run_test_builds()

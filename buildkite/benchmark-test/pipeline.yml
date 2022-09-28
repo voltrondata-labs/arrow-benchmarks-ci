@@ -7,15 +7,17 @@ steps:
         required: true
         multiple: true
         options:
-          - label: "ursa-i9-9960x"
-            value: "ursa-i9-9960x"
-          - label: "ursa-thinkcentre-m75q"
-            value: "ursa-thinkcentre-m75q"
-          - label: "ec2-t3-xlarge-us-east-2"
+          - label: "ec2-t3-xlarge-us-east-2 (Fastest build but only has Python benchmarks)"
             value: "ec2-t3-xlarge-us-east-2"
-          - label: "test-mac-arm"
+          - label: "arm64-m6g-linux-compute (Preferable for testing builds with C++, Python, R benchmarks"
+            value: "arm64-m6g-linux-compute"
+          - label: "ursa-i9-9960x (Please avoid using this machine for running test builds)"
+            value: "ursa-i9-9960x"
+          - label: "ursa-thinkcentre-m75q (Please avoid using this machine for running test builds)"
+            value: "ursa-thinkcentre-m75q"
+          - label: "test-mac-arm (Please avoid using this machine for running test builds)"
             value: "test-mac-arm"
-          - label: "voltron-pavilion"
+          - label: "voltron-pavilion (Please avoid using this machine for running test builds)"
             value: "voltron-pavilion"
 
   - label: "Test Benchmark Builds"
@@ -28,7 +30,6 @@ steps:
         -e BUILDKITE_API_TOKEN=${BUILDKITE_API_TOKEN} \
         -e BRANCH=${BUILDKITE_BRANCH} \
         -e COMMIT=${BUILDKITE_COMMIT} \
-        -e MESSAGE=${BUILDKITE_MESSAGE} \
         $(docker build -q .) python -m buildkite.benchmark-test.run_test_builds
     agents:
       queue: "arrow-bci"
