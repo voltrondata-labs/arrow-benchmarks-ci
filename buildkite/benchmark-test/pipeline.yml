@@ -9,7 +9,7 @@ steps:
         options:
           - label: "ec2-t3-xlarge-us-east-2 (Fastest build but only has Python benchmarks)"
             value: "ec2-t3-xlarge-us-east-2"
-          - label: "arm64-m6g-linux-compute (Preferable for testing builds with C++, Python, R benchmarks"
+          - label: "arm64-m6g-linux-compute (Preferable for testing builds with C++, Python, R benchmarks)"
             value: "arm64-m6g-linux-compute"
           - label: "ursa-i9-9960x (Please avoid using this machine for running test builds)"
             value: "ursa-i9-9960x"
