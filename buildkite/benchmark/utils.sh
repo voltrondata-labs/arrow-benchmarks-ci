@@ -78,6 +78,7 @@ install_conbench() {
   pip install -r requirements-cli.txt
   pip install -U PyYAML
   python setup.py install
+  pip install git+https://github.com/conbench/benchalerts.git@0.4.0
   popd
 }
 
