@@ -104,9 +104,15 @@ class Run(Base, BaseMixin):
         return self.reason
 
     def create_benchmark_build(self):
+        if self.benchmarkable.pull_number:
+            pr_number = str(self.benchmarkable.pull_number)
+        else:
+            pr_number = ""
+
         env = {
             "BENCHMARKABLE": self.benchmarkable_id,
             "BENCHMARKABLE_TYPE": self.benchmarkable.type,
+            "BENCHMARKABLE_PR_NUMBER": pr_number,
             "FILTERS": json.dumps(self.filters),
             "MACHINE": self.machine_name,
             "RUN_ID": self.id,
