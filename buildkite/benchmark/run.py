@@ -3,7 +3,10 @@ import logging
 import os
 import subprocess
 import tempfile
+from abc import ABC, abstractmethod
 from datetime import datetime
+from pathlib import Path
+from typing import List
 
 import psutil
 import requests
@@ -32,6 +35,53 @@ repos_with_benchmark_groups = [
         "setup_commands": ["pip install -e ."],
         "path_to_benchmark_groups_list_json": "benchmarks/benchmarks.json",
         "url_for_benchmark_groups_list_json": "https://raw.githubusercontent.com/voltrondata-labs/benchmarks/main/benchmarks.json",
+        "setup_commands_for_lang_benchmarks": {  # These commands need to be defined as functions in buildkite/benchmark/utils.sh
+            "C++": ["install_archery"],
+            "Python": ["create_data_dir"],
+            "R": [
+                "build_arrow_r",
+                "install_arrowbench",
+                "create_data_dir",
+            ],
+            "Java": ["build_arrow_java", "install_archery"],
+            "JavaScript": ["install_java_script_project_dependencies"],
+        },
+        "env_vars": {
+            "PYTHONFAULTHANDLER": "1",  # makes it easy to debug segmentation faults
+            "BENCHMARKS_DATA_DIR": f"{os.getenv('HOME')}/data",  # allows to avoid loading Python and R benchmarks input data from s3 for every build
+            "ARROWBENCH_DATA_DIR": f"{os.getenv('HOME')}/data",  # allows to avoid loading R benchmarks input data from s3 for every build
+            "ARROW_SRC": f"{build_dir}/arrow",  # required by Java Script benchmarks
+        },
+    },
+    {
+        "benchmarkable_type": "arrow-commit",
+        "repo": "https://github.com/voltrondata-labs/arrowbench.git",
+        "root": "arrowbench",
+        "branch": "main",
+        "setup_commands": [],
+        "path_to_benchmark_groups_list_json": "arrowbench/inst/benchmarks.json",
+        "url_for_benchmark_groups_list_json": "https://raw.githubusercontent.com/voltrondata-labs/arrowbench/main/inst/benchmarks.json",
+        "setup_commands_for_lang_benchmarks": {  # These commands need to be defined as functions in buildkite/benchmark/utils.sh
+            "R": [
+                "build_arrow_r",
+                "install_arrowbench",
+                "create_data_dir",
+            ],
+        },
+        "env_vars": {
+            "PYTHONFAULTHANDLER": "1",  # makes it easy to debug segmentation faults
+            "BENCHMARKS_DATA_DIR": f"{os.getenv('HOME')}/data",  # allows to avoid loading Python and R benchmarks input data from s3 for every build
+            "ARROWBENCH_DATA_DIR": f"{os.getenv('HOME')}/data",  # allows to avoid loading R benchmarks input data from s3 for every build
+        },
+    },
+    {
+        "benchmarkable_type": "arrow-commit",
+        "repo": "https://github.com/voltrondata-labs/arrow-benchmarks-ci.git",
+        "root": "arrow-benchmarks-ci/adapters",
+        "branch": "edward/direct-running",  # "main", # TODO: switch back to main
+        "setup_commands": ["pip install -r requirements.txt"],
+        "path_to_benchmark_groups_list_json": "arrowbench/inst/benchmarks.json",
+        "url_for_benchmark_groups_list_json": "https://raw.githubusercontent.com/voltrondata-labs/arrowbench/main/inst/benchmarks.json",
         "setup_commands_for_lang_benchmarks": {  # These commands need to be defined as functions in buildkite/benchmark/utils.sh
             "C++": ["install_archery"],
             "Python": ["create_data_dir"],
@@ -97,10 +147,21 @@ retryable_benchmark_groups = [
 
 
 class BenchmarkGroup:
-    def __init__(self, lang, name, options="", flags="", mock_run=False):
+    def __init__(
+        self,
+        runner: str,
+        lang: str,
+        name: str,
+        command: str,
+        options: str = "",
+        flags: str = "",
+        mock_run: bool = False,
+    ):
         self.id = generate_uuid()
+        self.runner = runner
         self.lang = lang
         self.name = name
+        self.base_command = command
         self.options = options
         self.flags = flags
         self.process_pid = psutil.Process().pid
@@ -116,10 +177,21 @@ class BenchmarkGroup:
 
     @property
     def command(self):
-        command = f'conbench {self.name} {self.options} --run-id=$RUN_ID --run-name="$RUN_NAME" --run-reason="$RUN_REASON"'
+        if self.runner == "conbench":
+            command = f'conbench {self.name} {self.options} --run-id=$RUN_ID --run-name="$RUN_NAME" --run-reason="$RUN_REASON"'
 
-        if self.lang == "Java":
-            command += f" --commit={benchmarkable_id} --src={build_dir}/arrow"
+            if self.lang == "Java":
+                command += f" --commit={benchmarkable_id} --src={build_dir}/arrow"
+        elif self.runner == "arrowbench":
+            # arrowbench benchmarks should be run together, not independently
+            command = self.base_command
+        elif self.runner == "adapter":
+            # for adapters, command should be a shell command to run the file that calls it
+            command = self.base_command
+        else:
+            raise NotImplementedError(
+                f"No command available for runner `{self.runner}`!"
+            )
 
         return command
 
@@ -196,31 +268,17 @@ class BenchmarkGroup:
         post_logs_to_arrow_bci("logs", self.log_data())
 
 
-class Run:
-    def __init__(self, repo_params):
-        self.repo = repo_params["repo"]
-        self.root = repo_params["root"]
-        self.branch = repo_params["branch"]
-        self.setup_commands = repo_params["setup_commands"]
-        self.path_to_benchmark_groups_list_json = repo_params[
-            "path_to_benchmark_groups_list_json"
-        ]
-        self.url_for_benchmark_groups_list_json = repo_params[
-            "url_for_benchmark_groups_list_json"
-        ]
-        self.benchmarkable_type = os.getenv("BENCHMARKABLE_TYPE")
-        self.filters = json.loads(os.getenv("FILTERS", "{}"))
-        self.setup_commands_for_lang_benchmarks = repo_params[
-            "setup_commands_for_lang_benchmarks"
-        ]
-        self.env_vars = repo_params["env_vars"]
-        self.benchmark_groups = []
+class CommandExecutor:
+    def __init__(self) -> None:
         self.executed_commands = []
 
-    def capture_context(self):
-        post_logs_to_arrow_bci(f"runs/{run_id}", run_context())
-
-    def execute_command(self, command, path=".", exit_on_failure=True, log_stdout=True):
+    def execute_command(
+        self,
+        command: str,
+        path: str = ".",
+        exit_on_failure: bool = True,
+        log_stdout: bool = True,
+    ):
         logging.info(f"Started executing -> {command}")
         self.executed_commands.append((command, path, exit_on_failure))
 
@@ -267,17 +325,133 @@ class Run:
         logging.info(f"Done executing -> {command}")
         return return_code, stderr
 
+
+class BenchmarkGroupsRunner(ABC):
+    "Abstract class for runners capable of running a set of benchmarks"
+
+    def __init__(self, root: str, executor: CommandExecutor) -> None:
+        self.root = root
+        self.executor = executor
+
+    @abstractmethod
+    def run_benchmark_groups(self, benchmark_groups: List[BenchmarkGroup]) -> None:
+        "Run a list of benchmark groups"
+
+
+class ConbenchBenchmarkGroupsRunner(BenchmarkGroupsRunner):
+    "Runner class for conbench runner"
+
+    def run_benchmark_groups(self, benchmark_groups: List[BenchmarkGroup]) -> None:
+        Run.print_env_vars()
+        for benchmark_group in benchmark_groups:
+            self.run_benchmark_group(benchmark_group)
+            if benchmark_group.failed and benchmark_group.retry_on_failure:
+                print(f"Retrying {benchmark_group.command}")
+                self.run_benchmark_group(benchmark_group)
+
+    def run_benchmark_group(self, benchmark_group: BenchmarkGroup) -> None:
+        benchmark_group.started_at = datetime.now()
+        benchmark_group.log_execution()
+        benchmark_group.start_memory_monitor()
+
+        return_code, stderr = self.executor.execute_command(
+            benchmark_group.command,
+            path=self.root,
+            exit_on_failure=False,
+            log_stdout=(
+                benchmark_group.lang != "Java"
+            ),  # Java benchmarks produce 12GB+ of output
+        )
+
+        benchmark_group.finished_at = datetime.now()
+        benchmark_group.return_code = return_code
+        benchmark_group.stderr = stderr
+        benchmark_group.log_execution()
+        benchmark_group.stop_memory_monitor()
+
+
+class ArrowbenchBenchmarkGroupsRunner(BenchmarkGroupsRunner):
+    "Runner class for arrowbench"
+
+    def run_benchmark_groups(self, benchmark_groups: List[BenchmarkGroup]) -> None:
+        Run.print_env_vars()
+        # NOTE: `bm.command` is the raw arrowbench name; `bm.name` is f"arrowbench/{bm.command}"
+        # to disambiguate from labs/benchmarks versions when filtering.
+        bm_names = [bm.command for bm in benchmark_groups]
+        r_command = f"""
+        bm_df <- arrowbench::get_package_benchmarks();
+        arrowbench::run(
+            bm_df[bm_df$name %in% c({str(bm_names)[1:-1]}), ],
+            publish = TRUE,
+            run_name = {os.getenv('RUN_NAME')},
+            run_reason = {os.getenv('RUN_REASON')}
+        )
+        """
+
+        (_, tmp) = tempfile.mkstemp(suffix=".R")
+        tmp = Path(tmp)
+        with open(tmp, "w") as f:
+            f.write(r_command)
+
+        self.executor.execute_command(
+            f"R -f {tmp}",
+            path=self.root,
+            exit_on_failure=False,
+        )
+
+        # leave tempfile for validation if mock run
+        if any([bg.mock_run for bg in benchmark_groups]):
+            tmp.unlink()
+
+
+class AdapterBenchmarkGroupsRunner(ConbenchBenchmarkGroupsRunner):
+    """
+    Runner class for benchadapt adapters
+
+    Presently an alias, as relevant differences are all handled via the
+    command.
+    """
+
+
+class Run:
+    def __init__(self, repo_params):
+        self.repo = repo_params["repo"]
+        self.root = repo_params["root"]
+        self.branch = repo_params["branch"]
+        self.setup_commands = repo_params["setup_commands"]
+        self.path_to_benchmark_groups_list_json = repo_params[
+            "path_to_benchmark_groups_list_json"
+        ]
+        self.url_for_benchmark_groups_list_json = repo_params[
+            "url_for_benchmark_groups_list_json"
+        ]
+        self.benchmarkable_type = os.getenv("BENCHMARKABLE_TYPE")
+        self.filters = json.loads(os.getenv("FILTERS", "{}"))
+        self.setup_commands_for_lang_benchmarks = repo_params[
+            "setup_commands_for_lang_benchmarks"
+        ]
+        self.env_vars = repo_params["env_vars"]
+        self.benchmark_groups = []
+        self.executor = CommandExecutor()
+
+    def capture_context(self):
+        post_logs_to_arrow_bci(f"runs/{run_id}", run_context())
+
     def setup_benchmarks_repo(self):
         # if benchmarks are located in the same repo as was cloned in utils.sh, do not clone it again
         if os.getenv("REPO") == self.repo:
             return
 
-        self.execute_command(f"git clone {self.repo}")
-        self.execute_command(f"git fetch && git checkout {self.branch}", self.root)
+        self.executor.execute_command(f"git clone {self.repo}")
+        self.executor.execute_command(
+            f"git fetch && git checkout {self.branch}", self.root
+        )
         for command in self.setup_commands:
-            self.execute_command(command, self.root)
+            self.executor.execute_command(command, self.root)
 
     def setup_conbench_credentials(self):
+        os.environ["CONBENCH_MACHINE_INFO_NAME"] = os.getenv("MACHINE")
+
         with open(f"{build_dir}/{self.root}/.conbench", "w") as f:
             f.writelines(
                 [
@@ -288,17 +462,52 @@ class Run:
                 ]
             )
 
-    def set_benchmark_groups(self):
+    def set_benchmark_groups(self, mock_run=False):
+        """
+        Gets JSON from benchmarks repo and sets `.benchmark_groups` attribute
+        to list of instances of `BenchmarkGroup`
+
+        Schema for benchmarks repo JSON (where `Optional` denotes a field can
+        be missing):
+
+        ```
+        [
+            {
+                "command": str,
+                "name": Optional[str],
+                "runner": Optional[str] = "conbench",
+                "flags": {
+                    "language": str,
+                    ...
+                }
+            },
+            ...
+        ]
+        ```
+
+        If `name` is not specified, it is inferred to be the first
+        space-delimited word in `command`. Specifying it directly allows more
+        flexible command structure.
+        """
         for benchmark_group in self.get_benchmark_groups():
-            command = benchmark_group["command"]
-            name, options = command.split(" ", 1) if " " in command else (command, "")
+            runner = benchmark_group.get("runner", "conbench")
+            name = benchmark_group.get("name")
+            options = ""
+            command = benchmark_group.get("command", "")
+            if not name:
+                name, options = (
+                    command.split(" ", 1) if " " in command else (command, "")
+                )
+
             self.benchmark_groups.append(
                 BenchmarkGroup(
-                    benchmark_group["flags"]["language"],
-                    name,
-                    options,
-                    benchmark_group["flags"],
-                    mock_run=False,
+                    runner=runner,
+                    lang=benchmark_group["flags"]["language"],
+                    name=name,
+                    command=command,
+                    options=options,
+                    flags=benchmark_group["flags"],
+                    mock_run=mock_run,
                 )
             )
 
@@ -311,7 +520,14 @@ class Run:
             return
 
         if "command" in self.filters:
-            self.benchmark_groups = [BenchmarkGroup("C++", self.filters["command"])]
+            self.benchmark_groups = [
+                BenchmarkGroup(
+                    runner="conbench",
+                    lang="C++",
+                    name=self.filters["command"],
+                    command=None,
+                )
+            ]
             return
 
         self.benchmark_groups = list(
@@ -345,40 +561,14 @@ class Run:
 
     def additional_setup_for_benchmark_groups(self, lang):
         for command in self.setup_commands_for_lang_benchmarks.get(lang, []):
-            self.execute_command(f"source buildkite/benchmark/utils.sh {command}")
+            self.executor.execute_command(
+                f"source buildkite/benchmark/utils.sh {command}"
+            )
 
     def mark_benchmark_groups_failed(self, lang, stderr):
         for benchmark_group in self.benchmark_groups_for_lang(lang):
             benchmark_group.stderr = stderr
             benchmark_group.log_execution()
-
-    def run_benchmark_groups(self, lang):
-        self.print_env_vars()
-        for benchmark_group in self.benchmark_groups_for_lang(lang):
-            self.run_benchmark_group(benchmark_group)
-            if benchmark_group.failed and benchmark_group.retry_on_failure:
-                print(f"Retrying {benchmark_group.command}")
-                self.run_benchmark_group(benchmark_group)
-
-    def run_benchmark_group(self, benchmark_group):
-        benchmark_group.started_at = datetime.now()
-        benchmark_group.log_execution()
-        benchmark_group.start_memory_monitor()
-
-        return_code, stderr = self.execute_command(
-            benchmark_group.command,
-            path=self.root,
-            exit_on_failure=False,
-            log_stdout=(
-                benchmark_group.lang != "Java"
-            ),  # Java benchmarks produce 12GB+ of output
-        )
-
-        benchmark_group.finished_at = datetime.now()
-        benchmark_group.return_code = return_code
-        benchmark_group.stderr = stderr
-        benchmark_group.log_execution()
-        benchmark_group.stop_memory_monitor()
 
     def print_results(self):
         print(
@@ -415,7 +605,8 @@ class Run:
         self.filter_benchmark_groups()
 
         for lang in benchmark_langs:
-            if not self.benchmark_groups_for_lang(lang):
+            lang_benchmark_groups = self.benchmark_groups_for_lang(lang=lang)
+            if not lang_benchmark_groups:
                 continue
 
             if self.benchmarkable_type.endswith("-commit"):
@@ -427,12 +618,38 @@ class Run:
                     self.mark_benchmark_groups_failed(lang, stderr)
                     continue
 
-            self.run_benchmark_groups(lang)
+            for runner in set([bg.runner for bg in lang_benchmark_groups]):
+                runner_lang_benchmark_groups = filter(
+                    lambda bg: bg.runner == runner,
+                    lang_benchmark_groups,
+                )
+                runner_lookup = {
+                    "conbench": ConbenchBenchmarkGroupsRunner,
+                    "arrowbench": ArrowbenchBenchmarkGroupsRunner,
+                    "adapter": AdapterBenchmarkGroupsRunner,
+                }
+                runner_cls = runner_lookup[runner]
+                runner_instance = runner_cls(root=self.root, executor=self.executor)
+
+                runner_instance.run_benchmark_groups(runner_lang_benchmark_groups)
 
         self.print_results()
 
         if len(self.failed_benchmark_groups()) > 0:
             raise Exception("Build has failed benchmarks.")
+
+
+class MockCommandExecutor(CommandExecutor):
+    def execute_command(
+        self,
+        command: str,
+        path: str = ".",
+        exit_on_failure: bool = True,
+        log_stdout: bool = True,
+    ):
+        logging.info(f"Started executing -> {command}")
+        self.executed_commands.append((command, path, exit_on_failure))
+        return 0, ""
 
 
 # MockRun is used for:
@@ -444,6 +661,7 @@ class MockRun(Run):
     def __init__(self, repo_params, filters):
         super().__init__(repo_params)
         self.filters = filters
+        self.executor = MockCommandExecutor()
 
     def capture_context(self):
         pass
@@ -454,13 +672,11 @@ class MockRun(Run):
     def setup_conbench_credentials(self):
         pass
 
-    def execute_command(self, command, path=".", exit_on_failure=True, log_stdout=True):
-        logging.info(f"Started executing -> {command}")
-        self.executed_commands.append((command, path, exit_on_failure))
-        return 0, ""
-
     def get_benchmark_groups(self):
         return requests.get(self.url_for_benchmark_groups_list_json).json()
+
+    def set_benchmark_groups(self, mock_run=False):
+        super().set_benchmark_groups(mock_run=mock_run)
 
     def has_benchmark_groups_to_execute(self):
         self.set_benchmark_groups()

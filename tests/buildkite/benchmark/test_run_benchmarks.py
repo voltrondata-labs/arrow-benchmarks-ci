@@ -1,4 +1,5 @@
 from copy import deepcopy
+from pathlib import Path
 
 from buildkite.benchmark.run import MockRun, repos_with_benchmark_groups
 from tests.helpers import (
@@ -213,4 +214,93 @@ def test_run_benchmarks():
         run = MockRun(repo, test["run_filters"])
         run.benchmarkable_type = "arrow-commit"
         run.run_all_benchmark_groups()
-        assert run.executed_commands == test["expected_commands"]
+        assert run.executor.executed_commands == test["expected_commands"]
+
+
+def test_run_arrowbench_benchmarks():
+    repo = deepcopy(repos_with_benchmark_groups[1])
+    # These tests should use benchmarks.json in arrowbench repo but should not be affected any new benchmarks
+    # that added since c5e5af241f17d27aadc01548f283a2a977151b91
+    repo[
+        "url_for_benchmark_groups_list_json"
+    ] = "https://raw.githubusercontent.com/voltrondata-labs/arrowbench/c5e5af241f17d27aadc01548f283a2a977151b91/inst/benchmarks.json"
+
+    filter_with_arrowbench_r_only_benchmarks = deepcopy(filter_with_r_only_benchmarks)
+    filter_with_arrowbench_r_only_benchmarks["langs"]["R"]["names"] = [
+        "arrowbench/" + name
+        for name in filter_with_arrowbench_r_only_benchmarks["langs"]["R"]["names"]
+    ]
+
+    expected_setup_commands = [
+        ("git clone https://github.com/voltrondata-labs/arrowbench.git", ".", True),
+        ("git fetch && git checkout main", "arrowbench", True),
+    ] + expected_setup_commands_for_r_benchmarks
+
+    run = MockRun(repo, filters=filter_with_arrowbench_r_only_benchmarks)
+    run.benchmarkable_type = "arrow-commit"
+    run.run_all_benchmark_groups()
+    assert run.executor.executed_commands[:-1] == expected_setup_commands
+    run_command = run.executor.executed_commands[-1]
+    # runs an ephemeral tempfile
+    assert run_command[0].startswith("R -f ")
+    assert run_command[0].endswith(".R")
+    assert run_command[1] == "arrowbench"
+    assert run_command[2] is False
+    tempfile_path = Path(run_command[0].split()[2])
+    with open(tempfile_path, "r") as f:
+        tempfile_lines = [line.strip() for line in f.readlines()]
+
+    assert tempfile_lines == [
+        "",
+        "bm_df <- arrowbench::get_package_benchmarks();",
+        "arrowbench::run(",
+        "bm_df[bm_df$name %in% c('file-write', 'dataframe-to-table', 'partitioned-dataset-filter', 'file-read'), ],",
+        "publish = TRUE,",
+        "run_name = None,",
+        "run_reason = None",
+        ")",
+        "",
+    ]
+
+    tempfile_path.unlink()
+
+
+def test_run_adapter_benchmarks():
+    repo = deepcopy(repos_with_benchmark_groups[1])
+    # # These tests should use benchmarks.json in arrow-benchmarks-ci repo but should not be affected any new benchmarks
+    # # that added since c5e5af241f17d27aadc01548f283a2a977151b91
+    # repo[
+    #     "url_for_benchmark_groups_list_json"
+    # ] = "https://raw.githubusercontent.com/voltrondata-labs/arrow-benchmarks-ci/c5e5af241f17d27aadc01548f283a2a977151b91/adapters/benchmarks.json"
+
+    filters = {
+        "langs": {
+            "Python": {
+                "names": [
+                    "adapters/mock-adapter",
+                ]
+            }
+        }
+    }
+
+    expected_setup_commands = [
+        (
+            "git clone https://github.com/voltrondata-labs/arrow-benchmarks-ci.git",
+            ".",
+            True,
+        ),
+        ("git fetch && git checkout main", "arrow-benchmarks-ci/adapters", True),
+        ("pip install -r requirements.txt", "arrow-benchmarks-ci/adapters", True),
+    ]
+
+    expected_run_commands = [
+        ("python mock-adapter.py", "arrow-benchmarks-ci/adapters", False)
+    ]
+
+    run = MockRun(repo, filters=filters)
+    run.benchmarkable_type = "arrow-commit"
+    run.run_all_benchmark_groups()
+    assert (
+        run.executor.executed_commands
+        == expected_setup_commands + expected_run_commands
+    )
