@@ -266,12 +266,12 @@ def test_run_arrowbench_benchmarks():
 
 
 def test_run_adapter_benchmarks():
-    repo = deepcopy(repos_with_benchmark_groups[1])
-    # # These tests should use benchmarks.json in arrow-benchmarks-ci repo but should not be affected any new benchmarks
-    # # that added since c5e5af241f17d27aadc01548f283a2a977151b91
-    # repo[
-    #     "url_for_benchmark_groups_list_json"
-    # ] = "https://raw.githubusercontent.com/voltrondata-labs/arrow-benchmarks-ci/c5e5af241f17d27aadc01548f283a2a977151b91/adapters/benchmarks.json"
+    repo = deepcopy(repos_with_benchmark_groups[2])
+    # These tests should use benchmarks.json in arrow-benchmarks-ci repo but should not be affected any new benchmarks
+    # that added since 1ca33e8800a11624faf89a85af817ca83e473f56
+    repo[
+        "url_for_benchmark_groups_list_json"
+    ] = "https://raw.githubusercontent.com/voltrondata-labs/arrow-benchmarks-ci/1ca33e8800a11624faf89a85af817ca83e473f56/adapters/benchmarks.json"
 
     filters = {
         "langs": {
@@ -289,8 +289,13 @@ def test_run_adapter_benchmarks():
             ".",
             True,
         ),
-        ("git fetch && git checkout main", "arrow-benchmarks-ci/adapters", True),
+        (
+            "git fetch && git checkout edward/direct-running",
+            "arrow-benchmarks-ci/adapters",
+            True,
+        ),
         ("pip install -r requirements.txt", "arrow-benchmarks-ci/adapters", True),
+        ("source buildkite/benchmark/utils.sh create_data_dir", ".", True),
     ]
 
     expected_run_commands = [
