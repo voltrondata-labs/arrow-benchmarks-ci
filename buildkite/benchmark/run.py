@@ -147,6 +147,37 @@ retryable_benchmark_groups = [
 
 
 class BenchmarkGroup:
+    """
+    Class representing a benchmark (i.e. code) that can be run with various sets of
+    parameters.
+
+    Parameters
+    ----------
+    runner : str
+        A string specifying which runner to use. Current options are `"conbench"`,
+        `"arrowbench"`, and `"adapters"`. The authoritative list is in
+        `Run.run_all_benchmark_groups()`.
+    lang : str
+        Language of the benchmark as specified in filters in `config.py`. Usually
+        capitalized, e.g. `"Python"`, `"R"`, or `"C++"`.
+    name : str
+        Name of the benchmark as used in benchmark repo metadata JSON and filters in
+        `config.py`. May not correspond to internal benchmark name and
+        `result.tags["name"]`.
+    command : str
+        Command used with runner to run the benchmark. From benchmark repo metadata JSON.
+    options : str
+        Additional options to be passed to runner. For `"conbench"` runner, `command` is
+        split into `{name} {options}` on the first space. For other runners, `name` is
+        specified separately and `options` is not used.
+    flags : str
+        Flags from benchmark repo metadata JSON. `language` is a required key; others
+        like `cloud` are optional.
+    mock_run : bool
+        Is this a mock run that should not attempt to run anything or send results to
+        Conbench?
+    """
+
     def __init__(
         self,
         runner: str,
@@ -400,7 +431,7 @@ class ArrowbenchBenchmarkGroupsRunner(BenchmarkGroupsRunner):
         )
 
         # leave tempfile for validation if mock run
-        if any([bg.mock_run for bg in benchmark_groups]):
+        if not all([bg.mock_run for bg in benchmark_groups]):
             tmp.unlink()
 
 
@@ -493,7 +524,7 @@ class Run:
             runner = benchmark_group.get("runner", "conbench")
             name = benchmark_group.get("name")
             options = ""
-            command = benchmark_group.get("command", "")
+            command = benchmark_group["command"]
             if not name:
                 name, options = (
                     command.split(" ", 1) if " " in command else (command, "")
@@ -675,7 +706,7 @@ class MockRun(Run):
     def get_benchmark_groups(self):
         return requests.get(self.url_for_benchmark_groups_list_json).json()
 
-    def set_benchmark_groups(self, mock_run=False):
+    def set_benchmark_groups(self, mock_run=True):
         super().set_benchmark_groups(mock_run=mock_run)
 
     def has_benchmark_groups_to_execute(self):

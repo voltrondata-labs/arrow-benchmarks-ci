@@ -203,7 +203,11 @@ tests = [
 
 
 def test_run_benchmarks():
-    repo = deepcopy(repos_with_benchmark_groups[0])
+    repo = [
+        deepcopy(x)
+        for x in repos_with_benchmark_groups
+        if x["repo"].endswith("voltrondata-labs/benchmarks.git")
+    ][0]
     # These tests should use benchmarks.json in benchmarks repo but should not be affected any new benchmarks
     # that added since 2b217db086260ab3bb243e26253b7c1de0180777
     repo[
@@ -218,7 +222,11 @@ def test_run_benchmarks():
 
 
 def test_run_arrowbench_benchmarks():
-    repo = deepcopy(repos_with_benchmark_groups[1])
+    repo = [
+        deepcopy(x)
+        for x in repos_with_benchmark_groups
+        if x["repo"].endswith("arrowbench.git")
+    ][0]
     # These tests should use benchmarks.json in arrowbench repo but should not be affected any new benchmarks
     # that added since c5e5af241f17d27aadc01548f283a2a977151b91
     repo[
@@ -246,7 +254,7 @@ def test_run_arrowbench_benchmarks():
     assert run_command[0].endswith(".R")
     assert run_command[1] == "arrowbench"
     assert run_command[2] is False
-    tempfile_path = Path(run_command[0].split()[2])
+    tempfile_path = Path(run_command[0].split()[2]).resolve()
     with open(tempfile_path, "r") as f:
         tempfile_lines = [line.strip() for line in f.readlines()]
 
@@ -266,7 +274,11 @@ def test_run_arrowbench_benchmarks():
 
 
 def test_run_adapter_benchmarks():
-    repo = deepcopy(repos_with_benchmark_groups[2])
+    repo = [
+        deepcopy(x)
+        for x in repos_with_benchmark_groups
+        if x["repo"].endswith("arrow-benchmarks-ci.git")
+    ][0]
     # These tests should use benchmarks.json in arrow-benchmarks-ci repo but should not be affected any new benchmarks
     # that added since 1ca33e8800a11624faf89a85af817ca83e473f56
     repo[
