@@ -57,7 +57,7 @@ repos_with_benchmark_groups = [
         "benchmarkable_type": "arrow-commit",
         "repo": "https://github.com/voltrondata-labs/arrowbench.git",
         "root": "arrowbench",
-        "branch": "edward/json-command-args",  # "main", # TODO: switch back to main after merged
+        "branch": "main",
         "setup_commands": [],
         "path_to_benchmark_groups_list_json": "arrowbench/inst/benchmarks.json",
         "url_for_benchmark_groups_list_json": "https://raw.githubusercontent.com/voltrondata-labs/arrowbench/main/inst/benchmarks.json",
@@ -408,6 +408,8 @@ class ArrowbenchBenchmarkGroupsRunner(BenchmarkGroupsRunner):
         bm_df <- arrowbench::get_package_benchmarks();
         arrowbench::run(
             bm_df[bm_df$name %in% c({str(bm_names)[1:-1]}), ],
+            n_iter = 3L,
+            drop_caches = TRUE,
             publish = TRUE,
             run_name = {os.getenv('RUN_NAME')},
             run_reason = {os.getenv('RUN_REASON')}
