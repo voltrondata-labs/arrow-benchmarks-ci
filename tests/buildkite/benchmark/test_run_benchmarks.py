@@ -221,7 +221,14 @@ def test_run_benchmarks():
         assert run.executor.executed_commands == test["expected_commands"]
 
 
-def test_run_arrowbench_benchmarks():
+def test_run_arrowbench_benchmarks(monkeypatch):
+    run_id = "fake-run-id"
+    run_name = "test-run-name"
+    run_reason = "test"
+    monkeypatch.setenv("RUN_ID", run_id)
+    monkeypatch.setenv("RUN_NAME", run_name)
+    monkeypatch.setenv("RUN_REASON", run_reason)
+
     repo = [
         deepcopy(x)
         for x in repos_with_benchmark_groups
@@ -266,8 +273,9 @@ def test_run_arrowbench_benchmarks():
         "n_iter = 3L,",
         "drop_caches = TRUE,",
         "publish = TRUE,",
-        "run_name = None,",
-        "run_reason = None",
+        f"run_id = '{run_id}',",
+        f"run_name = '{run_name}',",
+        f"run_reason = '{run_reason}'",
         ")",
         "",
     ]
