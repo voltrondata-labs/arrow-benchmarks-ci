@@ -200,7 +200,7 @@ class Config:
                 "arrow-commit": {
                     "langs": {
                         "Python": {"names": ["dataset-read", "dataset-select"]},
-                        "C++": {"names": ["cpp-micro"]},
+                        # "C++": {"names": ["cpp-micro"]},
                         "R": {"names": ["tpch", "arrowbench/file-write"]},
                     }
                 },
