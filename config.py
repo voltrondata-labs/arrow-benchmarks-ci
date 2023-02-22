@@ -201,7 +201,9 @@ class Config:
                     "langs": {
                         "Python": {"names": ["dataset-read", "dataset-select"]},
                         # "C++": {"names": ["cpp-micro"]},
-                        "R": {"names": ["tpch", "arrowbench/file-write"]},
+                        "R": {
+                            "names": ["file-write", "arrowbench/file-write"]  # "tpch",
+                        },
                     }
                 },
             },
