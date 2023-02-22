@@ -199,7 +199,7 @@ class Config:
             "default_filters": {
                 "arrow-commit": {
                     "langs": {
-                        "Python": {"names": ["dataset-read", "dataset-select"]},
+                        # "Python": {"names": ["dataset-read", "dataset-select"]},
                         # "C++": {"names": ["cpp-micro"]},
                         "R": {
                             "names": ["file-write", "arrowbench/file-write"]  # "tpch",
