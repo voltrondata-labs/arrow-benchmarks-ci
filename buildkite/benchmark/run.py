@@ -471,7 +471,9 @@ class Run:
         if os.getenv("REPO") == self.repo:
             return
 
-        self.executor.execute_command(f"git clone {self.repo}")
+        if not Path(self.root).exists():
+            self.executor.execute_command(f"git clone {self.repo}")
+
         self.executor.execute_command(
             f"git fetch && git checkout {self.branch}", self.root
         )
