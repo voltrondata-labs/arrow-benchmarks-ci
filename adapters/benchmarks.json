@@ -1,0 +1,10 @@
+[
+    {
+        "command": "python mock-adapter.py",
+        "name": "adapters/mock-adapter",
+        "runner": "adapter",
+        "flags": {
+            "language": "Python"
+        }
+    }
+]
