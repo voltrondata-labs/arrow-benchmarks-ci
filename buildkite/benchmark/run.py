@@ -78,8 +78,9 @@ repos_with_benchmark_groups = [
         "root": "arrow-benchmarks-ci/adapters",
         "branch": "edward/direct-running",  # "main", # TODO: switch back to main
         "setup_commands": ["pip install -r requirements.txt"],
-        "path_to_benchmark_groups_list_json": "arrowbench/inst/benchmarks.json",
-        "url_for_benchmark_groups_list_json": "https://raw.githubusercontent.com/voltrondata-labs/arrowbench/main/inst/benchmarks.json",
+        "path_to_benchmark_groups_list_json": "arrow-benchmarks-ci/adapters/benchmarks.json",
+        # TODO: point this at main
+        "url_for_benchmark_groups_list_json": "https://raw.githubusercontent.com/voltrondata-labs/arrow-benchmarks-ci/edward/direct-running/adapters/benchmarks.json",
         "setup_commands_for_lang_benchmarks": {  # These commands need to be defined as functions in buildkite/benchmark/utils.sh
             "C++": ["install_archery"],
             "Python": ["create_data_dir"],
