@@ -315,7 +315,7 @@ def test_run_adapter_benchmarks():
             True,
         ),
         (
-            "git fetch && git checkout edward/direct-running",
+            "git fetch && git checkout main",
             "arrow-benchmarks-ci/adapters",
             True,
         ),
