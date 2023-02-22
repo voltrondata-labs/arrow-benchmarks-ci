@@ -267,6 +267,9 @@ def test_run_arrowbench_benchmarks(monkeypatch):
 
     assert tempfile_lines == [
         "",
+        "arrowbench::install_pipx();",
+        "arrowbench::install_benchconnect();",
+        "",
         "bm_df <- arrowbench::get_package_benchmarks();",
         "arrowbench::run(",
         "bm_df[bm_df$name %in% c('file-write', 'dataframe-to-table', 'partitioned-dataset-filter', 'file-read'), ],",

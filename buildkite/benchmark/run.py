@@ -405,6 +405,9 @@ class ArrowbenchBenchmarkGroupsRunner(BenchmarkGroupsRunner):
         # to disambiguate from labs/benchmarks versions when filtering.
         bm_names = [bm.command for bm in benchmark_groups]
         r_command = f"""
+        arrowbench::install_pipx();
+        arrowbench::install_benchconnect();
+
         bm_df <- arrowbench::get_package_benchmarks();
         arrowbench::run(
             bm_df[bm_df$name %in% c({str(bm_names)[1:-1]}), ],
