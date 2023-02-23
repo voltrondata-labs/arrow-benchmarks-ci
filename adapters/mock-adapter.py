@@ -1,5 +1,5 @@
 import json
-from typing import List
+from typing import Any, Dict, List
 
 from benchadapt import BenchmarkResult
 from benchadapt.adapters import BenchmarkAdapter
@@ -31,7 +31,16 @@ RESULTS_DICT = {
 
 
 class MockAdapter(BenchmarkAdapter):
-    command: List[str] = ["echo", "hello"]
+    def __init__(
+        self,
+        result_fields_override: Dict[str, Any] = None,
+        result_fields_append: Dict[str, Any] = None,
+    ) -> None:
+        super().__init__(
+            command=["echo", "hello"],
+            result_fields_override=result_fields_override,
+            result_fields_append=result_fields_append,
+        )
 
     def _transform_results(self) -> List[BenchmarkResult]:
         return [BenchmarkResult(**RESULTS_DICT)]
