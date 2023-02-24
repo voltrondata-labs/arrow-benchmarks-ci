@@ -199,9 +199,11 @@ class Config:
             "default_filters": {
                 "arrow-commit": {
                     "langs": {
-                        "Python": {"names": ["dataset-read", "dataset-select"]},
-                        "C++": {"names": ["cpp-micro"]},
-                        "R": {"names": ["tpch"]},
+                        # "Python": {"names": ["dataset-read", "dataset-select"]},
+                        "Python": {"names": ["adapters/mock-adapter"]},
+                        # "C++": {"names": ["cpp-micro"]},
+                        # "R": {"names": ["tpch"]},
+                        "R": {"names": ["file-read", "arrowbench/file-read"]},
                     }
                 },
             },
