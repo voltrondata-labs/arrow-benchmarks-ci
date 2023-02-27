@@ -15,6 +15,9 @@ from utils import generate_uuid
 
 from .run_utils import post_logs_to_arrow_bci, run_context
 
+log = logging.getLogger(__name__)
+log.setLevel(logging.DEBUG)
+
 benchmark_langs = ["C++", "Java", "Python", "R", "JavaScript", "Rust"]
 benchmarkable_id = os.getenv("BENCHMARKABLE")
 run_id = os.getenv("RUN_ID")
@@ -290,7 +293,7 @@ class BenchmarkGroup:
         if self.mock_run:
             return
 
-        logging.info(self.log_data())
+        log.info(self.log_data())
         post_logs_to_arrow_bci("logs", self.log_data())
 
 
@@ -305,7 +308,7 @@ class CommandExecutor:
         exit_on_failure: bool = True,
         log_stdout: bool = True,
     ):
-        logging.info(f"Started executing -> {command}")
+        log.info(f"Started executing -> {command}")
         self.executed_commands.append((command, path, exit_on_failure))
 
         if log_stdout:
@@ -330,25 +333,25 @@ class CommandExecutor:
             stdout = ""
 
         return_code = result.returncode
-        logging.info(stderr)
-        logging.info(stdout)
+        log.info(stderr)
+        log.info(stdout)
 
         if exit_on_failure and (return_code != 0 or "ERROR" in stderr):
-            logging.error(return_code)
-            logging.error(stderr)
+            log.error(return_code)
+            log.error(stderr)
             raise Exception(f"Failed to execute {command}")
 
         # Always fail the build if benchmark logs have Internal Server Error because
         # it could mean that we are loosing benchmark results because
         # Conbench can't store benchmark results
         if "Internal Server Error" in stdout or "Internal Server Error" in stderr:
-            logging.error(stdout)
-            logging.error(stderr)
+            log.error(stdout)
+            log.error(stderr)
             raise Exception(
                 "Failed to post benchmark results because of Internal Server Error"
             )
 
-        logging.info(f"Done executing -> {command}")
+        log.info(f"Done executing -> {command}")
         return return_code, stderr
 
 
@@ -581,9 +584,9 @@ class Run:
     def print_env_vars():
         for var, value in sorted(os.environ.items()):
             if "PASSWORD" in var or "SECRET" in var or "TOKEN" in var or "PAT" in var:
-                logging.info(f"{var}=[REDACTED]")
+                log.info(f"{var}=[REDACTED]")
             else:
-                logging.info(f"{var}={value}")
+                log.info(f"{var}={value}")
 
     def benchmark_groups_for_lang(self, lang):
         return list(
@@ -647,7 +650,7 @@ class Run:
                 try:
                     self.additional_setup_for_benchmark_groups(lang)
                 except Exception as e:
-                    logging.exception(e)
+                    log.exception(e)
                     stderr = f"Setup for {lang} benchmark groups failed"
                     self.mark_benchmark_groups_failed(lang, stderr)
                     continue
@@ -681,7 +684,7 @@ class MockCommandExecutor(CommandExecutor):
         exit_on_failure: bool = True,
         log_stdout: bool = True,
     ):
-        logging.info(f"Started executing -> {command}")
+        log.info(f"Started executing -> {command}")
         self.executed_commands.append((command, path, exit_on_failure))
         return 0, ""
 
