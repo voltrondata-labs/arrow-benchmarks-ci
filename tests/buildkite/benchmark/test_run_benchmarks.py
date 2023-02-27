@@ -246,10 +246,17 @@ def test_run_arrowbench_benchmarks(monkeypatch):
         for name in filter_with_arrowbench_r_only_benchmarks["langs"]["R"]["names"]
     ]
 
-    expected_setup_commands = [
-        ("git clone https://github.com/voltrondata-labs/arrowbench.git", ".", True),
-        ("git fetch && git checkout main", "arrowbench", True),
-    ] + expected_setup_commands_for_r_benchmarks
+    expected_setup_commands = (
+        [
+            ("git clone https://github.com/voltrondata-labs/arrowbench.git", ".", True),
+            ("git fetch && git checkout main", "arrowbench", True),
+        ]
+        + expected_setup_commands_for_r_benchmarks
+        + [
+            ("R --vanilla -e 'arrowbench::install_pipx()'", "arrowbench", True),
+            ("R --vanilla -e 'arrowbench::install_benchconnect()'", "arrowbench", True),
+        ]
+    )
 
     run = MockRun(repo, filters=filter_with_arrowbench_r_only_benchmarks)
     run.benchmarkable_type = "arrow-commit"
@@ -257,22 +264,27 @@ def test_run_arrowbench_benchmarks(monkeypatch):
     assert run.executor.executed_commands[:-1] == expected_setup_commands
     run_command = run.executor.executed_commands[-1]
     # runs an ephemeral tempfile
-    assert run_command[0].startswith("R -f ")
+    assert run_command[0].startswith("R --vanilla -f ")
     assert run_command[0].endswith(".R")
     assert run_command[1] == "arrowbench"
     assert run_command[2] is False
-    tempfile_path = Path(run_command[0].split()[2]).resolve()
+    tempfile_path = Path(run_command[0].split()[3]).resolve()
     with open(tempfile_path, "r") as f:
         tempfile_lines = [line.strip() for line in f.readlines()]
 
     assert tempfile_lines == [
         "",
-        "arrowbench::install_pipx();",
-        "arrowbench::install_benchconnect();",
+        "bm_df <- arrowbench::get_package_benchmarks()",
+        "bm_names <- c('file-write', 'dataframe-to-table', "
+        "'partitioned-dataset-filter', 'file-read')",
+        "bm_df_filtered <- bm_df[bm_df$name %in% bm_names, ]",
         "",
-        "bm_df <- arrowbench::get_package_benchmarks();",
+        "print(paste('Benchmark names to run:', toString(bm_names)))",
+        "print('Benchmark dataframe run:')",
+        "print(bm_df_filtered)",
+        "",
         "arrowbench::run(",
-        "bm_df[bm_df$name %in% c('file-write', 'dataframe-to-table', 'partitioned-dataset-filter', 'file-read'), ],",
+        "bm_df_filtered,",
         "n_iter = 3L,",
         "drop_caches = TRUE,",
         "publish = TRUE,",

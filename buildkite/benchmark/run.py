@@ -404,16 +404,32 @@ class ArrowbenchBenchmarkGroupsRunner(BenchmarkGroupsRunner):
 
     def run_benchmark_groups(self, benchmark_groups: List[BenchmarkGroup]) -> None:
         Run.print_env_vars()
+
+        self.executor.execute_command(
+            "R --vanilla -e 'arrowbench::install_pipx()'",
+            path=self.root,
+            exit_on_failure=True,
+        )
+        self.executor.execute_command(
+            "R --vanilla -e 'arrowbench::install_benchconnect()'",
+            path=self.root,
+            exit_on_failure=True,
+        )
+
         # NOTE: `bm.command` is the raw arrowbench name; `bm.name` is f"arrowbench/{bm.command}"
         # to disambiguate from labs/benchmarks versions when filtering.
         bm_names = [bm.command for bm in benchmark_groups]
         r_command = f"""
-        arrowbench::install_pipx();
-        arrowbench::install_benchconnect();
+        bm_df <- arrowbench::get_package_benchmarks()
+        bm_names <- c({str(bm_names)[1:-1]})
+        bm_df_filtered <- bm_df[bm_df$name %in% bm_names, ]
 
-        bm_df <- arrowbench::get_package_benchmarks();
+        print(paste('Benchmark names to run:', toString(bm_names)))
+        print('Benchmark dataframe run:')
+        print(bm_df_filtered)
+
         arrowbench::run(
-            bm_df[bm_df$name %in% c({str(bm_names)[1:-1]}), ],
+            bm_df_filtered,
             n_iter = 3L,
             drop_caches = TRUE,
             publish = TRUE,
@@ -429,7 +445,7 @@ class ArrowbenchBenchmarkGroupsRunner(BenchmarkGroupsRunner):
             f.write(r_command)
 
         self.executor.execute_command(
-            f"R -f {tmp}",
+            f"R --vanilla -f {tmp}",
             path=self.root,
             exit_on_failure=False,
         )
