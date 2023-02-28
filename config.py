@@ -200,10 +200,10 @@ class Config:
                 "arrow-commit": {
                     "langs": {
                         # "Python": {"names": ["dataset-read", "dataset-select"]},
-                        "Python": {"names": ["adapters/mock-adapter"]},
+                        # "Python": {"names": ["adapters/mock-adapter"]},
                         # "C++": {"names": ["cpp-micro"]},
                         # "R": {"names": ["tpch"]},
-                        "R": {"names": ["file-read", "arrowbench/file-read"]},
+                        "R": {"names": ["arrowbench/file-read"]},
                     }
                 },
             },
