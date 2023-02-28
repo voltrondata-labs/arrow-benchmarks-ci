@@ -254,7 +254,7 @@ def test_run_arrowbench_benchmarks(monkeypatch):
         + expected_setup_commands_for_r_benchmarks
         + [
             (
-                "pip intall 'benchconnect@git+https://github.com/conbench/conbench.git@main#subdirectory=benchconnect'",
+                "pip install 'benchconnect@git+https://github.com/conbench/conbench.git@main#subdirectory=benchconnect'",
                 "arrowbench",
                 True,
             ),
