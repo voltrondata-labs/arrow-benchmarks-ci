@@ -411,7 +411,7 @@ class ArrowbenchBenchmarkGroupsRunner(BenchmarkGroupsRunner):
             exit_on_failure=True,
         )
         self.executor.execute_command(
-            "R --vanilla -e 'arrowbench::install_benchconnect()'",
+            "R --vanilla -e 'arrowbench::install_benchconnect()' && R --vanilla -e 'stopifnot(arrowbench:::benchconnect_available())'",
             path=self.root,
             exit_on_failure=True,
         )
@@ -445,7 +445,7 @@ class ArrowbenchBenchmarkGroupsRunner(BenchmarkGroupsRunner):
             f.write(r_command)
 
         self.executor.execute_command(
-            f"R --vanilla -f {tmp}",
+            f"source ~/.bashrc; R --vanilla -f {tmp}",
             path=self.root,
             exit_on_failure=False,
         )
