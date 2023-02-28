@@ -267,7 +267,7 @@ def test_run_arrowbench_benchmarks(monkeypatch):
     assert run.executor.executed_commands[:-1] == expected_setup_commands
     run_command = run.executor.executed_commands[-1]
     # runs an ephemeral tempfile
-    assert run_command[0].startswith("source ~/.bashrc; R --vanilla -f ")
+    assert run_command[0].startswith("R --vanilla -f ")
     assert run_command[0].endswith(".R")
     assert run_command[1] == "arrowbench"
     assert run_command[2] is False

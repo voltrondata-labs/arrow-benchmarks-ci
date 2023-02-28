@@ -440,7 +440,7 @@ class ArrowbenchBenchmarkGroupsRunner(BenchmarkGroupsRunner):
             f.write(r_command)
 
         self.executor.execute_command(
-            f"source ~/.bashrc; R --vanilla -f {tmp}",
+            f"R --vanilla -f {tmp}",
             path=self.root,
             exit_on_failure=False,
         )
