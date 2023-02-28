@@ -253,8 +253,11 @@ def test_run_arrowbench_benchmarks(monkeypatch):
         ]
         + expected_setup_commands_for_r_benchmarks
         + [
-            ("R --vanilla -e 'arrowbench::install_pipx()'", "arrowbench", True),
-            ("R --vanilla -e 'arrowbench::install_benchconnect()'", "arrowbench", True),
+            (
+                "pip intall 'benchconnect@git+https://github.com/conbench/conbench.git@main#subdirectory=benchconnect'",
+                "arrowbench",
+                True,
+            ),
         ]
     )
 

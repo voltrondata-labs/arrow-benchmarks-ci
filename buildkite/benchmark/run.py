@@ -406,12 +406,7 @@ class ArrowbenchBenchmarkGroupsRunner(BenchmarkGroupsRunner):
         Run.print_env_vars()
 
         self.executor.execute_command(
-            "R --vanilla -e 'arrowbench::install_pipx()'",
-            path=self.root,
-            exit_on_failure=True,
-        )
-        self.executor.execute_command(
-            "R --vanilla -e 'arrowbench::install_benchconnect()'",
+            "pip intall 'benchconnect@git+https://github.com/conbench/conbench.git@main#subdirectory=benchconnect'",
             path=self.root,
             exit_on_failure=True,
         )
