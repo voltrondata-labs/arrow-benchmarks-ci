@@ -406,12 +406,7 @@ class ArrowbenchBenchmarkGroupsRunner(BenchmarkGroupsRunner):
         Run.print_env_vars()
 
         self.executor.execute_command(
-            "R --vanilla -e 'arrowbench::install_pipx()' && pipx ensurepath",
-            path=self.root,
-            exit_on_failure=True,
-        )
-        self.executor.execute_command(
-            "R --vanilla -e 'arrowbench::install_benchconnect()' && R --vanilla -e 'stopifnot(arrowbench:::benchconnect_available())'",
+            "pip install 'benchconnect@git+https://github.com/conbench/conbench.git@main#subdirectory=benchconnect' && R --vanilla -e 'stopifnot(arrowbench:::benchconnect_available())'",
             path=self.root,
             exit_on_failure=True,
         )
@@ -424,8 +419,9 @@ class ArrowbenchBenchmarkGroupsRunner(BenchmarkGroupsRunner):
         bm_names <- c({str(bm_names)[1:-1]})
         bm_df_filtered <- bm_df[bm_df$name %in% bm_names, ]
 
-        print(paste('Benchmark names to run:', toString(bm_names)))
-        print('Benchmark dataframe run:')
+        # Benchmark names to run:
+        print(bm_names)
+        # Benchmark dataframe to run:
         print(bm_df_filtered)
 
         arrowbench::run(

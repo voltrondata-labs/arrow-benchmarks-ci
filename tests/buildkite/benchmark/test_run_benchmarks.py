@@ -254,12 +254,7 @@ def test_run_arrowbench_benchmarks(monkeypatch):
         + expected_setup_commands_for_r_benchmarks
         + [
             (
-                "R --vanilla -e 'arrowbench::install_pipx()' && pipx ensurepath",
-                "arrowbench",
-                True,
-            ),
-            (
-                "R --vanilla -e 'arrowbench::install_benchconnect()' && R --vanilla -e 'stopifnot(arrowbench:::benchconnect_available())'",
+                "pip install 'benchconnect@git+https://github.com/conbench/conbench.git@main#subdirectory=benchconnect' && R --vanilla -e 'stopifnot(arrowbench:::benchconnect_available())'",
                 "arrowbench",
                 True,
             ),
@@ -287,8 +282,9 @@ def test_run_arrowbench_benchmarks(monkeypatch):
         "'partitioned-dataset-filter', 'file-read')",
         "bm_df_filtered <- bm_df[bm_df$name %in% bm_names, ]",
         "",
-        "print(paste('Benchmark names to run:', toString(bm_names)))",
-        "print('Benchmark dataframe run:')",
+        "# Benchmark names to run:",
+        "print(bm_names)",
+        "# Benchmark dataframe to run:",
         "print(bm_df_filtered)",
         "",
         "arrowbench::run(",
