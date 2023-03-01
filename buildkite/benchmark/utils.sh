@@ -6,7 +6,7 @@ init_conda() {
 
 create_conda_env_for_arrow_commit() {
   pushd $REPO_DIR
-  
+
   conda create -y -n "${BENCHMARKABLE_TYPE}" -c conda-forge \
   --file ci/conda_env_unix.txt \
   --file ci/conda_env_cpp.txt \
@@ -18,19 +18,19 @@ create_conda_env_for_arrow_commit() {
 
   source dev/conbench_envs/hooks.sh activate_conda_env_for_benchmark_build
   source dev/conbench_envs/hooks.sh install_arrow_python_dependencies
-  
+
   # Workaround for https://github.com/aws/aws-sdk-cpp/issues/1820
   conda install -y -c conda-forge cmake==3.21.3
-  
+
   # Archery does not work when using setuptools==60.9.0
   conda install -y -c conda-forge setuptools==58.0.4
-  
+
   source dev/conbench_envs/hooks.sh set_arrow_build_and_run_env_vars
 
   export RANLIB=`which $RANLIB`
   export AR=`which $AR`
   export ARROW_JEMALLOC=OFF
-  
+
   source dev/conbench_envs/hooks.sh build_arrow_cpp
   source dev/conbench_envs/hooks.sh build_arrow_python
   popd
