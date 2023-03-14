@@ -110,16 +110,19 @@ Add repo dict in this format to **GITHUB_REPOS_WITH_BENCHMARKABLE_COMMITS**
             "benchmarkable_type": "arrow-commit",
             "enable_benchmarking_for_pull_requests": True,
             "github_secret": os.getenv("GITHUB_SECRET"),
+            "publish_benchmark_results_on_pull_requests": True,
         },
         "apache/arrow-rs": {
             "benchmarkable_type": "arrow-rs-commit",
             "enable_benchmarking_for_pull_requests": False,
             "github_secret": None,
+            "publish_benchmark_results_on_pull_requests": False,
         },
         "ElenaHenderson/benchmarkable-repo": {
             "benchmarkable_type": "benchmarkable-repo-commit",
             "enable_benchmarking_for_pull_requests": False,
             "github_secret": None,
+            "publish_benchmark_results_on_pull_requests": False,
         },
     }
 ```
