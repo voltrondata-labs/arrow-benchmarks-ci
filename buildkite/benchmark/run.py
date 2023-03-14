@@ -109,28 +109,31 @@ repos_with_benchmark_groups = [
         "setup_commands_for_lang_benchmarks": {},
         "env_vars": {},
     },
-    {
-        "benchmarkable_type": "arrow-rs-commit",
-        "repo": "https://github.com/apache/arrow-rs.git",
-        "root": "arrow-rs/conbench",
-        "branch": "master",
-        "setup_commands": ["pip install -r requirements.txt"],
-        "path_to_benchmark_groups_list_json": "arrow-rs/conbench/benchmarks.json",
-        "url_for_benchmark_groups_list_json": "https://raw.githubusercontent.com/apache/arrow-rs/master/conbench/benchmarks.json",
-        "setup_commands_for_lang_benchmarks": {},
-        "env_vars": {},
-    },
-    {
-        "benchmarkable_type": "arrow-datafusion-commit",
-        "repo": "https://github.com/apache/arrow-datafusion.git",
-        "root": "arrow-datafusion/conbench",
-        "branch": "master",
-        "setup_commands": ["pip install -r requirements.txt"],
-        "path_to_benchmark_groups_list_json": "arrow-datafusion/conbench/benchmarks.json",
-        "url_for_benchmark_groups_list_json": "https://raw.githubusercontent.com/apache/arrow-datafusion/master/conbench/benchmarks.json",
-        "setup_commands_for_lang_benchmarks": {},
-        "env_vars": {},
-    },
+    # NOTE (EV): Temporarily commented these out because failing builds were getting created
+    # for them even though they don't have any benchmarks
+    #
+    # {
+    #     "benchmarkable_type": "arrow-rs-commit",
+    #     "repo": "https://github.com/apache/arrow-rs.git",
+    #     "root": "arrow-rs/conbench",
+    #     "branch": "master",
+    #     "setup_commands": ["pip install -r requirements.txt"],
+    #     "path_to_benchmark_groups_list_json": "arrow-rs/conbench/benchmarks.json",
+    #     "url_for_benchmark_groups_list_json": "https://raw.githubusercontent.com/apache/arrow-rs/master/conbench/benchmarks.json",
+    #     "setup_commands_for_lang_benchmarks": {},
+    #     "env_vars": {},
+    # },
+    # {
+    #     "benchmarkable_type": "arrow-datafusion-commit",
+    #     "repo": "https://github.com/apache/arrow-datafusion.git",
+    #     "root": "arrow-datafusion/conbench",
+    #     "branch": "master",
+    #     "setup_commands": ["pip install -r requirements.txt"],
+    #     "path_to_benchmark_groups_list_json": "arrow-datafusion/conbench/benchmarks.json",
+    #     "url_for_benchmark_groups_list_json": "https://raw.githubusercontent.com/apache/arrow-datafusion/master/conbench/benchmarks.json",
+    #     "setup_commands_for_lang_benchmarks": {},
+    #     "env_vars": {},
+    # },
 ]
 
 retryable_benchmark_groups = [
