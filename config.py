@@ -24,21 +24,25 @@ class Config:
             "benchmarkable_type": "arrow-commit",
             "enable_benchmarking_for_pull_requests": True,
             "github_secret": os.getenv("GITHUB_SECRET"),
+            "publish_benchmark_results_on_pull_requests": True,
         },
         "ElenaHenderson/benchmarkable-repo": {
             "benchmarkable_type": "benchmarkable-repo-commit",
             "enable_benchmarking_for_pull_requests": False,
             "github_secret": None,
+            "publish_benchmark_results_on_pull_requests": False,
         },
         "apache/arrow-rs": {
             "benchmarkable_type": "arrow-rs-commit",
             "enable_benchmarking_for_pull_requests": False,
             "github_secret": None,
+            "publish_benchmark_results_on_pull_requests": False,
         },
         "apache/arrow-datafusion": {
             "benchmarkable_type": "arrow-datafusion-commit",
             "enable_benchmarking_for_pull_requests": False,
             "github_secret": None,
+            "publish_benchmark_results_on_pull_requests": False,
         },
     }
     GITHUB_REPO = os.getenv("GITHUB_REPO")

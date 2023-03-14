@@ -71,3 +71,11 @@ This option is only available to [Apache Arrow CI Buildkite org](https://buildki
     - Once `Test Benchmark Builds`, you will be able to monitor scheduled builds for selected 
     `arrow-benchmarks-ci` repo's commit and branch 
     under machines' `Arrow BCI Benchmark on ...` pipelines.
+
+#### How to run tests
+```bash
+cd ~/arrow-benchmarks-ci
+docker-compose -f envs/test/docker-compose.yml down
+docker-compose -f envs/test/docker-compose.yml build
+docker-compose -f envs/test/docker-compose.yml run app pytest -vv tests/
+```

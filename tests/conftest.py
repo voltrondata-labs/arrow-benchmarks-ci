@@ -18,6 +18,7 @@ def run_before_and_after_tests():
             "benchmarkable_type": "arrow-commit",
             "enable_benchmarking_for_pull_requests": True,
             "github_secret": os.getenv("GITHUB_SECRET"),
+            "publish_benchmark_results_on_pull_requests": True,
         }
     }
     yield

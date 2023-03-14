@@ -85,6 +85,12 @@ class Benchmarkable(Base, BaseMixin):
             if params["benchmarkable_type"] == self.type:
                 return repo
 
+    @property
+    def repo_params(self):
+        for repo, params in Config.GITHUB_REPOS_WITH_BENCHMARKABLE_COMMITS.items():
+            if params["benchmarkable_type"] == self.type:
+                return params
+
     def is_commit(self):
         return self.type.endswith("-commit")
 
@@ -128,7 +134,10 @@ class Benchmarkable(Base, BaseMixin):
 
     def add_notifications(self):
         self.notifications.append(Notification(type="slack_message"))
-        if self.pull_number:
+        if (
+            self.pull_number
+            and self.repo_params["publish_benchmark_results_on_pull_requests"]
+        ):
             self.notifications.append(Notification(type="pull_comment"))
             self.notifications.append(Notification(type="pull_comment_alert"))
 
