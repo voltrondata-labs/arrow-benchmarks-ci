@@ -73,15 +73,7 @@ clone_repo() {
 }
 
 install_conbench() {
-  git clone https://github.com/conbench/conbench.git
-  pushd conbench
-  # pin version: make this not be a moving dependency.
-  # The current commit is from January 2023.
-  git checkout 8e5db5c0142f401709396ffdba34fb411640bada
-  pip install -r requirements-cli.txt
-  pip install -U PyYAML
-  python setup.py install
-  popd
+  pip install 'conbench==2023.4.5'
 }
 
 build_arrow_r() {
