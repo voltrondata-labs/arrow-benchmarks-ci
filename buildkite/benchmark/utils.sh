@@ -73,7 +73,7 @@ clone_repo() {
 }
 
 install_conbench() {
-  pip install 'conbench==2023.4.5'
+  pip install 'conbench==2023.4.6'
 }
 
 build_arrow_r() {
