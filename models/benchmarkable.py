@@ -260,7 +260,7 @@ class Benchmarkable(Base, BaseMixin):
 
         return regressions, improvements
 
-    def runs_with_high_regressions(self, benchmark_langs_filter):
+    def runs_with_high_regressions(self, benchmark_langs_filter, benchmark_machine_ignorelist):
         runs = []
         for run in self.runs_with_buildkite_builds_and_publishable_benchmark_results:
             try:
@@ -271,6 +271,10 @@ class Benchmarkable(Base, BaseMixin):
                 continue
             except Exception as e:
                 raise e
+
+            # skip if this is a machine we ignore
+            if run.machine.name in benchmark_machine_ignorelist:
+                continue
 
             results = [
                 r
