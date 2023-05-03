@@ -83,6 +83,7 @@ class Config:
                                 "dataset-serialize",
                                 "file-read",
                                 "file-write",
+                                "recursive-get-file-info",
                                 "wide-dataframe",
                             ]
                         },
@@ -112,6 +113,7 @@ class Config:
                                 "dataset-serialize",
                                 "file-read",
                                 "file-write",
+                                "recursive-get-file-info",
                                 "wide-dataframe",
                             ]
                         }
