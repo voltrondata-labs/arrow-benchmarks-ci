@@ -74,30 +74,30 @@ class Config:
                     "langs": {
                         "Python": {
                             "names": [
-                                "csv-read",
-                                "dataframe-to-table",
+                                # "csv-read",
+                                # "dataframe-to-table",
                                 "dataset-filter",
                                 "dataset-read",
                                 "dataset-select",
                                 "dataset-selectivity",
                                 "dataset-serialize",
-                                "file-read",
-                                "file-write",
+                                # "file-read",
+                                # "file-write",
                                 "recursive-get-file-info",
-                                "wide-dataframe",
+                                # "wide-dataframe",
                             ]
                         },
-                        "R": {
-                            "names": [
-                                "dataframe-to-table",
-                                "file-read",
-                                "file-write",
-                                "partitioned-dataset-filter",
-                                "wide-dataframe",
-                                "tpch",
-                            ]
-                        },
-                        "JavaScript": {"names": ["js-micro"]},
+                        # "R": {
+                        #     "names": [
+                        #         "dataframe-to-table",
+                        #         "file-read",
+                        #         "file-write",
+                        #         "partitioned-dataset-filter",
+                        #         "wide-dataframe",
+                        #         "tpch",
+                        #     ]
+                        # },
+                        # "JavaScript": {"names": ["js-micro"]},
                     }
                 },
                 "pyarrow-apache-wheel": {
@@ -149,6 +149,7 @@ class Config:
                             "names": [
                                 "dataset-read",
                                 "dataset-select",
+                                "recursive-get-file-info",
                             ]
                         },
                     }
