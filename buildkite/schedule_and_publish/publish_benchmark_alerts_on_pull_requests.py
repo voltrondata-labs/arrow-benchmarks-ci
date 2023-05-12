@@ -20,7 +20,8 @@ def publish_benchmark_alerts_on_pull_requests():
 
         comment_body = (
             notification.generate_pull_comment_body_for_high_regression_alert(
-                benchmark_langs_filter=["Python", "R"]
+                benchmark_langs_filter=["Python", "R"],
+                benchmark_machine_ignorelist=["test-mac-arm"]
             )
         )
         if comment_body:

@@ -92,9 +92,9 @@ class Notification(Base, BaseMixin):
         )
 
     def generate_pull_comment_body_for_high_regression_alert(
-        self, benchmark_langs_filter
+        self, benchmark_langs_filter, benchmark_machine_ignorelist
     ):
-        runs = self.benchmarkable.runs_with_high_regressions(benchmark_langs_filter)
+        runs = self.benchmarkable.runs_with_high_regressions(benchmark_langs_filter, benchmark_machine_ignorelist)
         if not runs:
             return
 
