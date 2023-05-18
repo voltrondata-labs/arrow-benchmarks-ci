@@ -61,7 +61,8 @@ class Benchmarkable(Base, BaseMixin):
     @property
     def displayable_message(self):
         if self.is_commit():
-            return self.data["commit"]["message"].splitlines()[0][:60]
+            # Remove % since they could cause JSON encoding issues
+            return self.data["commit"]["message"].splitlines()[0][:60].replace("%", "")
 
     @property
     def slack_text(self):
