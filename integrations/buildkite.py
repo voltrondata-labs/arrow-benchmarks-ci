@@ -80,7 +80,6 @@ class Buildkite:
             "message": message,
             "env": env,
         }
-        print(data)
         return self.session.post(url, data=json.dumps(data)).json()
 
     def get_build(self, buildkite_build_url):
