@@ -61,7 +61,9 @@ class Benchmarkable(Base, BaseMixin):
     @property
     def displayable_message(self):
         if self.is_commit():
-            # Remove % since they could cause JSON encoding issues
+            # Remove % since they cause JSON parsing issues when passed to buildkite.
+            # TODO: are there other characters we should also check? And is it possible 
+            # to escape instead of deleting?
             return self.data["commit"]["message"].splitlines()[0][:60].replace("%", "")
 
     @property
