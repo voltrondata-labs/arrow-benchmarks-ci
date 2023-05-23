@@ -287,8 +287,8 @@ class Benchmarkable(Base, BaseMixin):
             if not results:
                 continue
 
-            # Check if run has at least one benchmark with z-score < -10.0
-            if [r for r in results if r["contender_z_score"] < -10.0]:
+            # Check if run has at least one benchmark with z-score < -30.0
+            if [r for r in results if r["contender_z_score"] < -30.0]:
                 runs.append(run)
 
         return runs
