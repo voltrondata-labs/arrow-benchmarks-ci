@@ -62,7 +62,7 @@ class Benchmarkable(Base, BaseMixin):
     def displayable_message(self):
         if self.is_commit():
             # Remove % since they cause JSON parsing issues when passed to buildkite.
-            # TODO: are there other characters we should also check? And is it possible 
+            # TODO: are there other characters we should also check? And is it possible
             # to escape instead of deleting?
             return self.data["commit"]["message"].splitlines()[0][:60].replace("%", "")
 
@@ -249,13 +249,25 @@ class Benchmarkable(Base, BaseMixin):
             return 0, 0
 
         regressions = round(
-            len([r for r in results if r["contender_z_regression"]])
+            len(
+                [
+                    r
+                    for r in results
+                    if r["analysis"]["lookback_z_score"]["regression_indicated"]
+                ]
+            )
             / len(results)
             * 100,
             2,
         )
         improvements = round(
-            len([r for r in results if r["contender_z_improvement"]])
+            len(
+                [
+                    r
+                    for r in results
+                    if r["analysis"]["lookback_z_score"]["improvement_indicated"]
+                ]
+            )
             / len(results)
             * 100,
             2,
@@ -263,7 +275,9 @@ class Benchmarkable(Base, BaseMixin):
 
         return regressions, improvements
 
-    def runs_with_high_regressions(self, benchmark_langs_filter, benchmark_machine_ignorelist):
+    def runs_with_high_regressions(
+        self, benchmark_langs_filter, benchmark_machine_ignorelist
+    ):
         runs = []
         for run in self.runs_with_buildkite_builds_and_publishable_benchmark_results:
             try:
@@ -282,13 +296,18 @@ class Benchmarkable(Base, BaseMixin):
             results = [
                 r
                 for r in results
-                if r["language"] in benchmark_langs_filter and r["contender_z_score"]
+                if r["contender"]["language"] in benchmark_langs_filter
+                and r["analysis"]["lookback_z_score"]["z_score"]
             ]
             if not results:
                 continue
 
             # Check if run has at least one benchmark with z-score < -30.0
-            if [r for r in results if r["contender_z_score"] < -30.0]:
+            if [
+                r
+                for r in results
+                if r["analysis"]["lookback_z_score"]["z_score"] < -30.0
+            ]:
                 runs.append(run)
 
         return runs
