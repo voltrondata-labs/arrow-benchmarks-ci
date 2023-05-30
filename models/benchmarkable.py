@@ -253,7 +253,8 @@ class Benchmarkable(Base, BaseMixin):
                 [
                     r
                     for r in results
-                    if r["analysis"]["lookback_z_score"]["regression_indicated"]
+                    if r["analysis"].get("lookback_z_score") is not None
+                    and r["analysis"]["lookback_z_score"]["regression_indicated"]
                 ]
             )
             / len(results)
@@ -265,7 +266,8 @@ class Benchmarkable(Base, BaseMixin):
                 [
                     r
                     for r in results
-                    if r["analysis"]["lookback_z_score"]["improvement_indicated"]
+                    if r["analysis"].get("lookback_z_score") is not None
+                    and r["analysis"]["lookback_z_score"]["improvement_indicated"]
                 ]
             )
             / len(results)
@@ -297,6 +299,7 @@ class Benchmarkable(Base, BaseMixin):
                 r
                 for r in results
                 if r["contender"]["language"] in benchmark_langs_filter
+                and r["analysis"].get("lookback_z_score") is not None
                 and r["analysis"]["lookback_z_score"]["z_score"]
             ]
             if not results:
@@ -306,7 +309,8 @@ class Benchmarkable(Base, BaseMixin):
             if [
                 r
                 for r in results
-                if r["analysis"]["lookback_z_score"]["z_score"] < -30.0
+                if r["analysis"]["lookback_z_score"]["z_score"] is not None
+                and r["analysis"]["lookback_z_score"]["z_score"] < -30.0
             ]:
                 runs.append(run)
 
