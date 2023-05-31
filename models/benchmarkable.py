@@ -299,7 +299,7 @@ class Benchmarkable(Base, BaseMixin):
                 r
                 for r in results
                 if r["contender"] is not None and  # see https://github.com/voltrondata-labs/arrow-benchmarks-ci/issues/117
-                if r["contender"]["language"] in benchmark_langs_filter
+                r["contender"]["language"] in benchmark_langs_filter
                 and r["analysis"].get("lookback_z_score") is not None
                 and r["analysis"]["lookback_z_score"]["z_score"]
             ]
