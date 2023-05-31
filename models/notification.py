@@ -56,7 +56,7 @@ class Notification(Base, BaseMixin):
         ):
             if not self.benchmarkable.machine_run(
                 machine
-            ) and not self.benchmarkable.baseline_machine_run(machine):
+            ) or not self.benchmarkable.baseline_machine_run(machine):
                 continue
 
             status = self.benchmarkable.machine_runs_status(machine)
@@ -94,7 +94,9 @@ class Notification(Base, BaseMixin):
     def generate_pull_comment_body_for_high_regression_alert(
         self, benchmark_langs_filter, benchmark_machine_ignorelist
     ):
-        runs = self.benchmarkable.runs_with_high_regressions(benchmark_langs_filter, benchmark_machine_ignorelist)
+        runs = self.benchmarkable.runs_with_high_regressions(
+            benchmark_langs_filter, benchmark_machine_ignorelist
+        )
         if not runs:
             return
 

@@ -21,6 +21,11 @@ def publish_benchmark_results_on_slack():
                 notification.mark_finished()
                 messages.append(text)
         except Exception as e:
+            log.error(
+                "Caught the following exception when trying to publish a slack message "
+                "for notification ID '%s'. Continuing on.",
+                notification.id,
+            )
             log.exception(e)
 
     return messages
