@@ -311,22 +311,23 @@ class CommandExecutor:
         exit_on_failure: bool = True,
         log_stdout: bool = True,
     ):
-        log.info(f"Started executing -> {command}")
+        log.info(f"start child process: {command}")
         self.executed_commands.append((command, path, exit_on_failure))
 
         if log_stdout:
-            result = subprocess.run(
+            child = subprocess.run(
                 f"cd {path}; {command}",
                 capture_output=True,
                 shell=True,
                 executable="/bin/bash",
             )
-            stderr = result.stderr.decode()
-            stdout = result.stdout.decode()
+            stderr = child.stderr.decode()
+            stdout = child.stdout.decode()
         else:
             # Do not log Java benchmarks stdout (12GB+)
+            # Note(JP): and what about stderr?
             with tempfile.NamedTemporaryFile(delete=True) as out:
-                result = subprocess.run(
+                child = subprocess.run(
                     f"cd {path}; {command}",
                     stdout=out,
                     shell=True,
@@ -335,18 +336,22 @@ class CommandExecutor:
             stderr = ""
             stdout = ""
 
-        return_code = result.returncode
-        log.info(stderr)
-        log.info(stdout)
+        log.info(
+            "child process exited with code %s.\nstderr:\n%s\n\nstdout:\n%s",
+            child.returncode,
+            stderr,
+            stdout,
+        )
 
-        if exit_on_failure and (return_code != 0 or "ERROR" in stderr):
-            log.error(return_code)
-            log.error(stderr)
-            raise Exception(f"Failed to execute {command}")
+        # Note(JP): better: rely only on exit code.
+        if exit_on_failure and (child.returncode != 0 or "ERROR" in stderr):
+            raise Exception("command failed, exit_on_failure set")
 
         # Always fail the build if benchmark logs have Internal Server Error because
         # it could mean that we are loosing benchmark results because
         # Conbench can't store benchmark results
+        # Note(JP): better: improve child  process in terms of error handling,
+        # then here rely only on exit code.
         if "Internal Server Error" in stdout or "Internal Server Error" in stderr:
             log.error(stdout)
             log.error(stderr)
@@ -355,7 +360,7 @@ class CommandExecutor:
             )
 
         log.info(f"Done executing -> {command}")
-        return return_code, stderr
+        return child.returncode, stderr
 
 
 class BenchmarkGroupsRunner(ABC):
