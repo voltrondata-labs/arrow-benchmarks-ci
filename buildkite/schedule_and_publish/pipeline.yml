@@ -40,27 +40,16 @@ steps:
 
   - wait
 
-  - label: "Publish Benchmark Results on Slack"
+  # We used to post benchmark results to a Voltron Data-internal Slack channel here. We
+  # took those messages out since they were noisy and no one looked at them. After we do
+  # https://github.com/voltrondata-labs/arrow-benchmarks-ci/issues/98, we could add a
+  # Slack benchalerts step that would do something similar with less noise.
+
+  - label: "Publish to Pull Requests"
     concurrency: 1
     concurrency_group: "arrow-bci-deploy"
     command:
-      - docker-compose -f envs/prod/docker-compose.yml run app python -c 'from buildkite.schedule_and_publish.publish_benchmark_results_on_slack import publish_benchmark_results_on_slack; publish_benchmark_results_on_slack()'
-
-  - wait
-
-  - label: "Publish Benchmark Results to Pull Requests"
-    concurrency: 1
-    concurrency_group: "arrow-bci-deploy"
-    command:
-      - docker-compose -f envs/prod/docker-compose.yml run app python -c 'from buildkite.schedule_and_publish.publish_benchmark_results_on_pull_requests import publish_benchmark_results_on_pull_requests; publish_benchmark_results_on_pull_requests()'
-
-  - wait
-
-  - label: "Publish Benchmark High Level of Regressions Alerts to Pull Requests"
-    concurrency: 1
-    concurrency_group: "arrow-bci-deploy"
-    command:
-      - docker-compose -f envs/prod/docker-compose.yml run app python -c 'from buildkite.schedule_and_publish.publish_benchmark_alerts_on_pull_requests import publish_benchmark_alerts_on_pull_requests; publish_benchmark_alerts_on_pull_requests()'
+      - docker-compose -f envs/prod/docker-compose.yml run app python -c 'from buildkite.schedule_and_publish.publish_benchmark_results_on_pull_requests import publish_benchmark_results_on_pull_requests; from buildkite.schedule_and_publish.publish_benchmark_alerts_on_pull_requests import publish_benchmark_alerts_on_pull_requests; publish_benchmark_results_on_pull_requests(); publish_benchmark_alerts_on_pull_requests()'
 
   - wait
 

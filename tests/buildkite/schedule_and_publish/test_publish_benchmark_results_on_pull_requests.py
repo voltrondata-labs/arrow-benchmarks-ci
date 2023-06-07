@@ -27,7 +27,7 @@ ursa-thinkcentre-m75q: Supported benchmark langs: C++, Java"""
 
 
 def verify_pull_comment(input_run_statuses, expected_statuses, expected_build_statuses):
-    for (run, status) in input_run_statuses:
+    for run, status in input_run_statuses:
         run.finished_at = s.sql.func.now()
         run.status = status
         run.save()
@@ -125,6 +125,7 @@ def test_publish_benchmark_results_on_pull_requests(client):
         outbound_requests[-1][0]
         == "http://mocked-integrations:9999/github/repos/apache/arrow/issues/comments/1234"
     )
+    previous_number_of_requests = len(outbound_requests)
 
     # Update pull comment body in the test since
     # mocked responses for POST http://mocked-integrations:9999/github/repos/apache/arrow/issues/comments/1234
@@ -143,10 +144,7 @@ def test_publish_benchmark_results_on_pull_requests(client):
 
     publish_benchmark_results_on_pull_requests()
     # Verify pull comment was not updated
-    assert (
-        outbound_requests[-1][0]
-        != "http://mocked-integrations:9999/github/repos/apache/arrow/issues/comments/1234"
-    )
+    assert len(outbound_requests) == previous_number_of_requests
 
     for run in Run.all():
         if run.machine_name == machines[1]:
@@ -156,6 +154,7 @@ def test_publish_benchmark_results_on_pull_requests(client):
 
     publish_benchmark_results_on_pull_requests()
     # Verify pull comment was updated
+    assert len(outbound_requests) > previous_number_of_requests
     assert (
         outbound_requests[-1][0]
         == "http://mocked-integrations:9999/github/repos/apache/arrow/issues/comments/1234"
