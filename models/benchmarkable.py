@@ -242,7 +242,7 @@ class Benchmarkable(Base, BaseMixin):
     # step, a cached /api/compare/runs/ response from Conbench should remain valid. The
     # cache's size has an implicit upper bound of the number of machines we have, which
     # is small.
-    @functools.cache
+    @functools.lru_cache
     def get_conbench_compare_results(self, machine):
         return conbench.get_compare_runs(
             self.baseline_machine_run(machine).id,
