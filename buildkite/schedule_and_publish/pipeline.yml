@@ -40,6 +40,11 @@ steps:
 
   - wait
 
+  # We used to post benchmark results to a Voltron Data-internal Slack channel here. We
+  # took those messages out since they were noisy and no one looked at them. After we do
+  # https://github.com/voltrondata-labs/arrow-benchmarks-ci/issues/98, we could add a
+  # Slack benchalerts step that would do something similar with less noise.
+
   - label: "Publish to Pull Requests"
     concurrency: 1
     concurrency_group: "arrow-bci-deploy"
