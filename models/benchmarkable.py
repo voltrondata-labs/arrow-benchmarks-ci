@@ -1,3 +1,4 @@
+import functools
 import traceback
 
 import sqlalchemy as s
@@ -236,6 +237,12 @@ class Benchmarkable(Base, BaseMixin):
             if notification.type == "pull_comment_alert":
                 return notification
 
+    # This cached method is only used during the "Publish to Pull Requests" step of the
+    # "schedule_and_publish" Buildkite pipeline. Through the (quick) lifetime of that
+    # step, a cached /api/compare/runs/ response from Conbench should remain valid. The
+    # cache's size has an implicit upper bound of the number of machines we have, which
+    # is small.
+    @functools.cache
     def get_conbench_compare_results(self, machine):
         return conbench.get_compare_runs(
             self.baseline_machine_run(machine).id,
@@ -298,8 +305,9 @@ class Benchmarkable(Base, BaseMixin):
             results = [
                 r
                 for r in results
-                if r["contender"] is not None and  # see https://github.com/voltrondata-labs/arrow-benchmarks-ci/issues/117
-                r["contender"]["language"] in benchmark_langs_filter
+                # see https://github.com/voltrondata-labs/arrow-benchmarks-ci/issues/117
+                if r["contender"] is not None
+                and r["contender"]["language"] in benchmark_langs_filter
                 and r["analysis"].get("lookback_z_score") is not None
                 and r["analysis"]["lookback_z_score"]["z_score"]
             ]

@@ -15,9 +15,6 @@ from buildkite.schedule_and_publish.publish_warnings_on_slack import (
     publish_buildkite_build_warnings_on_slack,
     publish_offline_machine_warnings_on_slack,
 )
-from buildkite.schedule_and_publish.publish_benchmark_results_on_slack import (
-    publish_benchmark_results_on_slack,
-)
 
 from models.benchmarkable import Benchmarkable
 from models.run import Run
@@ -76,18 +73,3 @@ time.sleep(15)
 update_benchmark_builds_status()
 for run in Run.all():
     print(run.benchmarkable_id, run.reason, run.status, run.skip_reason)
-
-
-print("\n-------Testing publish_benchmark_results_on_slack()\n")
-create_benchmark_builds()
-time.sleep(15)
-update_benchmark_builds_status()
-for benchmarkable in Benchmarkable.all():
-    print(
-        benchmarkable.id,
-        benchmarkable.all_runs_with_publishable_benchmark_results_finished(),
-        benchmarkable.baseline.all_runs_with_publishable_benchmark_results_finished()
-        if benchmarkable.baseline
-        else "",
-    )
-publish_benchmark_results_on_slack()
