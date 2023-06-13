@@ -11,8 +11,8 @@ from integrations import IntegrationException
 from integrations.conbench import conbench
 from logger import log
 from models.base import BaseMixin, NotNull, Nullable
+from models.benchalerts_run import BenchalertsRun
 from models.machine import Machine
-from models.notification import Notification
 from models.run import Run
 
 
@@ -26,8 +26,10 @@ class Benchmarkable(Base, BaseMixin):
     reason = NotNull(s.String)
     created_at = NotNull(s.DateTime(timezone=False), server_default=s.sql.func.now())
     runs = relationship("Run", backref=backref("benchmarkable", lazy="joined"))
-    notifications = relationship(
-        "Notification", backref=backref("benchmarkable", lazy="joined")
+    # Right now this is always 1-to-1, but leaving it as a list in case we add more
+    # alerting runs per benchmarkable in the future.
+    benchalerts_runs = relationship(
+        "BenchalertsRun", backref=backref("benchmarkable", lazy="joined")
     )
 
     @property
@@ -109,7 +111,7 @@ class Benchmarkable(Base, BaseMixin):
 
             benchmarkable = cls(**data)
             benchmarkable.add_runs(override_filters, data["reason"])
-            benchmarkable.add_notifications()
+            benchmarkable.add_benchalerts_run(reason=data["reason"])
 
             Session.add(benchmarkable)
             Session.commit()
@@ -136,14 +138,12 @@ class Benchmarkable(Base, BaseMixin):
                 )
             )
 
-    def add_notifications(self):
-        self.notifications.append(Notification(type="slack_message"))
+    def add_benchalerts_run(self, reason: str):
         if (
             self.pull_number
             and self.repo_params["publish_benchmark_results_on_pull_requests"]
         ):
-            self.notifications.append(Notification(type="pull_comment"))
-            self.notifications.append(Notification(type="pull_comment_alert"))
+            self.benchalerts_runs.append(BenchalertsRun(reason=reason))
 
     @property
     def runs_with_buildkite_builds_and_publishable_benchmark_results(self):
@@ -221,21 +221,6 @@ class Benchmarkable(Base, BaseMixin):
                 if run.machine.publish_benchmark_results
             ]
         )
-
-    def slack_notification(self):
-        for notification in self.notifications:
-            if notification.type == "slack_message":
-                return notification
-
-    def pull_notification(self):
-        for notification in self.notifications:
-            if notification.type == "pull_comment":
-                return notification
-
-    def pull_alert_notification(self):
-        for notification in self.notifications:
-            if notification.type == "pull_comment_alert":
-                return notification
 
     # This cached method is only used during the "Publish to Pull Requests" step of the
     # "schedule_and_publish" Buildkite pipeline. Through the (quick) lifetime of that

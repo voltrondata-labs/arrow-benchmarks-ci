@@ -211,9 +211,11 @@ class Events(Resource):
                     if run.status == "created":
                         run.create_benchmark_build()
 
-                notification = benchmarkable.pull_notification()
-                notification.create_pull_comment(
-                    notification.generate_pull_comment_body()
+                Github(repo).create_pull_comment(
+                    pull_number,
+                    f"Benchmark runs are scheduled for commit {benchmarkable.id}. Watch "
+                    f"{Config.CONBENCH_URL} for updates. A comment will be posted here "
+                    "when the runs are complete.",
                 )
             except UnsupportedBenchmarkCommand:
                 Github(repo).create_pull_comment(

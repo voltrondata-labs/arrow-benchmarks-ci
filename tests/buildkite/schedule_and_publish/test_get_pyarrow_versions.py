@@ -1,7 +1,7 @@
 from buildkite.schedule_and_publish.get_pyarrow_versions import get_pyarrow_versions
+from models.benchalerts_run import BenchalertsRun
 from models.benchmarkable import Benchmarkable
 from models.machine import Machine
-from models.notification import Notification
 from models.run import Run
 
 
@@ -31,12 +31,10 @@ def verify_benchmarkable_runs(version):
         assert not run.finished_at
 
 
-def verify_benchmarkable_notifications(version):
+def verify_benchmarkable_benchalerts_runs(version):
     benchmarkable_id = f"pyarrow=={version}"
-    assert Notification.first(benchmarkable_id=benchmarkable_id, type="slack_message")
-    assert not Notification.first(
-        benchmarkable_id=benchmarkable_id, type="pull_comment"
-    )
+    benchalerts_run = BenchalertsRun.first(benchmarkable_id=benchmarkable_id)
+    assert benchalerts_run is None
 
 
 def test_get_pyarrow_versions():
@@ -45,4 +43,4 @@ def test_get_pyarrow_versions():
     for version, prev_version in [("5.0.0", "4.0.1"), ("4.0.1", None)]:
         verify_benchmarkable(version, prev_version)
         verify_benchmarkable_runs(version)
-        verify_benchmarkable_notifications(version)
+        verify_benchmarkable_benchalerts_runs(version)

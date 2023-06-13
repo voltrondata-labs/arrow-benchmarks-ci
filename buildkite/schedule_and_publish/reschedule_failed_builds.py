@@ -1,5 +1,4 @@
 import os
-
 from datetime import datetime, timedelta
 
 from buildkite.schedule_and_publish.create_benchmark_builds import (
@@ -41,10 +40,14 @@ def reschedule_failed_builds():
             f"Rescheduled failed build for {run.benchmarkable_id} on {run.machine_name}"
         )
 
-    # Set finished_at to None for all notifications associated with failed builds
+    # Ensure each build has at least one benchalerts workflow still scheduled
     for run in runs:
-        for notification in run.benchmarkable.notifications:
-            notification.finished_at = None
-            notification.save()
+        unfinished_benchalerts_runs = [
+            benchalerts_run
+            for benchalerts_run in run.benchmarkable.benchalerts_runs
+            if benchalerts_run.finished_at is None
+        ]
+        if not unfinished_benchalerts_runs:
+            run.benchmarkable.add_benchalerts_run(reason=run.reason)
 
     create_benchmark_builds()
