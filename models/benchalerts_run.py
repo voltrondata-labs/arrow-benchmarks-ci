@@ -48,19 +48,16 @@ class BenchalertsRun(Base, BaseMixin):
             or self.benchmarkable.baseline.all_runs_with_publishable_benchmark_results_finished()
         )
 
-    def run_benchalerts(self) -> Optional[FullComparisonInfo]:
+    def run_benchalerts(self) -> None:
         """Run a benchalerts pipeline to find possible errors/regressions and post
-        about them in a GitHub Check and PR comment.
-
-        Returns a FullComparisonInfo object if the pipeline ran successfully, or None
-        if it didn't and shouldn't try again. If an exception is raised, it was probably
-        in communicating with Conbench or GitHub, so we can try again.
+        about them in a GitHub Check and PR comment. Then mark this run as finished.
         """
         if self.reason.endswith("-wheel"):
             # No alerting on wheels for now.
             log.info(
                 f"Skipping benchalerts for {self.benchmarkable_id} because it's a wheel"
             )
+            self.mark_finished(comparison=None)
             return
 
         # For all other reasons, the benchmarkable ID is the commit hash
@@ -71,6 +68,7 @@ class BenchalertsRun(Base, BaseMixin):
         pr_number: Optional[int] = self.benchmarkable.pull_number
         if not pr_number:
             log.warning(f"Skipping benchalerts for {commit_hash}: no PR number found")
+            self.mark_finished(comparison=None)
             return
 
         if self.reason == "pull-request":
@@ -120,14 +118,16 @@ class BenchalertsRun(Base, BaseMixin):
         )
 
         output = pipeline.run_pipeline()
-        comparison = output["z_comparison"]
+        self.mark_finished(comparison=output["z_comparison"])
 
-        self.output = dataclasses.asdict(comparison)
-        self.status = steps.GitHubCheckStep._default_check_status(comparison)
+    def mark_finished(self, comparison: Optional[FullComparisonInfo]) -> None:
+        """Mark this run as finished, and save the comparison data."""
+        if comparison:
+            self.output = dataclasses.asdict(comparison)
+            self.status = steps.GitHubCheckStep._default_check_status(comparison)
+
         self.finished_at = s.sql.func.now()
         self.save()
-
-        return comparison
 
 
 class MockBenchalertsGitHubClient(GitHubRepoClient):
