@@ -11,7 +11,6 @@ from typing import List
 import psutil
 import requests
 
-from integrations.slack import Slack
 from utils import generate_uuid
 
 from .run_utils import post_logs_to_arrow_bci, run_context
