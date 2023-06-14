@@ -39,6 +39,7 @@ class BenchalertsRun(Base, BaseMixin):
         postgresql.JSONB, nullable=True
     )
     status: Mapped[Optional[str]] = mapped_column(s.String, nullable=True)
+    check_link: Mapped[Optional[str]] = mapped_column(s.String, nullable=True)
 
     @property
     def ready_to_run(self) -> bool:
@@ -57,7 +58,7 @@ class BenchalertsRun(Base, BaseMixin):
             log.info(
                 f"Skipping benchalerts for {self.benchmarkable_id} because it's a wheel"
             )
-            self.mark_finished(comparison=None)
+            self.mark_finished(comparison=None, check_link=None)
             return
 
         # For all other reasons, the benchmarkable ID is the commit hash
@@ -68,7 +69,7 @@ class BenchalertsRun(Base, BaseMixin):
         pr_number: Optional[int] = self.benchmarkable.pull_number
         if not pr_number:
             log.warning(f"Skipping benchalerts for {commit_hash}: no PR number found")
-            self.mark_finished(comparison=None)
+            self.mark_finished(comparison=None, check_link=None)
             return
 
         if self.reason == "pull-request":
@@ -118,13 +119,20 @@ class BenchalertsRun(Base, BaseMixin):
         )
 
         output = pipeline.run_pipeline()
-        self.mark_finished(comparison=output["z_comparison"])
+        self.mark_finished(
+            comparison=output["z_comparison"],
+            check_link=output["GitHubCheckStep"][0]["html_url"],
+        )
 
-    def mark_finished(self, comparison: Optional[FullComparisonInfo]) -> None:
+    def mark_finished(
+        self, comparison: Optional[FullComparisonInfo], check_link: Optional[str]
+    ) -> None:
         """Mark this run as finished, and save the comparison data."""
         if comparison:
             self.output = dataclasses.asdict(comparison)
-            self.status = steps.GitHubCheckStep._default_check_status(comparison)
+            self.status = steps.GitHubCheckStep._default_check_status(comparison).value
+        if check_link:
+            self.check_link = check_link
 
         self.finished_at = s.sql.func.now()
         self.save()

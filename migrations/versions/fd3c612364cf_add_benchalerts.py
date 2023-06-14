@@ -25,6 +25,7 @@ def upgrade():
         sa.Column("finished_at", sa.DateTime(), nullable=True),
         sa.Column("output", postgresql.JSONB(astext_type=sa.Text()), nullable=True),
         sa.Column("status", sa.String(), nullable=True),
+        sa.Column("check_link", sa.String(), nullable=True),
         sa.ForeignKeyConstraint(
             ["benchmarkable_id"],
             ["benchmarkable.id"],

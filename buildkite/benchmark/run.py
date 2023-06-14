@@ -693,13 +693,6 @@ class Run:
         self.print_results()
 
         if len(self.failed_benchmark_groups()) > 0:
-            # Post a quick, dirty message to Slack
-            failure_names = "\n".join(bg.name for bg in self.failed_benchmark_groups())
-            Slack().post_message(
-                f"Failed Arrow benchmarks:\n{failure_names}\n\n"
-                f"Build log: {os.getenv('BUILDKITE_BUILD_URL')}"
-            )
-
             raise Exception("Build has failed benchmarks.")
 
 
