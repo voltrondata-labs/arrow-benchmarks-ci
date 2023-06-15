@@ -210,7 +210,8 @@ def verify_benchmarkables_and_builds_were_created_for_pull_request_comment(
         json.dumps(
             {
                 "body": f"Benchmark runs are scheduled for commit {benchmarkable.id}. "
-                f"Watch {Config.CONBENCH_URL} for updates. A comment will be posted "
+                f"Watch https://buildkite.com/{Config.BUILDKITE_ORG} and "
+                f"{Config.CONBENCH_URL} for updates. A comment will be posted "
                 "here when the runs are complete."
             }
         ),

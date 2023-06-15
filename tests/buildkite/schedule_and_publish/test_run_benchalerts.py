@@ -33,8 +33,8 @@ def last_pr_comment_body_posted() -> Optional[str]:
 def assert_last_pr_comment_was_pending():
     expected_comment_body = (
         f"Benchmark runs are scheduled for commit {test_benchmarkable_id}. "
-        f"Watch {Config.CONBENCH_URL} for updates. A comment will be posted "
-        "here when the runs are complete."
+        f"Watch https://buildkite.com/{Config.BUILDKITE_ORG} and {Config.CONBENCH_URL} "
+        "for updates. A comment will be posted here when the runs are complete."
     )
     assert last_pr_comment_body_posted()
     assert last_pr_comment_body_posted() == expected_comment_body
