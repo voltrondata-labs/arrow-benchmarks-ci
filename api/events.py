@@ -214,6 +214,7 @@ class Events(Resource):
                 Github(repo).create_pull_comment(
                     pull_number,
                     f"Benchmark runs are scheduled for commit {benchmarkable.id}. Watch "
+                    f"https://buildkite.com/{Config.BUILDKITE_ORG} and "
                     f"{Config.CONBENCH_URL} for updates. A comment will be posted here "
                     "when the runs are complete.",
                 )
