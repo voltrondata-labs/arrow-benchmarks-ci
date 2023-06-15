@@ -10,6 +10,7 @@ from benchalerts import pipeline_steps as steps
 from benchalerts.conbench_dataclasses import FullComparisonInfo
 from benchalerts.integrations.github import GitHubRepoClient
 from benchclients.conbench import LegacyConbenchClient
+from benchclients.logging import log as benchalerts_log
 from sqlalchemy.dialects import postgresql
 from sqlalchemy.orm import Mapped, mapped_column
 
@@ -93,6 +94,7 @@ class BenchalertsRun(Base, BaseMixin):
 
         run_ids = [run.id for run in self.benchmarkable.runs]
         log.info(f"Analyzing run IDs: {run_ids}")
+        benchalerts_log.setLevel("DEBUG")
 
         pipeline = AlertPipeline(
             steps=[
