@@ -64,6 +64,6 @@ if __name__ == "__main__":
         run_benchalerts()
     except Exception as e:
         Slack().post_message(
-            repr(e) + "\n\nBuild log: " + os.getenv("BUILDKITE_BUILD_URL")
+            repr(e) + "\n\nBuild log: " + os.getenv("BUILDKITE_BUILD_URL", "<missing>")
         )
         raise
