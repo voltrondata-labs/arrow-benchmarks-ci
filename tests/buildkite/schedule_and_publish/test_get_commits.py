@@ -3,9 +3,9 @@ import os
 
 from buildkite.schedule_and_publish.get_commits import get_commits
 from config import Config
+from models.benchalerts_run import BenchalertsRun
 from models.benchmarkable import Benchmarkable
 from models.machine import Machine
-from models.notification import Notification
 from models.run import Run
 
 commit_dicts = json.load(open("tests/mocked_integrations/github/get_commits.json"))
@@ -32,29 +32,14 @@ def verify_benchmarkable_runs(commit_dict):
         assert not run.finished_at
 
 
-def verify_benchmarkable_notifications(
+def verify_benchmarkable_benchalerts_runs(
     commit_dict, publish_benchmark_results_on_pull_requests=True
 ):
     benchmarkable_id = commit_dict["sha"]
-    assert Notification.first(benchmarkable_id=benchmarkable_id, type="slack_message")
     if publish_benchmark_results_on_pull_requests:
-        assert Notification.first(
-            benchmarkable_id=benchmarkable_id, type="pull_comment"
-        )
-        assert Notification.first(
-            benchmarkable_id=benchmarkable_id, type="pull_comment_alert"
-        )
+        assert BenchalertsRun.first(benchmarkable_id=benchmarkable_id)
     else:
-        assert (
-            Notification.first(benchmarkable_id=benchmarkable_id, type="pull_comment")
-            is None
-        )
-        assert (
-            Notification.first(
-                benchmarkable_id=benchmarkable_id, type="pull_comment_alert"
-            )
-            is None
-        )
+        assert BenchalertsRun.first(benchmarkable_id=benchmarkable_id) is None
 
 
 def test_get_commits():
@@ -63,7 +48,7 @@ def test_get_commits():
     for commit_dict in commit_dicts:
         verify_benchmarkable(commit_dict)
         verify_benchmarkable_runs(commit_dict)
-        verify_benchmarkable_notifications(commit_dict)
+        verify_benchmarkable_benchalerts_runs(commit_dict)
 
 
 def test_get_commits_with_publish_benchmark_results_on_pull_requests_off():
@@ -80,6 +65,6 @@ def test_get_commits_with_publish_benchmark_results_on_pull_requests_off():
     for commit_dict in commit_dicts:
         verify_benchmarkable(commit_dict)
         verify_benchmarkable_runs(commit_dict)
-        verify_benchmarkable_notifications(
+        verify_benchmarkable_benchalerts_runs(
             commit_dict, publish_benchmark_results_on_pull_requests=False
         )

@@ -2,11 +2,11 @@ import hashlib
 import hmac
 import json
 
+from models.benchalerts_run import BenchalertsRun
 from models.benchmark_group_execution import BenchmarkGroupExecution
 from models.benchmarkable import Benchmarkable
 from models.machine import Machine
 from models.memory_usage import MemoryUsage
-from models.notification import Notification
 from models.run import Run
 
 outbound_requests = []
@@ -178,7 +178,7 @@ filter_with_file_only_benchmarks = {
 def delete_data():
     for model in [
         Run,
-        Notification,
+        BenchalertsRun,
         Benchmarkable,
         Machine,
         BenchmarkGroupExecution,

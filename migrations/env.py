@@ -4,12 +4,11 @@ from alembic import context
 from sqlalchemy import engine_from_config, pool
 
 from config import Config
-from db import engine, Base
+from db import Base, engine
 
 from models import (  # noqa  # isort:skip
     benchmarkable,
     run,
-    notification,
     benchmark_group_execution,
     memory_usage,
 )

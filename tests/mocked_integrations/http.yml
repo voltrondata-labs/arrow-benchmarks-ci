@@ -59,6 +59,16 @@
     - reply_http:
         status_code: 201
         body_from_file: './github/post_issues_comments.json'
+- key: post_check_run
+  kind: Behavior
+  expect:
+    http:
+      method: POST
+      path: /github/repos/apache/arrow/check-runs
+  actions:
+    - reply_http:
+        status_code: 201
+        body_from_file: './github/post_check_run.json'
 - key: patch_issues_comments
   kind: Behavior
   expect:
@@ -188,6 +198,16 @@
     - reply_http:
         status_code: 200
         body_from_file: './pipy/get_pyarrow_project.json'
+- key: get_run
+  kind: Behavior
+  expect:
+    http:
+      method: GET
+      path: /conbench/api/runs/*
+  actions:
+    - reply_http:
+        status_code: 200
+        body_from_file: './conbench/get_run.json'
 - key: get_compare_runs_api_high_level_of_regressions
   kind: Behavior
   expect:

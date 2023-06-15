@@ -9,12 +9,12 @@ from models.run import Run
 from tests.helpers import (
     delete_data,
     filter_with_cpp_only_benchmarks,
+    filter_with_file_only_benchmarks,
+    filter_with_file_write_only_benchmarks,
+    filter_with_file_write_python_only_benchmarks,
     filter_with_java_script_only_benchmarks,
     filter_with_python_only_benchmarks,
     filter_with_r_only_benchmarks,
-    filter_with_file_write_only_benchmarks,
-    filter_with_file_write_python_only_benchmarks,
-    filter_with_file_only_benchmarks,
     machine_configs,
     make_github_webhook_event_for_comment,
     mock_offline_machine,
@@ -205,10 +205,16 @@ def verify_benchmarkables_and_builds_were_created_for_pull_request_comment(
     assert baseline_benchmarkable
     assert benchmarkable.baseline_id == test_baseline_benchmarkable_id
     assert benchmarkable.pull_number == test_pull_number
-    assert benchmarkable.pull_notification().message == {
-        "url": "http://mocked-integrations:9999/github/repos/apache/arrow/issues/comments/1234",
-        "body": "test",
-    }
+    assert outbound_requests[-1] == (
+        f"http://mocked-integrations:9999/github/repos/apache/arrow/issues/{test_pull_number}/comments",
+        json.dumps(
+            {
+                "body": f"Benchmark runs are scheduled for commit {benchmarkable.id}. "
+                f"Watch {Config.CONBENCH_URL} for updates. A comment will be posted "
+                "here when the runs are complete."
+            }
+        ),
+    )
     for machine_name, (
         expected_filters,
         expected_skip_reason,
