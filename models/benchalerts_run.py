@@ -92,7 +92,11 @@ class BenchalertsRun(Base, BaseMixin):
             conbench_client = None
             github_client = None
 
-        run_ids = [run.id for run in self.benchmarkable.runs]
+        run_ids = [
+            run.id
+            for run in self.benchmarkable.runs
+            if run.machine_name not in ["test-mac-arm"]
+        ]
         log.info(f"Analyzing run IDs: {run_ids}")
         benchalerts_log.setLevel("DEBUG")
 
