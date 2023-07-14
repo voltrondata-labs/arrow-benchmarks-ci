@@ -236,7 +236,7 @@ class ArrowAlerter(Alerter):
         return super().github_check_title(stable_comparison)
 
     def github_check_summary(
-        self, full_comparison: FullComparisonInfo, build_url: str | None
+        self, full_comparison: FullComparisonInfo, build_url: Optional[str]
     ) -> str:
         (
             stable_comparison,
