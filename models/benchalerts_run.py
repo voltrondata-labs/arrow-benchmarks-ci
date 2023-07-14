@@ -141,8 +141,9 @@ class BenchalertsRun(Base, BaseMixin):
     ) -> None:
         """Mark this run as finished, and save the comparison data."""
         if comparison:
+            alerter = ArrowAlerter("", "")
+            self.status = alerter.github_check_status(comparison).value
             self.output = dataclasses.asdict(comparison)
-            self.status = steps.GitHubCheckStep._default_check_status(comparison).value
         if check_link:
             self.check_link = check_link
 
@@ -194,10 +195,10 @@ class ArrowAlerter(Alerter):
         applying the lookback z-score analysis, and should be treated differently in
         alerts.
 
-        result_info looks like the "contender" field from this endpoint:
+        result_info looks like the response from this endpoint:
         https://conbench.ursa.dev/api/redoc#tag/Comparisons/paths/~1api~1compare~1benchmark-results~1%7Bcompare_ids%7D~1/get
         """
-        return result_info["language"] not in ["Python", "R"]
+        return result_info["contender"]["language"] not in ["Python", "R"]
 
     def _separate_known_unstable_benchmarks(
         self,
