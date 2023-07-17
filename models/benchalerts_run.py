@@ -1,14 +1,16 @@
 import dataclasses
 import os
+from copy import deepcopy
 from datetime import datetime
-from typing import Optional, Union
+from typing import Optional, Tuple, Union
 
 import requests
 import sqlalchemy as s
-from benchalerts import AlertPipeline
+from benchalerts import Alerter, AlertPipeline
 from benchalerts import pipeline_steps as steps
 from benchalerts.conbench_dataclasses import FullComparisonInfo
-from benchalerts.integrations.github import GitHubRepoClient
+from benchalerts.integrations.github import CheckStatus, GitHubRepoClient
+from benchalerts.message_formatting import _list_results
 from benchclients.conbench import LegacyConbenchClient
 from benchclients.logging import log as benchalerts_log
 from sqlalchemy.dialects import postgresql
@@ -100,6 +102,8 @@ class BenchalertsRun(Base, BaseMixin):
         log.info(f"Analyzing run IDs: {run_ids}")
         benchalerts_log.setLevel("DEBUG")
 
+        alerter = ArrowAlerter(commit_hash=commit_hash, reason=self.reason)
+
         pipeline = AlertPipeline(
             steps=[
                 steps.GetConbenchZComparisonForRunsStep(
@@ -114,11 +118,13 @@ class BenchalertsRun(Base, BaseMixin):
                     comparison_step_name="z_comparison",
                     repo=self.benchmarkable.repo,
                     github_client=github_client,
+                    alerter=alerter,
                 ),
                 steps.GitHubPRCommentAboutCheckStep(
                     pr_number=pr_number,
                     repo=self.benchmarkable.repo,
                     github_client=github_client,
+                    alerter=alerter,
                 ),
                 # TODO: post to Slack about failures, create GitHub issues?
             ]
@@ -135,8 +141,9 @@ class BenchalertsRun(Base, BaseMixin):
     ) -> None:
         """Mark this run as finished, and save the comparison data."""
         if comparison:
+            alerter = ArrowAlerter("", "")
+            self.status = alerter.github_check_status(comparison).value
             self.output = dataclasses.asdict(comparison)
-            self.status = steps.GitHubCheckStep._default_check_status(comparison).value
         if check_link:
             self.check_link = check_link
 
@@ -152,3 +159,138 @@ class MockBenchalertsGitHubClient(GitHubRepoClient):
         self.session = requests.Session()
         self.session.mount("http://", adapter)
         self.base_url = os.environ["GITHUB_API_BASE_URL"] + "/repos/apache/arrow"
+
+
+class ArrowAlerter(Alerter):
+    """Customize messages and logic for this Arrow repo."""
+
+    def __init__(self, commit_hash: str, reason: str) -> None:
+        super().__init__()
+        self.commit_hash = commit_hash
+        self.reason = reason
+
+    def intro_sentence(self, full_comparison: FullComparisonInfo) -> str:
+        num_runs = len(full_comparison.run_comparisons)
+        s = "" if num_runs == 1 else "s"
+        have = "has" if num_runs == 1 else "have"
+
+        if self.reason == "pull-request":
+            return self.clean(
+                f"""
+                Thanks for your patience. Conbench analyzed the {num_runs} benchmarking
+                run{s} that {have} been run so far on PR commit {self.commit_hash}.
+                """
+            )
+        else:
+            return self.clean(
+                f"""
+                After merging your PR, Conbench analyzed the {num_runs} benchmarking
+                run{s} that {have} been run so far on merge-commit {self.commit_hash}.
+                """
+            )
+
+    @staticmethod
+    def _is_known_unstable(result_info: dict) -> bool:
+        """Whether a benchmark result is known to sometimes produce false positives when
+        applying the lookback z-score analysis, and should be treated differently in
+        alerts.
+
+        result_info looks like the response from this endpoint:
+        https://conbench.ursa.dev/api/redoc#tag/Comparisons/paths/~1api~1compare~1benchmark-results~1%7Bcompare_ids%7D~1/get
+        """
+        return result_info["contender"]["language"] not in ["Python", "R"]
+
+    def _separate_known_unstable_benchmarks(
+        self,
+        full_comparison: FullComparisonInfo,
+    ) -> Tuple[FullComparisonInfo, FullComparisonInfo]:
+        """Separate out certain benchmarks that are known to be unstable, so that we
+        alert differently for them.
+        """
+        stable_comparison = deepcopy(full_comparison)
+        unstable_comparison = deepcopy(full_comparison)
+
+        for run in stable_comparison.run_comparisons:
+            if run.compare_results:
+                run.compare_results = [
+                    result
+                    for result in run.compare_results
+                    if not self._is_known_unstable(result)
+                ]
+
+        for run in unstable_comparison.run_comparisons:
+            if run.compare_results:
+                run.compare_results = [
+                    result
+                    for result in run.compare_results
+                    if self._is_known_unstable(result)
+                ]
+
+        return stable_comparison, unstable_comparison
+
+    def github_check_status(self, full_comparison: FullComparisonInfo) -> CheckStatus:
+        stable_comparison, _ = self._separate_known_unstable_benchmarks(full_comparison)
+        return super().github_check_status(stable_comparison)
+
+    def github_check_title(self, full_comparison: FullComparisonInfo) -> str:
+        stable_comparison, _ = self._separate_known_unstable_benchmarks(full_comparison)
+        return super().github_check_title(stable_comparison)
+
+    def github_check_summary(
+        self, full_comparison: FullComparisonInfo, build_url: Optional[str]
+    ) -> str:
+        (
+            stable_comparison,
+            unstable_comparison,
+        ) = self._separate_known_unstable_benchmarks(full_comparison)
+
+        summary = super().github_check_summary(stable_comparison, build_url) + "\n\n"
+
+        if unstable_comparison.results_with_errors:
+            summary += self.clean(
+                """
+                ## Unstable benchmarks with errors
+
+                These are errors that were caught while running the known-unstable
+                benchmarks. You can click each link to go to the Conbench entry for that
+                benchmark, which might have more information about what the error was.
+                """
+            )
+            summary += _list_results(unstable_comparison.results_with_errors)
+
+        if unstable_comparison.results_with_z_regressions:
+            summary += self.clean(
+                """
+                ## Unstable benchmarks with performance regressions
+
+                The following benchmark results indicate a possible performance
+                regression, but are known to sometimes produce false positives when
+                applying the lookback z-score analysis.
+                """
+            )
+            summary += _list_results(unstable_comparison.results_with_z_regressions)
+
+        return summary
+
+    def github_pr_comment(
+        self, full_comparison: FullComparisonInfo, check_link: str
+    ) -> str:
+        (
+            stable_comparison,
+            unstable_comparison,
+        ) = self._separate_known_unstable_benchmarks(full_comparison)
+
+        comment = super().github_pr_comment(stable_comparison, check_link)
+
+        if (
+            unstable_comparison.results_with_errors
+            or unstable_comparison.results_with_z_regressions
+        ):
+            comment += self.clean(
+                """
+                It also includes information about possible false positives for
+                unstable benchmarks that are known to sometimes produce them.
+                """
+            )
+
+        return comment
