@@ -11,7 +11,7 @@ from benchalerts import pipeline_steps as steps
 from benchalerts.conbench_dataclasses import FullComparisonInfo
 from benchalerts.integrations.github import CheckStatus, GitHubRepoClient
 from benchalerts.message_formatting import _list_results
-from benchclients.conbench import LegacyConbenchClient
+from benchclients.conbench import ConbenchClient
 from benchclients.logging import log as benchalerts_log
 from sqlalchemy.dialects import postgresql
 from sqlalchemy.orm import Mapped, mapped_column
@@ -87,9 +87,8 @@ class BenchalertsRun(Base, BaseMixin):
             "http://mocked-integrations"
         ):
             log.info("Using mocked integrations")
-            conbench_client = LegacyConbenchClient(adapter=adapter)
-            conbench_client.session.mount("http://", adapter)
-            github_client = MockBenchalertsGitHubClient()
+            conbench_client = MockBenchclientsConbenchClient(adapter=adapter)
+            github_client = MockBenchalertsGitHubClient(adapter=adapter)
         else:
             conbench_client = None
             github_client = None
@@ -154,11 +153,22 @@ class BenchalertsRun(Base, BaseMixin):
 class MockBenchalertsGitHubClient(GitHubRepoClient):
     """During pytest, bypass the hassle of mocking the GitHub App login."""
 
-    def __init__(self):
+    def __init__(self, adapter):
         self._is_github_app_token = True
         self.session = requests.Session()
         self.session.mount("http://", adapter)
         self.base_url = os.environ["GITHUB_API_BASE_URL"] + "/repos/apache/arrow"
+
+
+class MockBenchclientsConbenchClient(ConbenchClient):
+    """During pytest, bypass the hassle of mocking the Conbench login."""
+
+    def __init__(self, adapter):
+        super().__init__()
+        self.session.mount("https://", adapter)
+
+    def _login_or_raise(self) -> None:
+        pass
 
 
 class ArrowAlerter(Alerter):
