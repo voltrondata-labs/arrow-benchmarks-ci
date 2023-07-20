@@ -1,5 +1,7 @@
 import os
 
+from benchclients.http import RetryingHTTPClientDeadlineReached
+
 from integrations.slack import Slack
 from logger import log
 from models.benchalerts_run import BenchalertsRun
@@ -51,6 +53,10 @@ def run_benchalerts():
     for benchalerts_run in unfinished_runs:
         try:
             run_one_benchalerts_run(benchalerts_run)
+        except RetryingHTTPClientDeadlineReached as e:
+            log.info(f"Marking {benchalerts_run.id} as finished due to timeout")
+            benchalerts_run.mark_finished(None, None)
+            benchalerts_errors.append(e)
         except Exception as e:
             log.exception(f"Error running benchalerts: {repr(e)}")
             benchalerts_errors.append(e)
