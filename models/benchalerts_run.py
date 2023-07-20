@@ -90,7 +90,7 @@ class BenchalertsRun(Base, BaseMixin):
             conbench_client = MockBenchclientsConbenchClient(adapter=adapter)
             github_client = MockBenchalertsGitHubClient(adapter=adapter)
         else:
-            conbench_client = ConbenchClient(default_retry_for_seconds=5 * 60)
+            conbench_client = None
             github_client = None
 
         run_ids = [
