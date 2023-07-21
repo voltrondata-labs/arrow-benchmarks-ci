@@ -210,12 +210,10 @@ class ArrowAlerter(Alerter):
         result_info looks like the response from this endpoint:
         https://conbench.ursa.dev/api/redoc#tag/Comparisons/paths/~1api~1compare~1benchmark-results~1%7Bcompare_ids%7D~1/get
         """
-        return (
-            result_info
-            and "contender" in result_info
-            and "language" in result_info["contender"]
-            and result_info["contender"]["language"] not in ["Python", "R"]
-        )
+        contender = result_info["contender"]
+        if not contender:
+            return False
+        return contender["language"] not in ["Python", "R"]
 
     def _separate_known_unstable_benchmarks(
         self,
