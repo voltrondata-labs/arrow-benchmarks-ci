@@ -298,6 +298,7 @@ class ArrowAlerter(Alerter):
             unstable_comparison.results_with_errors
             or unstable_comparison.results_with_z_regressions
         ):
+            comment += " "
             comment += self.clean(
                 """
                 It also includes information about possible false positives for
