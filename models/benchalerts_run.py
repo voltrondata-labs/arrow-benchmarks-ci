@@ -185,19 +185,21 @@ class ArrowAlerter(Alerter):
         have = "has" if num_runs == 1 else "have"
 
         if self.reason == "pull-request":
-            return self.clean(
+            intro = self.clean(
                 f"""
                 Thanks for your patience. Conbench analyzed the {num_runs} benchmarking
                 run{s} that {have} been run so far on PR commit {self.commit_hash}.
                 """
             )
         else:
-            return self.clean(
+            intro = self.clean(
                 f"""
                 After merging your PR, Conbench analyzed the {num_runs} benchmarking
                 run{s} that {have} been run so far on merge-commit {self.commit_hash}.
                 """
             )
+
+        return intro + "\n\n"
 
     @staticmethod
     def _is_known_unstable(result_info: dict) -> bool:
