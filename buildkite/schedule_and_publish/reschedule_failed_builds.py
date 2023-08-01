@@ -8,22 +8,20 @@ from models.run import Run
 
 
 def reschedule_failed_builds():
-    machines = os.getenv("MACHINES_WITH_FAILED_BUILDS")
+    machines = os.getenv("MACHINES_WITH_FAILED_BUILDS", "").split()
     hours = int(os.getenv("HOURS_WITH_FAILED_BUILDS"))
-    runs = Run.all(status="failed")
-
     print(
         f"Rescheduling failed builds created in the last {hours} hours for these machines: {machines}"
     )
 
-    runs = [
-        r
-        for r in runs
-        if r.created_at > datetime.now() - timedelta(hours=hours)
-        and r.machine_name in machines
-    ]
-
-    print(f"Found {len(runs)} failed builds")
+    runs = Run.search(
+        [
+            Run.status == "failed",
+            Run.created_at > datetime.now() - timedelta(hours=hours),
+            Run.machine_name.in_(machines),
+        ]
+    )
+    print(f"Found {len(runs)} failed build(s)")
 
     # Set status to "created" for all failed builds
     for run in runs:
