@@ -63,16 +63,20 @@ steps:
         required: true
         multiple: true
         options:
-          - label: "ursa-i9-9960x"
-            value: "ursa-i9-9960x"
-          - label: "ursa-thinkcentre-m75q"
-            value: "ursa-thinkcentre-m75q"
+          - label: "arm64-m6g-linux-compute"
+            value: "arm64-m6g-linux-compute"
+          - label: "arm64-t4g-linux-compute"
+            value: "arm64-t4g-linux-compute"
+          - label: "ec2-m5-4xlarge-us-east-2"
+            value: "ec2-m5-4xlarge-us-east-2"
           - label: "ec2-t3-xlarge-us-east-2"
             value: "ec2-t3-xlarge-us-east-2"
           - label: "test-mac-arm"
             value: "test-mac-arm"
-          - label: "voltron-pavilion"
-            value: "voltron-pavilion"
+          - label: "ursa-i9-9960x"
+            value: "ursa-i9-9960x"
+          - label: "ursa-thinkcentre-m75q"
+            value: "ursa-thinkcentre-m75q"
       - text: "Hours"
         key: "hours"
         required: true
