@@ -1,7 +1,7 @@
 alembic
 authlib
-benchalerts@git+https://github.com/conbench/conbench.git@1748f11#subdirectory=benchalerts
-benchclients@git+https://github.com/conbench/conbench.git@1748f11#subdirectory=benchclients/python
+benchalerts@git+https://github.com/conbench/conbench.git@10690a5#subdirectory=benchalerts
+benchclients@git+https://github.com/conbench/conbench.git@10690a5#subdirectory=benchclients/python
 flask==2.0.3
 flask-restful
 gunicorn
