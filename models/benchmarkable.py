@@ -1,5 +1,6 @@
 import functools
 import traceback
+from typing import Optional
 
 import sqlalchemy as s
 from sqlalchemy.dialects import postgresql
@@ -62,7 +63,7 @@ class Benchmarkable(Base, BaseMixin):
                 return self.data["committer"]["html_url"]
 
     @property
-    def displayable_message(self):
+    def displayable_message(self) -> Optional[str]:
         if self.is_commit():
             # Remove % since they cause JSON parsing issues when passed to buildkite.
             # TODO: are there other characters we should also check? And is it possible
@@ -125,7 +126,10 @@ class Benchmarkable(Base, BaseMixin):
     def add_runs(self, override_filters, reason):
         for machine in Machine.all():
             filters, skip_reason = machine.run_filters_and_skip_reason(
-                self.type, override_filters
+                benchmarkable_type=self.type,
+                benchmarkable_reason=reason,
+                benchmarkable_commit_msg=self.displayable_message,
+                override_filters=override_filters,
             )
             self.runs.append(
                 Run(

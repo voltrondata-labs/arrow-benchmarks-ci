@@ -13,6 +13,16 @@ outbound_requests = []
 test_pull_number = 1234
 test_benchmarkable_id = "sha2"
 test_baseline_benchmarkable_id = "sha1"
+skip_strings = {
+    "commit_message_skip_strings": [
+        "[C#]",
+        "[Doc]",
+        "[Docs]",
+        "[Go]",
+        "[Java]",
+        "[MATLAB]",
+    ]
+}
 machine_configs = {
     "ursa-i9-9960x": {
         "info": "Supported benchmark langs: Python, R, JavaScript",
@@ -42,7 +52,8 @@ machine_configs = {
                         ]
                     },
                     "JavaScript": {"names": ["js-micro"]},
-                }
+                },
+                **skip_strings,
             },
             "pyarrow-apache-wheel": {
                 "langs": {

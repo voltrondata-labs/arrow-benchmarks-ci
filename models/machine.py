@@ -1,6 +1,7 @@
 import socket
 from copy import deepcopy
 from datetime import datetime
+from typing import Optional
 
 import sqlalchemy as s
 from authlib.jose import jwt
@@ -48,7 +49,13 @@ class Machine(Base, BaseMixin):
     def delete_benchmark_pipeline(self):
         buildkite.delete_pipeline(self.buildkite_pipeline_name)
 
-    def run_filters_and_skip_reason(self, benchmarkable_type, override_filters=None):
+    def run_filters_and_skip_reason(
+        self,
+        benchmarkable_type: str,
+        benchmarkable_reason: str,
+        benchmarkable_commit_msg: Optional[str],
+        override_filters: Optional[dict],
+    ):
         if benchmarkable_type not in self.default_filters:
             return (
                 {},
@@ -56,6 +63,20 @@ class Machine(Base, BaseMixin):
             )
 
         machine_run_filters = deepcopy(self.default_filters[benchmarkable_type])
+
+        if (
+            "commit_message_skip_strings" in machine_run_filters
+            # never skip PRs or wheels with otherwise-skippable commit messages
+            and benchmarkable_reason.endswith("-commit")
+            and benchmarkable_commit_msg
+        ):
+            for skip_string in machine_run_filters["commit_message_skip_strings"]:
+                if skip_string in benchmarkable_commit_msg:
+                    return (
+                        machine_run_filters,
+                        f"The following commit message is skipped on {self.name} due "
+                        f"to containing '{skip_string}': {benchmarkable_commit_msg}",
+                    )
 
         if not override_filters:
             return machine_run_filters, None

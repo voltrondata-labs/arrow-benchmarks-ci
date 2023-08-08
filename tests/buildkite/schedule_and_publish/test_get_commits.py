@@ -28,8 +28,18 @@ def verify_benchmarkable_runs(commit_dict):
         assert run
         assert run.filters == machine.default_filters["arrow-commit"]
         assert run.reason == "arrow-commit"
-        assert run.status == "created"
-        assert not run.finished_at
+
+        if machine.name == "ursa-i9-9960x" and (
+            "[Go]" in commit_dict["commit"]["message"]
+            or "[Doc]" in commit_dict["commit"]["message"]
+        ):
+            assert run.status == "skipped"
+            assert run.skip_reason
+            assert run.finished_at
+        else:
+            assert run.status == "created"
+            assert not run.skip_reason
+            assert not run.finished_at
 
 
 def verify_benchmarkable_benchalerts_runs(

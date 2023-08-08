@@ -98,7 +98,15 @@ class Config:
                             ]
                         },
                         "JavaScript": {"names": ["js-micro"]},
-                    }
+                    },
+                    "commit_message_skip_strings": [
+                        "[C#]",
+                        "[Doc]",
+                        "[Docs]",
+                        "[Go]",
+                        "[Java]",
+                        "[MATLAB]",
+                    ],
                 },
                 "pyarrow-apache-wheel": {
                     "langs": {
