@@ -15,6 +15,7 @@ from tests.helpers import (
     filter_with_java_script_only_benchmarks,
     filter_with_python_only_benchmarks,
     filter_with_r_only_benchmarks,
+    skip_strings,
     machine_configs,
     make_github_webhook_event_for_comment,
     mock_offline_machine,
@@ -26,7 +27,7 @@ from tests.helpers import (
 
 pull_comments_with_expected_machine_run_filters_and_skip_reason = {
     "@ursabot please benchmark lang=Python": {
-        "ursa-i9-9960x": (filter_with_python_only_benchmarks, None),
+        "ursa-i9-9960x": ({**filter_with_python_only_benchmarks, **skip_strings}, None),
         "ursa-thinkcentre-m75q": (
             {"lang": "Python"},
             "Only ['C++', 'Java'] langs are supported on ursa-thinkcentre-m75q",
@@ -65,7 +66,7 @@ pull_comments_with_expected_machine_run_filters_and_skip_reason = {
         ),
     },
     "@ursabot please benchmark lang=Python   ": {
-        "ursa-i9-9960x": (filter_with_python_only_benchmarks, None),
+        "ursa-i9-9960x": ({**filter_with_python_only_benchmarks, **skip_strings}, None),
         "ursa-thinkcentre-m75q": (
             {"lang": "Python"},
             "Only ['C++', 'Java'] langs are supported on ursa-thinkcentre-m75q",
@@ -76,7 +77,10 @@ pull_comments_with_expected_machine_run_filters_and_skip_reason = {
         ),
     },
     "@ursabot please benchmark lang=JavaScript   ": {
-        "ursa-i9-9960x": (filter_with_java_script_only_benchmarks, None),
+        "ursa-i9-9960x": (
+            {**filter_with_java_script_only_benchmarks, **skip_strings},
+            None,
+        ),
         "ursa-thinkcentre-m75q": (
             {"lang": "JavaScript"},
             "Only ['C++', 'Java'] langs are supported on ursa-thinkcentre-m75q",
@@ -103,7 +107,7 @@ pull_comments_with_expected_machine_run_filters_and_skip_reason = {
         "new-machine": (filter_with_cpp_only_benchmarks, None),
     },
     "@ursabot please benchmark lang=R": {
-        "ursa-i9-9960x": (filter_with_r_only_benchmarks, None),
+        "ursa-i9-9960x": ({**filter_with_r_only_benchmarks, **skip_strings}, None),
         "ursa-thinkcentre-m75q": (
             {"lang": "R"},
             "Only ['C++', 'Java'] langs are supported on ursa-thinkcentre-m75q",
@@ -114,7 +118,10 @@ pull_comments_with_expected_machine_run_filters_and_skip_reason = {
         ),
     },
     "@ursabot please benchmark name=file-write": {
-        "ursa-i9-9960x": (filter_with_file_write_only_benchmarks, None),
+        "ursa-i9-9960x": (
+            {**filter_with_file_write_only_benchmarks, **skip_strings},
+            None,
+        ),
         "ursa-thinkcentre-m75q": (
             {"name": "file-write"},
             "Only ['lang', 'command'] filters are supported on ursa-thinkcentre-m75q",
@@ -125,7 +132,10 @@ pull_comments_with_expected_machine_run_filters_and_skip_reason = {
         ),
     },
     "@ursabot please benchmark name=file-write lang=Python": {
-        "ursa-i9-9960x": (filter_with_file_write_python_only_benchmarks, None),
+        "ursa-i9-9960x": (
+            {**filter_with_file_write_python_only_benchmarks, **skip_strings},
+            None,
+        ),
         "ursa-thinkcentre-m75q": (
             {"lang": "Python", "name": "file-write"},
             "Only ['C++', 'Java'] langs are supported on ursa-thinkcentre-m75q",
@@ -136,7 +146,10 @@ pull_comments_with_expected_machine_run_filters_and_skip_reason = {
         ),
     },
     "@ursabot please benchmark    name=file-write  lang=Python ": {
-        "ursa-i9-9960x": (filter_with_file_write_python_only_benchmarks, None),
+        "ursa-i9-9960x": (
+            {**filter_with_file_write_python_only_benchmarks, **skip_strings},
+            None,
+        ),
         "ursa-thinkcentre-m75q": (
             {"lang": "Python", "name": "file-write"},
             "Only ['C++', 'Java'] langs are supported on ursa-thinkcentre-m75q",
@@ -147,7 +160,7 @@ pull_comments_with_expected_machine_run_filters_and_skip_reason = {
         ),
     },
     "@ursabot please benchmark name=file-*": {
-        "ursa-i9-9960x": (filter_with_file_only_benchmarks, None),
+        "ursa-i9-9960x": ({**filter_with_file_only_benchmarks, **skip_strings}, None),
         "ursa-thinkcentre-m75q": (
             {"name": "file-*"},
             "Only ['lang', 'command'] filters are supported on ursa-thinkcentre-m75q",

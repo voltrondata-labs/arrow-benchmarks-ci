@@ -68,7 +68,8 @@ class Config:
 
     MACHINES = {
         "ursa-i9-9960x": {
-            "info": "Supported benchmark langs: Python, R, JavaScript",
+            "info": "Supported benchmark langs: Python, R, JavaScript. Skips certain "
+            "commit messages if they contain certain strings.",
             "default_filters": {
                 "arrow-commit": {
                     "langs": {
@@ -98,7 +99,16 @@ class Config:
                             ]
                         },
                         "JavaScript": {"names": ["js-micro"]},
-                    }
+                    },
+                    "commit_message_skip_strings": [
+                        "[C#]",
+                        "[CI]",
+                        "[Doc]",
+                        "[Docs]",
+                        "[Go]",
+                        "[Java]",
+                        "[MATLAB]",
+                    ],
                 },
                 "pyarrow-apache-wheel": {
                     "langs": {
