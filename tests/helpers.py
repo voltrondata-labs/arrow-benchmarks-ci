@@ -16,6 +16,7 @@ test_baseline_benchmarkable_id = "sha1"
 skip_strings = {
     "commit_message_skip_strings": [
         "[C#]",
+        "[CI]",
         "[Doc]",
         "[Docs]",
         "[Go]",
