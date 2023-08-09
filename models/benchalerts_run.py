@@ -244,10 +244,20 @@ class ArrowAlerter(Alerter):
         return stable_comparison, unstable_comparison
 
     def github_check_status(self, full_comparison: FullComparisonInfo) -> CheckStatus:
+        if self.reason == "pull-request":
+            # For PR requests, the check status/title should be based on all possible
+            # results since they might be filtered by language.
+            return super().github_check_status(full_comparison)
+
         stable_comparison, _ = self._separate_known_unstable_benchmarks(full_comparison)
         return super().github_check_status(stable_comparison)
 
     def github_check_title(self, full_comparison: FullComparisonInfo) -> str:
+        if self.reason == "pull-request":
+            # For PR requests, the check status/title should be based on all possible
+            # results since they might be filtered by language.
+            return super().github_check_title(full_comparison)
+
         stable_comparison, _ = self._separate_known_unstable_benchmarks(full_comparison)
         return super().github_check_title(stable_comparison)
 
@@ -290,6 +300,11 @@ class ArrowAlerter(Alerter):
     def github_pr_comment(
         self, full_comparison: FullComparisonInfo, check_link: str
     ) -> str:
+        if self.reason == "pull-request":
+            # For PR requests, the comment should be based on all possible results since
+            # they might be filtered by language.
+            return super().github_pr_comment(full_comparison, check_link)
+
         (
             stable_comparison,
             unstable_comparison,
@@ -308,5 +323,7 @@ class ArrowAlerter(Alerter):
                 unstable benchmarks that are known to sometimes produce them.
                 """
             )
+            # Don't get too excited about no regressions
+            comment.replace(". 🎉", " among the stable benchmarks.")
 
         return comment
