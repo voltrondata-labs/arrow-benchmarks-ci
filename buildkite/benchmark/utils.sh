@@ -148,6 +148,7 @@ create_conda_env_and_run_benchmarks() {
       ;;
   esac
 
+  pip install -r requirements.txt
   python -m buildkite.benchmark.run_benchmark_groups
 }
 
