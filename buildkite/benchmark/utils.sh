@@ -72,10 +72,6 @@ clone_repo() {
   popd
 }
 
-install_conbench() {
-  pip install 'conbench==2023.4.6'
-}
-
 build_arrow_r() {
   pushd $REPO_DIR
   source dev/conbench_envs/hooks.sh build_arrow_r
@@ -152,7 +148,6 @@ create_conda_env_and_run_benchmarks() {
       ;;
   esac
 
-  install_conbench
   python -m buildkite.benchmark.run_benchmark_groups
 }
 
