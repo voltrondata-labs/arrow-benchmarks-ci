@@ -44,10 +44,8 @@ RUN apt-get update -y -q && \
     rm -rf /var/lib/apt/lists*
 
 # Install Python dependencies
-# Note: libpq-dev for psycopg2
 RUN apt-get update -y -q && \
     apt-get install -y -q \
-        libpq-dev \
         python3 \
         python3-pip \
         python3-dev && \
