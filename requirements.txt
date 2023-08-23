@@ -1,5 +1,6 @@
 alembic
 authlib
+benchadapt@git+https://github.com/conbench/conbench.git@10690a5#subdirectory=benchadapt/python
 benchalerts@git+https://github.com/conbench/conbench.git@10690a5#subdirectory=benchalerts
 benchclients@git+https://github.com/conbench/conbench.git@10690a5#subdirectory=benchclients/python
 flask==2.0.3

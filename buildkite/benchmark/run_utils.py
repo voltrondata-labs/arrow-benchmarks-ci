@@ -27,7 +27,7 @@ def context():
 
 def machine_info():
     sys.path.append("conbench")
-    from conbench.machine_info import machine_info
+    from benchadapt._machine_info import machine_info
 
     return machine_info(os.getenv("MACHINE"))
 
