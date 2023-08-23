@@ -148,9 +148,6 @@ create_conda_env_and_run_benchmarks() {
       ;;
   esac
 
-  # Not in `requirements.txt` because the actual install that runs postgres
-  # was working fine without it
-  python -m pip install psycopg2-binary
   pip install -r requirements.txt
   python -m buildkite.benchmark.run_benchmark_groups
 }
