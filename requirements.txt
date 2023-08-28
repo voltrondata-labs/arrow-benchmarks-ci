@@ -1,5 +1,6 @@
 alembic
 authlib
+benchadapt@git+https://github.com/conbench/conbench.git@10690a5#subdirectory=benchadapt/python
 benchalerts@git+https://github.com/conbench/conbench.git@10690a5#subdirectory=benchalerts
 benchclients@git+https://github.com/conbench/conbench.git@10690a5#subdirectory=benchclients/python
 flask==2.0.3
@@ -7,6 +8,6 @@ flask-restful
 gunicorn
 itsdangerous==2.0.1
 psutil
-psycopg2
+psycopg2-binary
 requests
 SQLAlchemy>=1.4.0b1
