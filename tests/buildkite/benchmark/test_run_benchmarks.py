@@ -12,7 +12,7 @@ from tests.helpers import (
 
 expected_setup_commands = [
     ("git clone https://github.com/voltrondata-labs/benchmarks.git", ".", True),
-    ("git fetch && git checkout edward/conbenchlegacy", "benchmarks", True),
+    ("git fetch && git checkout main", "benchmarks", True),
     ("pip install -e .", "benchmarks", True),
 ]
 
