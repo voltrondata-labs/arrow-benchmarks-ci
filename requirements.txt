@@ -11,3 +11,4 @@ psutil
 psycopg2-binary
 requests
 SQLAlchemy>=1.4.0b1
+werkzeug==2.0.3
