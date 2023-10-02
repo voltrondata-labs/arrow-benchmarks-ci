@@ -16,8 +16,8 @@ def run_one_benchalerts_run(benchalerts_run: BenchalertsRun) -> None:
 
     benchalerts_run.run_benchalerts()
     log.info(
-        f"Finished benchalerts run. Status: {benchalerts_run.status}, link: "
-        f"{benchalerts_run.check_link}"
+        f"Finished benchalerts run. Status: {benchalerts_run.status}, check link: "
+        f"{benchalerts_run.check_link}, comment link: {benchalerts_run.pr_comment_link}"
     )
 
     # TODO: move this Slack step into the BenchalertsRun.run_benchalerts() pipeline
@@ -25,14 +25,14 @@ def run_one_benchalerts_run(benchalerts_run: BenchalertsRun) -> None:
         msg = (
             f"The `benchalerts` run for {benchalerts_run.reason} "
             f"`{benchalerts_run.benchmarkable_id[:7]}` had benchmark failures. Please "
-            f"see the report for more details: {benchalerts_run.check_link}"
+            f"see the report for more details: {benchalerts_run.pr_comment_link}"
         )
     elif benchalerts_run.status == "failure":
         msg = (
             f"The `benchalerts` run for {benchalerts_run.reason} "
             f"`{benchalerts_run.benchmarkable_id[:7]}` had benchmarks indicating a "
             "performance regression. Please see the report for more details: "
-            f"{benchalerts_run.check_link}"
+            f"{benchalerts_run.pr_comment_link}"
         )
     else:
         return

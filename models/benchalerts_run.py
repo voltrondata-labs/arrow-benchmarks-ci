@@ -22,6 +22,13 @@ from logger import log
 from models.base import BaseMixin
 from utils import generate_uuid
 
+MACHINES_TO_NOT_ANALYZE = ["test-mac-arm"]
+MACHINES_WITH_PUBLIC_BK_URLS = [
+    "ec2-t3-xlarge-us-east-2",
+    "ursa-i9-9960x",
+    "ursa-thinkcentre-m75q",
+]
+
 
 class BenchalertsRun(Base, BaseMixin):
     __tablename__ = "benchalerts_run"
@@ -43,6 +50,7 @@ class BenchalertsRun(Base, BaseMixin):
     )
     status: Mapped[Optional[str]] = mapped_column(s.String, nullable=True)
     check_link: Mapped[Optional[str]] = mapped_column(s.String, nullable=True)
+    pr_comment_link: Mapped[Optional[str]] = mapped_column(s.String, nullable=True)
 
     @property
     def ready_to_run(self) -> bool:
@@ -61,7 +69,7 @@ class BenchalertsRun(Base, BaseMixin):
             log.info(
                 f"Skipping benchalerts for {self.benchmarkable_id} because it's a wheel"
             )
-            self.mark_finished(comparison=None, check_link=None)
+            self.mark_finished(comparison=None, check_link=None, pr_comment_link=None)
             return
 
         # For all other reasons, the benchmarkable ID is the commit hash
@@ -72,7 +80,7 @@ class BenchalertsRun(Base, BaseMixin):
         pr_number: Optional[int] = self.benchmarkable.pull_number
         if not pr_number:
             log.warning(f"Skipping benchalerts for {commit_hash}: no PR number found")
-            self.mark_finished(comparison=None, check_link=None)
+            self.mark_finished(comparison=None, check_link=None, pr_comment_link=None)
             return
 
         if self.reason == "pull-request":
@@ -96,9 +104,21 @@ class BenchalertsRun(Base, BaseMixin):
         run_ids = [
             run.id
             for run in self.benchmarkable.runs
-            if run.machine_name not in ["test-mac-arm"]
+            if run.machine_name not in MACHINES_TO_NOT_ANALYZE
         ]
         log.info(f"Analyzing run IDs: {run_ids}")
+
+        possible_build_urls = [
+            run.buildkite_build_web_url
+            for run in self.benchmarkable.runs
+            if run.machine_name in MACHINES_WITH_PUBLIC_BK_URLS
+            and run.buildkite_build_web_url
+        ]
+        log.info(
+            f"Linking to the first in this list if it's nonempty: {possible_build_urls}"
+        )
+        build_url = possible_build_urls[0] if possible_build_urls else None
+
         benchalerts_log.setLevel("DEBUG")
 
         alerter = ArrowAlerter(commit_hash=commit_hash, reason=self.reason)
@@ -118,6 +138,7 @@ class BenchalertsRun(Base, BaseMixin):
                     repo=self.benchmarkable.repo,
                     github_client=github_client,
                     alerter=alerter,
+                    build_url=build_url,
                 ),
                 steps.GitHubPRCommentAboutCheckStep(
                     pr_number=pr_number,
@@ -133,18 +154,24 @@ class BenchalertsRun(Base, BaseMixin):
         self.mark_finished(
             comparison=output["z_comparison"],
             check_link=output["GitHubCheckStep"][0]["html_url"],
+            pr_comment_link=output["GitHubPRCommentAboutCheckStep"]["html_url"],
         )
 
     def mark_finished(
-        self, comparison: Optional[FullComparisonInfo], check_link: Optional[str]
+        self,
+        comparison: Optional[FullComparisonInfo],
+        check_link: Optional[str],
+        pr_comment_link: Optional[str],
     ) -> None:
         """Mark this run as finished, and save the comparison data."""
         if comparison:
-            alerter = ArrowAlerter("", "")
+            alerter = ArrowAlerter(commit_hash="doesn't matter", reason=self.reason)
             self.status = alerter.github_check_status(comparison).value
             self.output = dataclasses.asdict(comparison)
         if check_link:
             self.check_link = check_link
+        if pr_comment_link:
+            self.pr_comment_link = pr_comment_link
 
         self.finished_at = s.sql.func.now()
         self.save()
@@ -316,11 +343,15 @@ class ArrowAlerter(Alerter):
             unstable_comparison.results_with_errors
             or unstable_comparison.results_with_z_regressions
         ):
+            number = len(unstable_comparison.results_with_errors) + len(
+                unstable_comparison.results_with_z_regressions
+            )
+            ss = "s" if number != 1 else ""
             comment += " "
             comment += self.clean(
-                """
-                It also includes information about possible false positives for
-                unstable benchmarks that are known to sometimes produce them.
+                f"""
+                It also includes information about {number} possible false positive{ss}
+                for unstable benchmarks that are known to sometimes produce them.
                 """
             )
             # Don't get too excited about no regressions
