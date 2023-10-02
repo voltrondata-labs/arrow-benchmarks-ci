@@ -53,7 +53,8 @@ class Run(Base, BaseMixin):
 
     @property
     def buildkite_build_web_url(self):
-        return self.buildkite_data.get("web_url")
+        if self.buildkite_data:
+            return self.buildkite_data.get("web_url")
 
     def buildkite_build_web_url_with_status(self, format):
         if format == "slack_message":
