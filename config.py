@@ -136,21 +136,21 @@ class Config:
             "publish_benchmark_results": True,
             "max_builds": 1,
         },
-        # "ursa-thinkcentre-m75q": {
-        #     "info": "Supported benchmark langs: C++, Java",
-        #     "default_filters": {
-        #         "arrow-commit": {
-        #             "langs": {
-        #                 "C++": {"names": ["cpp-micro"]},
-        #                 "Java": {"names": ["java-micro"]},
-        #             }
-        #         }
-        #     },
-        #     "supported_filters": ["lang", "command"],
-        #     "offline_warning_enabled": True,
-        #     "publish_benchmark_results": True,
-        #     "max_builds": 1,
-        # },
+        "ursa-thinkcentre-m75q": {
+            "info": "Supported benchmark langs: C++, Java",
+            "default_filters": {
+                # "arrow-commit": {
+                #     "langs": {
+                #         "C++": {"names": ["cpp-micro"]},
+                #         "Java": {"names": ["java-micro"]},
+                #     }
+                # }
+            },
+            "supported_filters": ["lang", "command"],
+            "offline_warning_enabled": False,
+            "publish_benchmark_results": True,
+            "max_builds": 1,
+        },
         "ec2-t3-xlarge-us-east-2": {
             "info": "Supported benchmark langs: Python, R. Runs only benchmarks with cloud = True",
             "default_filters": {
