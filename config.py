@@ -139,15 +139,24 @@ class Config:
         "ursa-thinkcentre-m75q": {
             "info": "Supported benchmark langs: C++, Java",
             "default_filters": {
-                # "arrow-commit": {
-                #     "langs": {
-                #         "C++": {"names": ["cpp-micro"]},
-                #         "Java": {"names": ["java-micro"]},
-                #     }
-                # }
+                "arrow-commit": {
+                    "langs": {
+                        "C++": {"names": ["cpp-micro"]},
+                        "Java": {"names": ["java-micro"]},
+                    },
+                    "commit_message_skip_strings": [
+                        "[C#]",
+                        "[CI]",
+                        "[Doc]",
+                        "[Docs]",
+                        "[Go]",
+                        "[JavaScript]",
+                        "[MATLAB]",
+                    ],
+                }
             },
             "supported_filters": ["lang", "command"],
-            "offline_warning_enabled": False,
+            "offline_warning_enabled": True,
             "publish_benchmark_results": True,
             "max_builds": 1,
         },
