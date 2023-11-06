@@ -9,7 +9,6 @@ from sqlalchemy.orm import backref, relationship
 from config import Config
 from db import Base, Session
 from integrations import IntegrationException
-from integrations.conbench import conbench
 from logger import log
 from models.base import BaseMixin, NotNull, Nullable
 from models.benchalerts_run import BenchalertsRun
@@ -149,73 +148,10 @@ class Benchmarkable(Base, BaseMixin):
         ):
             self.benchalerts_runs.append(BenchalertsRun(reason=reason))
 
-    @property
-    def runs_with_buildkite_builds_and_publishable_benchmark_results(self):
-        return sorted(
-            [
-                run
-                for run in self.runs
-                if run.buildkite_data and run.machine.publish_benchmark_results
-            ],
-            key=lambda x: x.machine.name,
-        )
-
     def machine_run(self, machine):
         for run in self.runs:
             if run.machine == machine:
                 return run
-
-    def baseline_machine_run(self, machine):
-        for run in self.baseline.runs:
-            if run.machine == machine:
-                return run
-
-    def conbench_compare_runs_web_url(self, machine):
-        baseline_run_id = self.baseline_machine_run(machine).id
-        run_id = self.machine_run(machine).id
-        return f"{Config.CONBENCH_URL}/compare/runs/{baseline_run_id}...{run_id}/"
-
-    def machine_runs_status(
-        self,
-        machine,
-    ):
-        run = self.machine_run(machine)
-        baseline_run = self.baseline_machine_run(machine)
-
-        if run.status == "skipped":
-            return f"Skipped :warning: {run.skip_reason}"
-
-        if run.finished_at and baseline_run.finished_at:
-            try:
-                regressions, improvements = self.regressions_and_improvements(machine)
-                if run.status == "finished" and baseline_run.status == "finished":
-                    runs_status = (
-                        f"Finished :arrow_down:{regressions}% :arrow_up:{improvements}%"
-                    )
-                else:
-                    runs_status = (
-                        f"Failed :arrow_down:{regressions}% :arrow_up:{improvements}%"
-                    )
-
-                if not run.context_matches_baseline_run_context():
-                    runs_status += (
-                        f" :warning: Contender and baseline run contexts do not match"
-                    )
-
-                return runs_status
-            except IntegrationException:
-                return "Failed"
-            except Exception as e:
-                raise e
-
-        runs_status = "Scheduled"
-        if (
-            machine.offline_warning_enabled
-            and (machine.hostname or machine.ip_address)
-            and not machine.is_reachable()
-        ):
-            runs_status += f" :warning: {machine.name} is offline."
-        return runs_status
 
     def all_runs_with_publishable_benchmark_results_finished(self):
         return all(
@@ -225,91 +161,3 @@ class Benchmarkable(Base, BaseMixin):
                 if run.machine.publish_benchmark_results
             ]
         )
-
-    # This cached method is only used during the "Publish to Pull Requests" step of the
-    # "schedule_and_publish" Buildkite pipeline. Through the (quick) lifetime of that
-    # step, a cached /api/compare/runs/ response from Conbench should remain valid. The
-    # cache's size has an implicit upper bound of the number of machines we have, which
-    # is small.
-    @functools.lru_cache
-    def get_conbench_compare_results(self, machine):
-        return conbench.get_compare_runs(
-            self.baseline_machine_run(machine).id,
-            self.machine_run(machine).id,
-        )
-
-    def regressions_and_improvements(self, machine):
-        results = self.get_conbench_compare_results(machine)
-
-        if len(results) == 0:
-            return 0, 0
-
-        regressions = round(
-            len(
-                [
-                    r
-                    for r in results
-                    if r["analysis"].get("lookback_z_score") is not None
-                    and r["analysis"]["lookback_z_score"]["regression_indicated"]
-                ]
-            )
-            / len(results)
-            * 100,
-            2,
-        )
-        improvements = round(
-            len(
-                [
-                    r
-                    for r in results
-                    if r["analysis"].get("lookback_z_score") is not None
-                    and r["analysis"]["lookback_z_score"]["improvement_indicated"]
-                ]
-            )
-            / len(results)
-            * 100,
-            2,
-        )
-
-        return regressions, improvements
-
-    def runs_with_high_regressions(
-        self, benchmark_langs_filter, benchmark_machine_ignorelist
-    ):
-        runs = []
-        for run in self.runs_with_buildkite_builds_and_publishable_benchmark_results:
-            try:
-                results = self.get_conbench_compare_results(run.machine)
-            except IntegrationException:
-                # Handle a case when no benchmarks were run for either contender or baseline run
-                log.info(traceback.format_exc())
-                continue
-            except Exception as e:
-                raise e
-
-            # skip if this is a machine we ignore
-            if run.machine.name in benchmark_machine_ignorelist:
-                continue
-
-            results = [
-                r
-                for r in results
-                # see https://github.com/voltrondata-labs/arrow-benchmarks-ci/issues/117
-                if r["contender"] is not None
-                and r["contender"]["language"] in benchmark_langs_filter
-                and r["analysis"].get("lookback_z_score") is not None
-                and r["analysis"]["lookback_z_score"]["z_score"]
-            ]
-            if not results:
-                continue
-
-            # Check if run has at least one benchmark with z-score < -30.0
-            if [
-                r
-                for r in results
-                if r["analysis"]["lookback_z_score"]["z_score"] is not None
-                and r["analysis"]["lookback_z_score"]["z_score"] < -30.0
-            ]:
-                runs.append(run)
-
-        return runs
