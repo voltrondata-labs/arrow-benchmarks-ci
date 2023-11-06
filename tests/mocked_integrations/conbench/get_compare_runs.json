@@ -1,122 +1,127 @@
-[
-  {
-    "unit": "s",
-    "less_is_better": true,
-    "baseline": {
-      "benchmark_name": "file-write",
-      "case_permutation": "benchmark 1",
-      "language": "Python",
-      "value": 10.459,
-      "error": false,
-      "benchmark_result_id": "sha1",
-      "batch_id": "batch1",
-      "run_id": 1,
-      "tags": []
-    },
-    "contender": {
-      "benchmark_name": "file-write",
-      "case_permutation": "benchmark 1",
-      "language": "Python",
-      "value": 10.528,
-      "error": false,
-      "benchmark_result_id": "sha2",
-      "batch_id": "batch2",
-      "run_id": 2,
-      "tags": []
-    },
-    "analysis": {
-      "pairwise": {
-        "percent_change": 0.659,
-        "percent_threshold": 5.0,
-        "regression_indicated": false,
-        "improvement_indicated": false
-      },
-      "lookback_z_score": {
-        "z_threshold": 5.0,
-        "z_score": 0,
-        "regression_indicated": false,
-        "improvement_indicated": true
-      }
+{
+    "data": [
+        {
+            "unit": "s",
+            "less_is_better": true,
+            "baseline": {
+                "benchmark_name": "file-write",
+                "case_permutation": "benchmark 1",
+                "language": "Python",
+                "value": 10.459,
+                "error": false,
+                "benchmark_result_id": "sha1",
+                "batch_id": "batch1",
+                "run_id": 1,
+                "tags": []
+            },
+            "contender": {
+                "benchmark_name": "file-write",
+                "case_permutation": "benchmark 1",
+                "language": "Python",
+                "value": 10.528,
+                "error": false,
+                "benchmark_result_id": "sha2",
+                "batch_id": "batch2",
+                "run_id": 2,
+                "tags": []
+            },
+            "analysis": {
+                "pairwise": {
+                    "percent_change": 0.659,
+                    "percent_threshold": 5.0,
+                    "regression_indicated": false,
+                    "improvement_indicated": false
+                },
+                "lookback_z_score": {
+                    "z_threshold": 5.0,
+                    "z_score": 0,
+                    "regression_indicated": false,
+                    "improvement_indicated": true
+                }
+            }
+        },
+        {
+            "unit": "s",
+            "less_is_better": true,
+            "baseline": {
+                "benchmark_name": "file-write",
+                "case_permutation": "benchmark 2",
+                "language": "R",
+                "value": 10.459,
+                "error": false,
+                "benchmark_result_id": "sha1",
+                "batch_id": "batch1",
+                "run_id": 1,
+                "tags": []
+            },
+            "contender": {
+                "benchmark_name": "file-write",
+                "case_permutation": "benchmark 2",
+                "language": "R",
+                "value": 10.528,
+                "error": false,
+                "benchmark_result_id": "sha2",
+                "batch_id": "batch2",
+                "run_id": 2,
+                "tags": []
+            },
+            "analysis": {
+                "pairwise": {
+                    "percent_change": 0.659,
+                    "percent_threshold": 5.0,
+                    "regression_indicated": false,
+                    "improvement_indicated": false
+                },
+                "lookback_z_score": {
+                    "z_threshold": 5.0,
+                    "z_score": -0.1,
+                    "regression_indicated": true,
+                    "improvement_indicated": false
+                }
+            }
+        },
+        {
+            "unit": "s",
+            "less_is_better": true,
+            "baseline": {
+                "benchmark_name": "file-write",
+                "case_permutation": "benchmark 3",
+                "language": "Python",
+                "value": 10.459,
+                "error": false,
+                "benchmark_result_id": "sha1",
+                "batch_id": "batch1",
+                "run_id": 1,
+                "tags": []
+            },
+            "contender": {
+                "benchmark_name": "file-write",
+                "case_permutation": "benchmark 3",
+                "language": "Python",
+                "value": 10.528,
+                "error": false,
+                "benchmark_result_id": "sha2",
+                "batch_id": "batch2",
+                "run_id": 2,
+                "tags": []
+            },
+            "analysis": {
+                "pairwise": {
+                    "percent_change": 0.659,
+                    "percent_threshold": 5.0,
+                    "regression_indicated": false,
+                    "improvement_indicated": false
+                },
+                "lookback_z_score": {
+                    "z_threshold": 5.0,
+                    "z_score": 0,
+                    "regression_indicated": false,
+                    "improvement_indicated": false
+                }
+            }
+        }
+    ],
+    "metadata": {
+        "next_page_cursor": null
     }
-  },
-  {
-    "unit": "s",
-    "less_is_better": true,
-    "baseline": {
-      "benchmark_name": "file-write",
-      "case_permutation": "benchmark 2",
-      "language": "R",
-      "value": 10.459,
-      "error": false,
-      "benchmark_result_id": "sha1",
-      "batch_id": "batch1",
-      "run_id": 1,
-      "tags": []
-    },
-    "contender": {
-      "benchmark_name": "file-write",
-      "case_permutation": "benchmark 2",
-      "language": "R",
-      "value": 10.528,
-      "error": false,
-      "benchmark_result_id": "sha2",
-      "batch_id": "batch2",
-      "run_id": 2,
-      "tags": []
-    },
-    "analysis": {
-      "pairwise": {
-        "percent_change": 0.659,
-        "percent_threshold": 5.0,
-        "regression_indicated": false,
-        "improvement_indicated": false
-      },
-      "lookback_z_score": {
-        "z_threshold": 5.0,
-        "z_score": -0.1,
-        "regression_indicated": true,
-        "improvement_indicated": false
-      }
-    }
-  },
-  {
-    "unit": "s",
-    "less_is_better": true,
-    "baseline": {
-      "benchmark_name": "file-write",
-      "case_permutation": "benchmark 3",
-      "language": "Python",
-      "value": 10.459,
-      "error": false,
-      "benchmark_result_id": "sha1",
-      "batch_id": "batch1",
-      "run_id": 1,
-      "tags": []
-    },
-    "contender": {
-      "benchmark_name": "file-write",
-      "case_permutation": "benchmark 3",
-      "language": "Python",
-      "value": 10.528,
-      "error": false,
-      "benchmark_result_id": "sha2",
-      "batch_id": "batch2",
-      "run_id": 2,
-      "tags": []
-    },
-    "analysis": {
-      "pairwise": {
-        "percent_change": 0.659,
-        "percent_threshold": 5.0,
-        "regression_indicated": false,
-        "improvement_indicated": false
-      },
-      "lookback_z_score": {
-        "z_threshold": 5.0,
-        "z_score": 0,
-        "regression_indicated": false,
-        "improvement_indicated": false
-      }
-    }
-  }
-]
+}

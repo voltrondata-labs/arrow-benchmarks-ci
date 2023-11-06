@@ -148,6 +148,11 @@ class Benchmarkable(Base, BaseMixin):
         ):
             self.benchalerts_runs.append(BenchalertsRun(reason=reason))
 
+    def machine_run(self, machine):
+        for run in self.runs:
+            if run.machine == machine:
+                return run
+
     def all_runs_with_publishable_benchmark_results_finished(self):
         return all(
             [
