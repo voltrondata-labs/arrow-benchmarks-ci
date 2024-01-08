@@ -35,6 +35,6 @@ def publish_buildkite_build_warnings_on_slack():
         ):
             warning = f":warning: Benchmark build {run.buildkite_build_web_url} is running > {max_benchmark_build_run_time_hours} hours."
             warnings.append(warning)
-            slack.post_message(f"{warning} cc: <@{Config.SLACK_USER_ID_FOR_WARNINGS}>")
+            slack.post_message(warning)
 
     return warnings
