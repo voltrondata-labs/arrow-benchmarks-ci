@@ -34,7 +34,7 @@ repos_with_benchmark_groups = [
         "benchmarkable_type": "arrow-commit",
         "repo": "https://github.com/voltrondata-labs/benchmarks.git",
         "root": "benchmarks",
-        "branch": "main",
+        "branch": "aus/cpp_reps",
         "setup_commands": ["pip install -e ."],
         "path_to_benchmark_groups_list_json": "benchmarks/benchmarks.json",
         "url_for_benchmark_groups_list_json": "https://raw.githubusercontent.com/voltrondata-labs/benchmarks/main/benchmarks.json",
@@ -56,59 +56,59 @@ repos_with_benchmark_groups = [
             "ARROW_SRC": f"{build_dir}/arrow",  # required by Java Script benchmarks
         },
     },
-    {
-        "benchmarkable_type": "arrow-commit",
-        "repo": "https://github.com/voltrondata-labs/arrowbench.git",
-        "root": "arrowbench",
-        "branch": "main",
-        "setup_commands": [],
-        "path_to_benchmark_groups_list_json": "arrowbench/inst/benchmarks.json",
-        "url_for_benchmark_groups_list_json": "https://raw.githubusercontent.com/voltrondata-labs/arrowbench/main/inst/benchmarks.json",
-        "setup_commands_for_lang_benchmarks": {  # These commands need to be defined as functions in buildkite/benchmark/utils.sh
-            "R": [
-                "build_arrow_r",
-                "install_arrowbench",
-                "create_data_dir",
-            ],
-        },
-        "env_vars": {
-            "ARROWBENCH_DATA_DIR": f"{os.getenv('HOME')}/data",  # allows to avoid loading R benchmarks input data from s3 for every build
-        },
-    },
-    {
-        "benchmarkable_type": "arrow-commit",
-        "repo": "https://github.com/voltrondata-labs/arrow-benchmarks-ci.git",
-        "root": "arrow-benchmarks-ci/adapters",
-        "branch": "main",
-        "setup_commands": ["pip install -r requirements.txt"],
-        "path_to_benchmark_groups_list_json": "arrow-benchmarks-ci/adapters/benchmarks.json",
-        "url_for_benchmark_groups_list_json": "https://raw.githubusercontent.com/voltrondata-labs/arrow-benchmarks-ci/main/adapters/benchmarks.json",
-        "setup_commands_for_lang_benchmarks": {  # These commands need to be defined as functions in buildkite/benchmark/utils.sh
-            "C++": ["install_archery"],
-            "Python": ["create_data_dir"],
-            "R": [
-                "build_arrow_r",
-                "install_arrowbench",
-                "create_data_dir",
-            ],
-            "Java": ["build_arrow_java", "install_archery"],
-            "JavaScript": ["install_java_script_project_dependencies"],
-        },
-        "env_vars": {
-            "ARROW_SRC": f"{build_dir}/arrow",  # required by Java Script benchmarks
-        },
-    },
-    {
-        "benchmarkable_type": "benchmarkable-repo-commit",
-        "repo": "https://github.com/ElenaHenderson/benchmarkable-repo.git",
-        "root": "benchmarkable-repo",
-        "branch": "master",
-        "setup_commands": [],
-        "path_to_benchmark_groups_list_json": "benchmarkable-repo/benchmarks.json",
-        "url_for_benchmark_groups_list_json": "https://raw.githubusercontent.com/ElenaHenderson/benchmarkable-repo/master/benchmarks.json",
-        "setup_commands_for_lang_benchmarks": {},
-        "env_vars": {},
-    },
+    # {
+    #     "benchmarkable_type": "arrow-commit",
+    #     "repo": "https://github.com/voltrondata-labs/arrowbench.git",
+    #     "root": "arrowbench",
+    #     "branch": "main",
+    #     "setup_commands": [],
+    #     "path_to_benchmark_groups_list_json": "arrowbench/inst/benchmarks.json",
+    #     "url_for_benchmark_groups_list_json": "https://raw.githubusercontent.com/voltrondata-labs/arrowbench/main/inst/benchmarks.json",
+    #     "setup_commands_for_lang_benchmarks": {  # These commands need to be defined as functions in buildkite/benchmark/utils.sh
+    #         "R": [
+    #             "build_arrow_r",
+    #             "install_arrowbench",
+    #             "create_data_dir",
+    #         ],
+    #     },
+    #     "env_vars": {
+    #         "ARROWBENCH_DATA_DIR": f"{os.getenv('HOME')}/data",  # allows to avoid loading R benchmarks input data from s3 for every build
+    #     },
+    # },
+    # {
+    #     "benchmarkable_type": "arrow-commit",
+    #     "repo": "https://github.com/voltrondata-labs/arrow-benchmarks-ci.git",
+    #     "root": "arrow-benchmarks-ci/adapters",
+    #     "branch": "main",
+    #     "setup_commands": ["pip install -r requirements.txt"],
+    #     "path_to_benchmark_groups_list_json": "arrow-benchmarks-ci/adapters/benchmarks.json",
+    #     "url_for_benchmark_groups_list_json": "https://raw.githubusercontent.com/voltrondata-labs/arrow-benchmarks-ci/main/adapters/benchmarks.json",
+    #     "setup_commands_for_lang_benchmarks": {  # These commands need to be defined as functions in buildkite/benchmark/utils.sh
+    #         "C++": ["install_archery"],
+    #         "Python": ["create_data_dir"],
+    #         "R": [
+    #             "build_arrow_r",
+    #             "install_arrowbench",
+    #             "create_data_dir",
+    #         ],
+    #         "Java": ["build_arrow_java", "install_archery"],
+    #         "JavaScript": ["install_java_script_project_dependencies"],
+    #     },
+    #     "env_vars": {
+    #         "ARROW_SRC": f"{build_dir}/arrow",  # required by Java Script benchmarks
+    #     },
+    # },
+    # {
+    #     "benchmarkable_type": "benchmarkable-repo-commit",
+    #     "repo": "https://github.com/ElenaHenderson/benchmarkable-repo.git",
+    #     "root": "benchmarkable-repo",
+    #     "branch": "master",
+    #     "setup_commands": [],
+    #     "path_to_benchmark_groups_list_json": "benchmarkable-repo/benchmarks.json",
+    #     "url_for_benchmark_groups_list_json": "https://raw.githubusercontent.com/ElenaHenderson/benchmarkable-repo/master/benchmarks.json",
+    #     "setup_commands_for_lang_benchmarks": {},
+    #     "env_vars": {},
+    # },
     # NOTE (EV): Temporarily commented these out because failing builds were getting created
     # for them even though they don't have any benchmarks
     #
