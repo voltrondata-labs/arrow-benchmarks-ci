@@ -7,9 +7,11 @@ init_conda() {
 create_conda_env_for_arrow_commit() {
   pushd $REPO_DIR
 
-  conda update -y -n base conda
+  (conda update -y -n base conda && conda install -y -n base conda-libmamba-solver) || echo 'moving on'
+  conda -V
+  conda config --set solver libmamba
+
   conda create -y -n "${BENCHMARKABLE_TYPE}" -c conda-forge \
-  --solver libmamba \
   --file ci/conda_env_unix.txt \
   --file ci/conda_env_cpp.txt \
   --file ci/conda_env_python.txt \
