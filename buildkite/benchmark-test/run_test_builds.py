@@ -18,11 +18,7 @@ def run_test_builds():
             "BENCHMARKABLE": "HEAD",
             "BENCHMARKABLE_TYPE": benchmarkable_type,
             "FILTERS": json.dumps(
-                {
-                    "langs": {
-                        "Python": {"names": ["dataframe-to-table"]},
-                    }
-                }
+                Config.MACHINES[machine]["default_filters"][benchmarkable_type]
             ),
             "MACHINE": machine,
             "RUN_ID": generate_uuid(),
