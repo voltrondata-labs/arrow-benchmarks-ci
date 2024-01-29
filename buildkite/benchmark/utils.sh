@@ -7,6 +7,10 @@ init_conda() {
 create_conda_env_for_arrow_commit() {
   pushd $REPO_DIR
 
+  (conda update -y -n base conda && conda install -y -n base conda-libmamba-solver) || echo 'moving on'
+  conda -V
+  conda config --set solver libmamba
+
   conda create -y -n "${BENCHMARKABLE_TYPE}" -c conda-forge \
   --file ci/conda_env_unix.txt \
   --file ci/conda_env_cpp.txt \
@@ -18,13 +22,6 @@ create_conda_env_for_arrow_commit() {
 
   source dev/conbench_envs/hooks.sh activate_conda_env_for_benchmark_build
   source dev/conbench_envs/hooks.sh install_arrow_python_dependencies
-
-  # Workaround for https://github.com/aws/aws-sdk-cpp/issues/1820
-  conda install -y -c conda-forge cmake==3.21.3
-
-  # Archery does not work when using setuptools==60.9.0
-  conda install -y -c conda-forge setuptools==58.0.4
-
   source dev/conbench_envs/hooks.sh set_arrow_build_and_run_env_vars
 
   export RANLIB=`which $RANLIB`
@@ -122,7 +119,8 @@ create_conda_env_and_run_benchmarks() {
       export REPO=https://github.com/apache/arrow.git
       export REPO_DIR=arrow
       clone_repo
-      create_conda_env_for_arrow_commit
+      # retry this sometimes-flaky step on ursa-i9
+      create_conda_env_for_arrow_commit || create_conda_env_for_arrow_commit
       test_pyarrow_is_built
       ;;
     "pyarrow-apache-wheel")
