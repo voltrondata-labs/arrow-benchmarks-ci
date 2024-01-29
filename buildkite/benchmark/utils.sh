@@ -119,7 +119,8 @@ create_conda_env_and_run_benchmarks() {
       export REPO=https://github.com/apache/arrow.git
       export REPO_DIR=arrow
       clone_repo
-      create_conda_env_for_arrow_commit
+      # retry this sometimes-flaky step on ursa-i9
+      create_conda_env_for_arrow_commit || create_conda_env_for_arrow_commit
       test_pyarrow_is_built
       ;;
     "pyarrow-apache-wheel")
