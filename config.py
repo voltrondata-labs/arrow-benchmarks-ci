@@ -215,7 +215,7 @@ class Config:
             },
             "supported_filters": ["lang", "name"],
             "offline_warning_enabled": False,
-            "publish_benchmark_results": False,
+            "publish_benchmark_results": True,
             "max_builds": 2,
         },
         "arm64-m6g-linux-compute": {
@@ -231,7 +231,7 @@ class Config:
             },
             "supported_filters": ["lang", "name"],
             "offline_warning_enabled": False,
-            "publish_benchmark_results": False,
+            "publish_benchmark_results": True,
             "max_builds": 2,
         },
         "ec2-m5-4xlarge-us-east-2": {
@@ -245,7 +245,7 @@ class Config:
             },
             "supported_filters": ["lang", "name"],
             "offline_warning_enabled": False,
-            "publish_benchmark_results": False,
+            "publish_benchmark_results": True,
             "max_builds": 2,
         },
     }

@@ -22,9 +22,9 @@ from logger import log
 from models.base import BaseMixin
 from utils import generate_uuid
 
-MACHINES_TO_NOT_ANALYZE = ["test-mac-arm"]
 MACHINES_WITH_PUBLIC_BK_URLS = [
     "ec2-t3-xlarge-us-east-2",
+    "test-mac-arm",
     "ursa-i9-9960x",
     "ursa-thinkcentre-m75q",
 ]
@@ -101,11 +101,7 @@ class BenchalertsRun(Base, BaseMixin):
             conbench_client = None
             github_client = None
 
-        run_ids = [
-            run.id
-            for run in self.benchmarkable.runs
-            if run.machine_name not in MACHINES_TO_NOT_ANALYZE
-        ]
+        run_ids = [run.id for run in self.benchmarkable.runs]
         log.info(f"Analyzing run IDs: {run_ids}")
 
         possible_build_urls = [
