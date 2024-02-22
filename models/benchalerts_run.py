@@ -163,7 +163,10 @@ class BenchalertsRun(Base, BaseMixin):
         if comparison:
             alerter = ArrowAlerter(commit_hash="doesn't matter", reason=self.reason)
             self.status = alerter.github_check_status(comparison).value
-            self.output = dataclasses.asdict(comparison)
+            # We used to do this, but these days this is so big that the BK job is
+            # getting OOM killed.
+            # self.output = dataclasses.asdict(comparison)
+            self.output = {"finished": True}
         if check_link:
             self.check_link = check_link
         if pr_comment_link:
