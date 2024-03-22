@@ -67,7 +67,7 @@ npm install -g yarn
 
 echo "-------Installing Java dependencies"
 apt-get update -y -q && \
-apt-get install -y -q --no-install-recommends openjdk-8-jdk maven && \
+apt-get install -y -q --no-install-recommends openjdk-8-jdk && \
 apt-get clean && \
 rm -rf /var/lib/apt/lists*
 case $( uname -m ) in
@@ -77,6 +77,11 @@ case $( uname -m ) in
     java_alternative=java-1.8.0-openjdk-amd64;;
 esac
 update-java-alternatives -s $java_alternative
+
+# have to install a later maven version than what's on apt
+wget https://dlcdn.apache.org/maven/maven-3/3.9.6/binaries/apache-maven-3.9.6-bin.tar.gz
+tar xzvf apache-maven-3.9.6-bin.tar.gz
+mv apache-maven-3.9.6 /opt
 
 echo "-------Installing Buildkite Agent"
 sh -c 'echo deb https://apt.buildkite.com/buildkite-agent stable main > /etc/apt/sources.list.d/buildkite-agent.list'
@@ -100,6 +105,9 @@ touch /etc/buildkite-agent/hooks/environment
 
 cp /etc/buildkite-agent/hooks/pre-command.sample /etc/buildkite-agent/hooks/pre-command
 echo "source /var/lib/buildkite-agent/.bashrc" >> /etc/buildkite-agent/hooks/pre-command
+
+echo 'export PATH="/opt/apache-maven-3.9.6/bin:$PATH"' >> /var/lib/buildkite-agent/.bashrc
+echo 'export PATH="/opt/apache-maven-3.9.6/bin:$PATH"' >> /var/lib/buildkite-agent/.bash_profile
 
 echo "-------Setting NOPASSWD for buildkite-agent user"
 echo "buildkite-agent ALL=(ALL) NOPASSWD:ALL" | sudo tee -a /etc/sudoers
