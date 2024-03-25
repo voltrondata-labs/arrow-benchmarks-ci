@@ -114,6 +114,7 @@ class Run(Base, BaseMixin):
             "BENCHMARKABLE": self.benchmarkable_id,
             "BENCHMARKABLE_TYPE": self.benchmarkable.type,
             "BENCHMARKABLE_PR_NUMBER": pr_number,
+            "BUILD_TIMEOUT": self.machine.build_timeout,
             "FILTERS": json.dumps(self.filters),
             "MACHINE": self.machine_name,
             "RUN_ID": self.id,
