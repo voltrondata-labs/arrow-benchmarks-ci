@@ -17,6 +17,7 @@ def run_test_builds():
         env = {
             "BENCHMARKABLE": "HEAD",
             "BENCHMARKABLE_TYPE": benchmarkable_type,
+            "BUILD_TIMEOUT": Config.MACHINES[machine]["build_timeout"],
             "FILTERS": json.dumps(
                 Config.MACHINES[machine]["default_filters"][benchmarkable_type]
             ),

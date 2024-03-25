@@ -134,6 +134,7 @@ class Config:
             "offline_warning_enabled": True,
             "publish_benchmark_results": True,
             "max_builds": 1,
+            "build_timeout": 160,
         },
         "ursa-thinkcentre-m75q": {
             "info": "Supported benchmark langs: C++, Java",
@@ -158,6 +159,7 @@ class Config:
             "offline_warning_enabled": True,
             "publish_benchmark_results": True,
             "max_builds": 1,
+            "build_timeout": 150,
         },
         "ec2-t3-xlarge-us-east-2": {
             "info": "Supported benchmark langs: Python, R. Runs only benchmarks with cloud = True",
@@ -186,6 +188,7 @@ class Config:
             "offline_warning_enabled": False,
             "publish_benchmark_results": True,
             "max_builds": 1,
+            "build_timeout": 30,
         },
         "test-mac-arm": {
             "info": "Supported benchmark langs: C++, Python, R",
@@ -201,6 +204,7 @@ class Config:
             "offline_warning_enabled": False,
             "publish_benchmark_results": True,
             "max_builds": 1,
+            "build_timeout": 120,
         },
         "arm64-t4g-linux-compute": {
             "info": "Supported benchmark langs: C++, Python, R",
@@ -217,6 +221,7 @@ class Config:
             "offline_warning_enabled": False,
             "publish_benchmark_results": True,
             "max_builds": 2,
+            "build_timeout": 200,
         },
         "arm64-m6g-linux-compute": {
             "info": "Supported benchmark langs: C++, Python, R",
@@ -233,6 +238,7 @@ class Config:
             "offline_warning_enabled": False,
             "publish_benchmark_results": True,
             "max_builds": 2,
+            "build_timeout": 300,
         },
         "ec2-m5-4xlarge-us-east-2": {
             "info": "Supported benchmark langs: R",
@@ -247,5 +253,6 @@ class Config:
             "offline_warning_enabled": False,
             "publish_benchmark_results": True,
             "max_builds": 2,
+            "build_timeout": 200,
         },
     }
