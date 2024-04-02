@@ -79,6 +79,12 @@ build_arrow_java() {
   popd
 }
 
+install_minio() {
+  pushd $REPO_DIR
+  ci/scripts/install_minio.sh latest ${ARROW_HOME}
+  popd
+}
+
 install_arrowbench() {
   # do I need to cd into benchmarks dir?
   git clone https://github.com/voltrondata-labs/arrowbench.git
