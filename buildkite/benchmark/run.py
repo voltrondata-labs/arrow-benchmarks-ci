@@ -39,14 +39,14 @@ repos_with_benchmark_groups = [
         "path_to_benchmark_groups_list_json": "benchmarks/benchmarks.json",
         "url_for_benchmark_groups_list_json": "https://raw.githubusercontent.com/voltrondata-labs/benchmarks/main/benchmarks.json",
         "setup_commands_for_lang_benchmarks": {  # These commands need to be defined as functions in buildkite/benchmark/utils.sh
-            "C++": ["install_archery"],
+            "C++": [],
             "Python": ["create_data_dir"],
             "R": [
                 "build_arrow_r",
                 "install_arrowbench",
                 "create_data_dir",
             ],
-            "Java": ["build_arrow_java", "install_archery"],
+            "Java": ["build_arrow_java"],
             "JavaScript": ["install_java_script_project_dependencies"],
         },
         "env_vars": {
@@ -84,14 +84,14 @@ repos_with_benchmark_groups = [
         "path_to_benchmark_groups_list_json": "arrow-benchmarks-ci/adapters/benchmarks.json",
         "url_for_benchmark_groups_list_json": "https://raw.githubusercontent.com/voltrondata-labs/arrow-benchmarks-ci/main/adapters/benchmarks.json",
         "setup_commands_for_lang_benchmarks": {  # These commands need to be defined as functions in buildkite/benchmark/utils.sh
-            "C++": ["install_archery"],
+            "C++": [],
             "Python": ["create_data_dir"],
             "R": [
                 "build_arrow_r",
                 "install_arrowbench",
                 "create_data_dir",
             ],
-            "Java": ["build_arrow_java", "install_archery"],
+            "Java": ["build_arrow_java"],
             "JavaScript": ["install_java_script_project_dependencies"],
         },
         "env_vars": {

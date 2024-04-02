@@ -16,9 +16,7 @@ expected_setup_commands = [
     ("pip install -e .", "benchmarks", True),
 ]
 
-expected_setup_commands_for_cpp_benchmarks = [
-    ("source buildkite/benchmark/utils.sh install_archery", ".", True),
-]
+expected_setup_commands_for_cpp_benchmarks = []
 
 expected_setup_commands_for_r_benchmarks = [
     ("source buildkite/benchmark/utils.sh build_arrow_r", ".", True),
@@ -210,9 +208,9 @@ def test_run_benchmarks():
     ][0]
     # These tests should use benchmarks.json in benchmarks repo but should not be affected any new benchmarks
     # that added since 2b217db086260ab3bb243e26253b7c1de0180777
-    repo[
-        "url_for_benchmark_groups_list_json"
-    ] = "https://raw.githubusercontent.com/voltrondata-labs/benchmarks/2b217db086260ab3bb243e26253b7c1de0180777/benchmarks.json"
+    repo["url_for_benchmark_groups_list_json"] = (
+        "https://raw.githubusercontent.com/voltrondata-labs/benchmarks/2b217db086260ab3bb243e26253b7c1de0180777/benchmarks.json"
+    )
     for test in tests:
         print(test)
         run = MockRun(repo, test["run_filters"])
@@ -236,9 +234,9 @@ def test_run_arrowbench_benchmarks(monkeypatch):
     ][0]
     # These tests should use benchmarks.json in arrowbench repo but should not be affected any new benchmarks
     # that added since c5e5af241f17d27aadc01548f283a2a977151b91
-    repo[
-        "url_for_benchmark_groups_list_json"
-    ] = "https://raw.githubusercontent.com/voltrondata-labs/arrowbench/c5e5af241f17d27aadc01548f283a2a977151b91/inst/benchmarks.json"
+    repo["url_for_benchmark_groups_list_json"] = (
+        "https://raw.githubusercontent.com/voltrondata-labs/arrowbench/c5e5af241f17d27aadc01548f283a2a977151b91/inst/benchmarks.json"
+    )
 
     filter_with_arrowbench_r_only_benchmarks = deepcopy(filter_with_r_only_benchmarks)
     filter_with_arrowbench_r_only_benchmarks["langs"]["R"]["names"] = [
@@ -309,9 +307,9 @@ def test_run_adapter_benchmarks():
     ][0]
     # These tests should use benchmarks.json in arrow-benchmarks-ci repo but should not be affected any new benchmarks
     # that added since 1ca33e8800a11624faf89a85af817ca83e473f56
-    repo[
-        "url_for_benchmark_groups_list_json"
-    ] = "https://raw.githubusercontent.com/voltrondata-labs/arrow-benchmarks-ci/1ca33e8800a11624faf89a85af817ca83e473f56/adapters/benchmarks.json"
+    repo["url_for_benchmark_groups_list_json"] = (
+        "https://raw.githubusercontent.com/voltrondata-labs/arrow-benchmarks-ci/1ca33e8800a11624faf89a85af817ca83e473f56/adapters/benchmarks.json"
+    )
 
     filters = {
         "langs": {
