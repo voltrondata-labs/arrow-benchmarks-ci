@@ -169,7 +169,7 @@ class Config:
                         "Python": {
                             "names": [
                                 "csv-read",
-                                "dataframe-to-table",
+                                # "dataframe-to-table",
                                 "dataset-filter",
                                 "dataset-read",
                                 "dataset-select",
