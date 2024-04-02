@@ -162,16 +162,36 @@ class Config:
             "build_timeout": 150,
         },
         "ec2-t3-xlarge-us-east-2": {
-            "info": "Supported benchmark langs: Python, R. Runs only benchmarks with cloud = True",
+            "info": "Supported benchmark langs: Python, R, JavaScript",
             "default_filters": {
                 "arrow-commit": {
                     "langs": {
                         "Python": {
                             "names": [
+                                "csv-read",
+                                "dataframe-to-table",
+                                "dataset-filter",
                                 "dataset-read",
                                 "dataset-select",
+                                "dataset-selectivity",
+                                "dataset-serialize",
+                                "file-read",
+                                "file-write",
+                                "recursive-get-file-info",
+                                "wide-dataframe",
                             ]
                         },
+                        "R": {
+                            "names": [
+                                "dataframe-to-table",
+                                "file-read",
+                                "file-write",
+                                "partitioned-dataset-filter",
+                                "wide-dataframe",
+                                "tpch",
+                            ]
+                        },
+                        "JavaScript": {"names": ["js-micro"]},
                     }
                 },
                 "benchmarkable-repo-commit": {
@@ -188,7 +208,7 @@ class Config:
             "offline_warning_enabled": False,
             "publish_benchmark_results": True,
             "max_builds": 1,
-            "build_timeout": 30,
+            "build_timeout": 300,
         },
         "test-mac-arm": {
             "info": "Supported benchmark langs: C++, Python, R",
@@ -241,11 +261,36 @@ class Config:
             "build_timeout": 300,
         },
         "ec2-m5-4xlarge-us-east-2": {
-            "info": "Supported benchmark langs: R",
+            "info": "Supported benchmark langs: Python, R, JavaScript",
             "default_filters": {
                 "arrow-commit": {
                     "langs": {
-                        "R": {"names": ["tpch"]},
+                        "Python": {
+                            "names": [
+                                "csv-read",
+                                "dataframe-to-table",
+                                "dataset-filter",
+                                "dataset-read",
+                                "dataset-select",
+                                "dataset-selectivity",
+                                "dataset-serialize",
+                                "file-read",
+                                "file-write",
+                                "recursive-get-file-info",
+                                "wide-dataframe",
+                            ]
+                        },
+                        "R": {
+                            "names": [
+                                "dataframe-to-table",
+                                "file-read",
+                                "file-write",
+                                "partitioned-dataset-filter",
+                                "wide-dataframe",
+                                "tpch",
+                            ]
+                        },
+                        "JavaScript": {"names": ["js-micro"]},
                     }
                 },
             },
@@ -253,6 +298,6 @@ class Config:
             "offline_warning_enabled": False,
             "publish_benchmark_results": True,
             "max_builds": 2,
-            "build_timeout": 200,
+            "build_timeout": 300,
         },
     }
