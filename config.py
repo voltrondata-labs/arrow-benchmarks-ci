@@ -174,7 +174,7 @@ class Config:
                                 "dataset-read",
                                 "dataset-select",
                                 "dataset-selectivity",
-                                "dataset-serialize",
+                                # "dataset-serialize",
                                 "file-read",
                                 "file-write",
                                 "recursive-get-file-info",
