@@ -162,21 +162,16 @@ class Config:
             "build_timeout": 150,
         },
         "ec2-t3-xlarge-us-east-2": {
-            "info": "Supported benchmark langs: Python, R, JavaScript",
+            "info": "Supported benchmark langs: Python, R",
             "default_filters": {
                 "arrow-commit": {
                     "langs": {
                         "Python": {
                             "names": [
-                                "csv-read",
-                                # "dataframe-to-table",
                                 "dataset-filter",
                                 "dataset-read",
                                 "dataset-select",
-                                "dataset-selectivity",
-                                # "dataset-serialize",
                                 "file-read",
-                                "file-write",
                                 "recursive-get-file-info",
                                 "wide-dataframe",
                             ]
@@ -185,13 +180,9 @@ class Config:
                             "names": [
                                 "dataframe-to-table",
                                 "file-read",
-                                "file-write",
                                 "partitioned-dataset-filter",
-                                "wide-dataframe",
-                                "tpch",
                             ]
                         },
-                        "JavaScript": {"names": ["js-micro"]},
                     }
                 },
                 "benchmarkable-repo-commit": {
@@ -269,27 +260,12 @@ class Config:
                             "names": [
                                 "csv-read",
                                 "dataframe-to-table",
-                                "dataset-filter",
-                                "dataset-read",
-                                "dataset-select",
                                 "dataset-selectivity",
                                 "dataset-serialize",
-                                "file-read",
                                 "file-write",
-                                "recursive-get-file-info",
-                                "wide-dataframe",
                             ]
                         },
-                        "R": {
-                            "names": [
-                                "dataframe-to-table",
-                                "file-read",
-                                "file-write",
-                                "partitioned-dataset-filter",
-                                "wide-dataframe",
-                                "tpch",
-                            ]
-                        },
+                        "R": {"names": ["file-write"]},
                         "JavaScript": {"names": ["js-micro"]},
                     }
                 },
