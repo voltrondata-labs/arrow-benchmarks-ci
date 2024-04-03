@@ -1,4 +1,5 @@
 #!/bin/bash
+set -x
 
 init_conda() {
   eval "$(command "$HOME/miniconda3/bin/conda" 'shell.bash' 'hook' 2> /dev/null)"
@@ -93,6 +94,14 @@ install_arrowbench() {
 }
 
 install_java_script_project_dependencies() {
+  # install node.js and yarn
+  curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+  source ~/.bashrc
+  nvm install 14
+  node -e "console.log('Running Node.js ' + process.version)"
+  corepack enable
+  yarn -v
+
   pushd $REPO_DIR
   source dev/conbench_envs/hooks.sh install_java_script_project_dependencies
   popd
