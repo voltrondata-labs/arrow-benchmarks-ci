@@ -391,6 +391,10 @@ class ConbenchBenchmarkGroupsRunner(BenchmarkGroupsRunner):
         benchmark_group.log_execution()
         benchmark_group.start_memory_monitor()
 
+        print(
+            "which yarn?",
+            subprocess.run(["which", "yarn"], capture_output=True).stdout.decode(),
+        )
         return_code, stderr = self.executor.execute_command(
             benchmark_group.command,
             path=self.root,
