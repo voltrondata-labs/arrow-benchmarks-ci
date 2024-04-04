@@ -97,7 +97,7 @@ install_java_script_project_dependencies() {
   echo "node: $(which node)"
   echo "npm: $(which npm)"
   echo "yarn: $(which yarn)"
-  sudo $(which npm) install -g yarn
+  npm install -g yarn
   echo "yarn! $(which yarn)"
   echo "PATH! $PATH"
 
