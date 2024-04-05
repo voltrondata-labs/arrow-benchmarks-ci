@@ -93,6 +93,7 @@ install_arrowbench() {
 }
 
 install_java_script_project_dependencies() {
+  npm install -g yarn
   pushd $REPO_DIR
   source dev/conbench_envs/hooks.sh install_java_script_project_dependencies
   popd
