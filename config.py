@@ -183,7 +183,7 @@ class Config:
                                 "partitioned-dataset-filter",
                             ]
                         },
-                        "JavaScript": {"names": ["js-micro"]},
+                        # "JavaScript": {"names": ["js-micro"]},
                     }
                 },
                 "benchmarkable-repo-commit": {
