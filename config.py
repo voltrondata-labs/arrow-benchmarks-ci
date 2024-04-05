@@ -159,10 +159,10 @@ class Config:
             "offline_warning_enabled": True,
             "publish_benchmark_results": True,
             "max_builds": 1,
-            "build_timeout": 150,
+            "build_timeout": 120,
         },
         "ec2-t3-xlarge-us-east-2": {
-            "info": "Supported benchmark langs: Python, R",
+            "info": "Supported benchmark langs: Python, R, JavaScript",
             "default_filters": {
                 "arrow-commit": {
                     "langs": {
@@ -183,6 +183,7 @@ class Config:
                                 "partitioned-dataset-filter",
                             ]
                         },
+                        "JavaScript": {"names": ["js-micro"]},
                     }
                 },
                 "benchmarkable-repo-commit": {
@@ -199,7 +200,7 @@ class Config:
             "offline_warning_enabled": False,
             "publish_benchmark_results": True,
             "max_builds": 1,
-            "build_timeout": 300,
+            "build_timeout": 120,
         },
         "test-mac-arm": {
             "info": "Supported benchmark langs: C++, Python, R",
@@ -252,7 +253,7 @@ class Config:
             "build_timeout": 300,
         },
         "ec2-m5-4xlarge-us-east-2": {
-            "info": "Supported benchmark langs: Python, R, JavaScript",
+            "info": "Supported benchmark langs: Python, R",
             "default_filters": {
                 "arrow-commit": {
                     "langs": {
@@ -266,7 +267,6 @@ class Config:
                             ]
                         },
                         "R": {"names": ["file-write"]},
-                        "JavaScript": {"names": ["js-micro"]},
                     }
                 },
             },
@@ -274,6 +274,6 @@ class Config:
             "offline_warning_enabled": False,
             "publish_benchmark_results": True,
             "max_builds": 2,
-            "build_timeout": 300,
+            "build_timeout": 150,
         },
     }

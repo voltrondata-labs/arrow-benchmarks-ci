@@ -317,13 +317,12 @@ class CommandExecutor:
         if log_stdout:
             child = subprocess.run(
                 f"cd {path}; {command}",
-                # capture_output=True,
+                capture_output=True,
                 shell=True,
                 executable="/bin/bash",
             )
-            # stderr = child.stderr.decode()
-            # stdout = child.stdout.decode()
-            stderr, stdout = "", ""
+            stderr = child.stderr.decode()
+            stdout = child.stdout.decode()
         else:
             # Do not log Java benchmarks stdout (12GB+)
             # Note(JP): and what about stderr?
@@ -392,11 +391,6 @@ class ConbenchBenchmarkGroupsRunner(BenchmarkGroupsRunner):
         benchmark_group.log_execution()
         benchmark_group.start_memory_monitor()
 
-        print(
-            "which yarn?",
-            subprocess.run(["which", "yarn"], capture_output=True).stdout.decode(),
-        )
-        print("PATH?", os.getenv("PATH"))
         return_code, stderr = self.executor.execute_command(
             benchmark_group.command,
             path=self.root,
