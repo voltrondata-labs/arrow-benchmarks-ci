@@ -23,7 +23,6 @@ create_conda_env_for_arrow_commit() {
 
   export RANLIB=`which $RANLIB`
   export AR=`which $AR`
-  export ARROW_JEMALLOC=OFF
 
   source dev/conbench_envs/hooks.sh build_arrow_cpp
   source dev/conbench_envs/hooks.sh build_arrow_python
