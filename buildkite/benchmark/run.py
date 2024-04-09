@@ -34,7 +34,7 @@ repos_with_benchmark_groups = [
         "benchmarkable_type": "arrow-commit",
         "repo": "https://github.com/voltrondata-labs/benchmarks.git",
         "root": "benchmarks",
-        "branch": "aus/build",
+        "branch": "main",
         "setup_commands": ["pip install -e ."],
         "path_to_benchmark_groups_list_json": "benchmarks/benchmarks.json",
         "url_for_benchmark_groups_list_json": "https://raw.githubusercontent.com/voltrondata-labs/benchmarks/main/benchmarks.json",
@@ -317,14 +317,12 @@ class CommandExecutor:
         if log_stdout:
             child = subprocess.run(
                 f"cd {path}; {command}",
-                # capture_output=True,
+                capture_output=True,
                 shell=True,
                 executable="/bin/bash",
             )
-            # stderr = child.stderr.decode()
-            # stdout = child.stdout.decode()
-            stderr = ""
-            stdout = ""
+            stderr = child.stderr.decode()
+            stdout = child.stdout.decode()
         else:
             # Do not log Java benchmarks stdout (12GB+)
             # Note(JP): and what about stderr?

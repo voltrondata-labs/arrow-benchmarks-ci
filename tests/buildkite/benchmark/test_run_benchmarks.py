@@ -16,7 +16,9 @@ expected_setup_commands = [
     ("pip install -e .", "benchmarks", True),
 ]
 
-expected_setup_commands_for_cpp_benchmarks = []
+expected_setup_commands_for_cpp_benchmarks = [
+    ("source buildkite/benchmark/utils.sh install_minio", ".", True),
+]
 
 expected_setup_commands_for_r_benchmarks = [
     ("source buildkite/benchmark/utils.sh build_arrow_r", ".", True),
