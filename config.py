@@ -183,7 +183,7 @@ class Config:
                                 "partitioned-dataset-filter",
                             ]
                         },
-                        # "JavaScript": {"names": ["js-micro"]},
+                        "JavaScript": {"names": ["js-micro"]},
                     }
                 },
                 "benchmarkable-repo-commit": {
@@ -253,7 +253,7 @@ class Config:
             "build_timeout": 300,
         },
         "ec2-m5-4xlarge-us-east-2": {
-            "info": "Supported benchmark langs: Python, R",
+            "info": "Supported benchmark langs: Python, R, Java",
             "default_filters": {
                 "arrow-commit": {
                     "langs": {
@@ -267,6 +267,7 @@ class Config:
                             ]
                         },
                         "R": {"names": ["file-write"]},
+                        "Java": {"names": ["java-micro"]},
                     }
                 },
             },
@@ -274,6 +275,6 @@ class Config:
             "offline_warning_enabled": False,
             "publish_benchmark_results": True,
             "max_builds": 2,
-            "build_timeout": 150,
+            "build_timeout": 300,
         },
     }
