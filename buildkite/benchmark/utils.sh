@@ -73,7 +73,7 @@ build_arrow_r() {
 }
 
 build_arrow_java() {
-  conda install -y --solver libmamba -c conda-forge maven
+  conda install -y --solver libmamba -c conda-forge 'maven=3.9.6'
   # arrow java gets built as part of archery
 }
 
