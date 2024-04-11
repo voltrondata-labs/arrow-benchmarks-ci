@@ -200,7 +200,7 @@ class Config:
             "offline_warning_enabled": False,
             "publish_benchmark_results": True,
             "max_builds": 1,
-            "build_timeout": 300,
+            "build_timeout": 90,
         },
         "test-mac-arm": {
             "info": "Supported benchmark langs: C++, Python, R",
@@ -233,7 +233,7 @@ class Config:
             "offline_warning_enabled": False,
             "publish_benchmark_results": True,
             "max_builds": 2,
-            "build_timeout": 200,
+            "build_timeout": 180,
         },
         "arm64-m6g-linux-compute": {
             "info": "Supported benchmark langs: C++, Python, R",
@@ -250,7 +250,7 @@ class Config:
             "offline_warning_enabled": False,
             "publish_benchmark_results": True,
             "max_builds": 2,
-            "build_timeout": 300,
+            "build_timeout": 270,
         },
         "ec2-m5-4xlarge-us-east-2": {
             "info": "Supported benchmark langs: Python, R, Java",
@@ -275,6 +275,6 @@ class Config:
             "offline_warning_enabled": False,
             "publish_benchmark_results": True,
             "max_builds": 2,
-            "build_timeout": 300,
+            "build_timeout": 210,
         },
     }
