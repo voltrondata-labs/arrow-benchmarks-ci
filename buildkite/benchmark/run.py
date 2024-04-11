@@ -305,36 +305,19 @@ class CommandExecutor:
         self.executed_commands = []
 
     def execute_command(
-        self,
-        command: str,
-        path: str = ".",
-        exit_on_failure: bool = True,
-        log_stdout: bool = True,
+        self, command: str, path: str = ".", exit_on_failure: bool = True
     ):
         log.info(f"start child process: {command}")
         self.executed_commands.append((command, path, exit_on_failure))
 
-        if log_stdout:
-            child = subprocess.run(
-                f"cd {path}; {command}",
-                capture_output=True,
-                shell=True,
-                executable="/bin/bash",
-            )
-            stderr = child.stderr.decode()
-            stdout = child.stdout.decode()
-        else:
-            # Do not log Java benchmarks stdout (12GB+)
-            # Note(JP): and what about stderr?
-            with tempfile.NamedTemporaryFile(delete=True) as out:
-                child = subprocess.run(
-                    f"cd {path}; {command}",
-                    stdout=out,
-                    shell=True,
-                    executable="/bin/bash",
-                )
-            stderr = ""
-            stdout = ""
+        child = subprocess.run(
+            f"cd {path}; {command}",
+            capture_output=True,
+            shell=True,
+            executable="/bin/bash",
+        )
+        stderr = child.stderr.decode()
+        stdout = child.stdout.decode()
 
         log.info(
             "child process exited with code %s.\nstderr:\n%s\n\nstdout:\n%s",
@@ -392,12 +375,7 @@ class ConbenchBenchmarkGroupsRunner(BenchmarkGroupsRunner):
         benchmark_group.start_memory_monitor()
 
         return_code, stderr = self.executor.execute_command(
-            benchmark_group.command,
-            path=self.root,
-            exit_on_failure=False,
-            log_stdout=(
-                benchmark_group.lang != "Java"
-            ),  # Java benchmarks produce 12GB+ of output
+            benchmark_group.command, path=self.root, exit_on_failure=False
         )
 
         benchmark_group.finished_at = datetime.now()
@@ -697,11 +675,7 @@ class Run:
 
 class MockCommandExecutor(CommandExecutor):
     def execute_command(
-        self,
-        command: str,
-        path: str = ".",
-        exit_on_failure: bool = True,
-        log_stdout: bool = True,
+        self, command: str, path: str = ".", exit_on_failure: bool = True
     ):
         log.info(f"Started executing -> {command}")
         self.executed_commands.append((command, path, exit_on_failure))

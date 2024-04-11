@@ -73,9 +73,8 @@ build_arrow_r() {
 }
 
 build_arrow_java() {
-  pushd $REPO_DIR
-  source dev/conbench_envs/hooks.sh build_arrow_java
-  popd
+  conda install -y --solver libmamba -c conda-forge 'maven=3.9.6'
+  # arrow java gets built as part of archery
 }
 
 install_minio() {
