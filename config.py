@@ -131,7 +131,7 @@ class Config:
                 },
             },
             "supported_filters": ["lang", "name"],
-            "offline_warning_enabled": True,
+            "offline_warning_enabled": False,
             "publish_benchmark_results": True,
             "max_builds": 1,
             "build_timeout": 160,
@@ -156,7 +156,7 @@ class Config:
                 }
             },
             "supported_filters": ["lang", "command"],
-            "offline_warning_enabled": True,
+            "offline_warning_enabled": False,
             "publish_benchmark_results": True,
             "max_builds": 1,
             "build_timeout": 120,
