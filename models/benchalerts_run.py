@@ -321,6 +321,9 @@ class ArrowAlerter(Alerter):
             )
             summary += _list_results(unstable_comparison.results_with_z_regressions)
 
+        if len(summary) > 65535:
+            summary = summary[:65532] + "..."
+
         return summary
 
     def github_pr_comment(
