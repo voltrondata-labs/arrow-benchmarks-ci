@@ -184,6 +184,7 @@ class Config:
                             ]
                         },
                         "JavaScript": {"names": ["js-micro"]},
+                        "C++": {"names": ["cpp-micro"]},
                     }
                 },
                 "benchmarkable-repo-commit": {
@@ -241,7 +242,6 @@ class Config:
                 "arrow-commit": {
                     "langs": {
                         "Python": {"names": ["dataset-read", "dataset-select"]},
-                        "C++": {"names": ["cpp-micro"]},
                         "R": {"names": ["tpch"]},
                     }
                 },
