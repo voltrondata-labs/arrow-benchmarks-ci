@@ -201,7 +201,7 @@ class Config:
             "offline_warning_enabled": False,
             "publish_benchmark_results": True,
             "max_builds": 1,
-            "build_timeout": 270,
+            "build_timeout": 180,
         },
         "test-mac-arm": {
             "info": "Supported benchmark langs: C++, Python, R",
