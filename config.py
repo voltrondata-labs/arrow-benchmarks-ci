@@ -184,6 +184,7 @@ class Config:
                             ]
                         },
                         "JavaScript": {"names": ["js-micro"]},
+                        "C++": {"names": ["cpp-micro"]},
                     }
                 },
                 "benchmarkable-repo-commit": {
@@ -200,7 +201,7 @@ class Config:
             "offline_warning_enabled": False,
             "publish_benchmark_results": True,
             "max_builds": 1,
-            "build_timeout": 90,
+            "build_timeout": 180,
         },
         "test-mac-arm": {
             "info": "Supported benchmark langs: C++, Python, R",
@@ -241,7 +242,6 @@ class Config:
                 "arrow-commit": {
                     "langs": {
                         "Python": {"names": ["dataset-read", "dataset-select"]},
-                        "C++": {"names": ["cpp-micro"]},
                         "R": {"names": ["tpch"]},
                     }
                 },
