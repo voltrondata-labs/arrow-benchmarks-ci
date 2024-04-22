@@ -159,7 +159,7 @@ class Config:
             "offline_warning_enabled": False,
             "publish_benchmark_results": True,
             "max_builds": 1,
-            "build_timeout": 120,
+            "build_timeout": 150,
         },
         "ec2-t3-xlarge-us-east-2": {
             "info": "Supported benchmark langs: Python, R, JavaScript",
