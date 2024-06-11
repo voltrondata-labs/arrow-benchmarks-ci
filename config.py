@@ -134,7 +134,7 @@ class Config:
             "offline_warning_enabled": False,
             "publish_benchmark_results": True,
             "max_builds": 1,
-            "build_timeout": 240,
+            "build_timeout": 180,
         },
         "ursa-thinkcentre-m75q": {
             "info": "Supported benchmark langs: C++, Java",
@@ -217,7 +217,7 @@ class Config:
             "offline_warning_enabled": False,
             "publish_benchmark_results": True,
             "max_builds": 1,
-            "build_timeout": 120,
+            "build_timeout": 150,
         },
         "arm64-t4g-linux-compute": {
             "info": "Supported benchmark langs: C++, Python, R",
