@@ -95,7 +95,6 @@ class Config:
                                 "file-write",
                                 "partitioned-dataset-filter",
                                 "wide-dataframe",
-                                "tpch",
                             ]
                         },
                         "JavaScript": {"names": ["js-micro"]},
@@ -199,7 +198,7 @@ class Config:
             },
             "supported_filters": ["lang", "name"],
             "offline_warning_enabled": False,
-            "publish_benchmark_results": False,
+            "publish_benchmark_results": True,
             "max_builds": 1,
             "build_timeout": 180,
         },
