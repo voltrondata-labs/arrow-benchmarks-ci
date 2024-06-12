@@ -71,64 +71,63 @@ class Config:
             "info": "Supported benchmark langs: Python, R, JavaScript. Skips certain "
             "commit messages if they contain certain strings.",
             "default_filters": {
-                "arrow-commit": {
-                    "langs": {
-                        "Python": {
-                            "names": [
-                                "csv-read",
-                                "dataframe-to-table",
-                                "dataset-filter",
-                                "dataset-read",
-                                "dataset-select",
-                                "dataset-selectivity",
-                                "dataset-serialize",
-                                "file-read",
-                                "file-write",
-                                "recursive-get-file-info",
-                                "wide-dataframe",
-                            ]
-                        },
-                        "R": {
-                            "names": [
-                                "dataframe-to-table",
-                                "file-read",
-                                "file-write",
-                                "partitioned-dataset-filter",
-                                "wide-dataframe",
-                                "tpch",
-                            ]
-                        },
-                        "JavaScript": {"names": ["js-micro"]},
-                    },
-                    "commit_message_skip_strings": [
-                        "[C#]",
-                        "[CI]",
-                        "[Doc]",
-                        "[Docs]",
-                        "[Go]",
-                        "[Java]",
-                        "[MATLAB]",
-                    ],
-                },
-                "pyarrow-apache-wheel": {
-                    "langs": {
-                        "Python": {
-                            "names": [
-                                "csv-read",
-                                "dataframe-to-table",
-                                "dataset-filter",
-                                "dataset-read",
-                                "dataset-select",
-                                "dataset-selectivity",
-                                "dataset-serialize",
-                                "file-read",
-                                "file-write",
-                                "recursive-get-file-info",
-                                "wide-dataframe",
-                            ]
-                        }
-                    },
-                },
+                # "arrow-commit": {
+                #     "langs": {
+                #         "Python": {
+                #             "names": [
+                #                 "csv-read",
+                #                 "dataframe-to-table",
+                #                 "dataset-filter",
+                #                 "dataset-read",
+                #                 "dataset-select",
+                #                 "dataset-selectivity",
+                #                 "dataset-serialize",
+                #                 "file-read",
+                #                 "file-write",
+                #                 "recursive-get-file-info",
+                #                 "wide-dataframe",
+                #             ]
+                #         },
+                #         "R": {
+                #             "names": [
+                #                 "dataframe-to-table",
+                #                 "file-read",
+                #                 "file-write",
+                #                 "partitioned-dataset-filter",
+                #                 "wide-dataframe",
+                #             ]
+                #         },
+                #         "JavaScript": {"names": ["js-micro"]},
+                #     },
+                #     "commit_message_skip_strings": [
+                #         "[C#]",
+                #         "[CI]",
+                #         "[Doc]",
+                #         "[Docs]",
+                #         "[Go]",
+                #         "[Java]",
+                #         "[MATLAB]",
+                #     ],
+                # },
+                # "pyarrow-apache-wheel": {
+                #     "langs": {
+                #         "Python": {
+                #             "names": [
+                #                 "csv-read",
+                #                 "dataframe-to-table",
+                #                 "dataset-filter",
+                #                 "dataset-read",
+                #                 "dataset-select",
+                #                 "dataset-selectivity",
+                #                 "dataset-serialize",
+                #                 "file-read",
+                #                 "file-write",
+                #                 "recursive-get-file-info",
+                #                 "wide-dataframe",
+                #             ]
+                #         }
+                #     },
+                # },
             },
             "supported_filters": ["lang", "name"],
             "offline_warning_enabled": False,
@@ -199,7 +198,7 @@ class Config:
             },
             "supported_filters": ["lang", "name"],
             "offline_warning_enabled": False,
-            "publish_benchmark_results": False,
+            "publish_benchmark_results": True,
             "max_builds": 1,
             "build_timeout": 180,
         },
