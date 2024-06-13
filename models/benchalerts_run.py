@@ -290,6 +290,14 @@ class ArrowAlerter(Alerter):
     def github_check_summary(
         self, full_comparison: FullComparisonInfo, build_url: Optional[str]
     ) -> str:
+        if self.reason == "pull-request":
+            # For PR requests, the summary should be based on all possible results since
+            # they might be filtered by language.
+            summary = super().github_check_summary(full_comparison, build_url)
+            if len(summary) > 65535:
+                summary = summary[:65532] + "..."
+            return summary
+
         (
             stable_comparison,
             unstable_comparison,
