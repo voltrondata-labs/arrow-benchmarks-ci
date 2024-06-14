@@ -25,7 +25,6 @@ from utils import generate_uuid
 MACHINES_WITH_PUBLIC_BK_URLS = [
     "ec2-t3-xlarge-us-east-2",
     "test-mac-arm",
-    "ursa-i9-9960x",
     "ursa-thinkcentre-m75q",
 ]
 
