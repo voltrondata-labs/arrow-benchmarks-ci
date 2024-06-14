@@ -13,6 +13,8 @@ steps:
             value: "ec2-m5-4xlarge-us-east-2"
           - label: "ec2-r5-4xlarge-us-east-2"
             value: "ec2-r5-4xlarge-us-east-2"
+          - label: "ec2-c6a-4xlarge-us-east-2"
+            value: "ec2-c6a-4xlarge-us-east-2"
           - label: "arm64-m6g-linux-compute (Preferable for testing builds with C++, Python, R benchmarks)"
             value: "arm64-m6g-linux-compute"
           - label: "arm64-t4g-linux-compute"

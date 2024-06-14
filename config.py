@@ -124,7 +124,7 @@ class Config:
             "offline_warning_enabled": False,
             "publish_benchmark_results": False,  # TODO: turn this on
             "max_builds": 5,
-            "build_timeout": 240,  # TODO: revisit
+            "build_timeout": 360,  # TODO: revisit
         },
         "ursa-thinkcentre-m75q": {
             "info": "Supported benchmark langs: C++, Java",
