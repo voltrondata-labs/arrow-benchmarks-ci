@@ -190,6 +190,7 @@ class Config:
                             ]
                         },
                         "JavaScript": {"names": ["js-micro"]},
+                        "C++": {"names": ["cpp-micro"]},
                     }
                 },
                 "benchmarkable-repo-commit": {
@@ -272,6 +273,7 @@ class Config:
                             ]
                         },
                         "R": {"names": ["file-write"]},
+                        "Java": {"names": ["java-micro"]},
                     }
                 },
             },
