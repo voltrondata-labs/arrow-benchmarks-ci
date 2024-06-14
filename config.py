@@ -67,73 +67,64 @@ class Config:
     )
 
     MACHINES = {
-        "ursa-i9-9960x": {
-            "info": "Supported benchmark langs: Python, R, JavaScript. Skips certain "
-            "commit messages if they contain certain strings.",
+        "ec2-r5-4xlarge-us-east-2": {
+            "info": "Supported benchmark langs: Python, R, JavaScript",
             "default_filters": {
-                # "arrow-commit": {
-                #     "langs": {
-                #         "Python": {
-                #             "names": [
-                #                 "csv-read",
-                #                 "dataframe-to-table",
-                #                 "dataset-filter",
-                #                 "dataset-read",
-                #                 "dataset-select",
-                #                 "dataset-selectivity",
-                #                 "dataset-serialize",
-                #                 "file-read",
-                #                 "file-write",
-                #                 "recursive-get-file-info",
-                #                 "wide-dataframe",
-                #             ]
-                #         },
-                #         "R": {
-                #             "names": [
-                #                 "dataframe-to-table",
-                #                 "file-read",
-                #                 "file-write",
-                #                 "partitioned-dataset-filter",
-                #                 "wide-dataframe",
-                #             ]
-                #         },
-                #         "JavaScript": {"names": ["js-micro"]},
-                #     },
-                #     "commit_message_skip_strings": [
-                #         "[C#]",
-                #         "[CI]",
-                #         "[Doc]",
-                #         "[Docs]",
-                #         "[Go]",
-                #         "[Java]",
-                #         "[MATLAB]",
-                #     ],
-                # },
-                # "pyarrow-apache-wheel": {
-                #     "langs": {
-                #         "Python": {
-                #             "names": [
-                #                 "csv-read",
-                #                 "dataframe-to-table",
-                #                 "dataset-filter",
-                #                 "dataset-read",
-                #                 "dataset-select",
-                #                 "dataset-selectivity",
-                #                 "dataset-serialize",
-                #                 "file-read",
-                #                 "file-write",
-                #                 "recursive-get-file-info",
-                #                 "wide-dataframe",
-                #             ]
-                #         }
-                #     },
-                # },
+                "arrow-commit": {
+                    "langs": {
+                        "Python": {
+                            "names": [
+                                "csv-read",
+                                "dataframe-to-table",
+                                "dataset-filter",
+                                "dataset-read",
+                                "dataset-select",
+                                "dataset-selectivity",
+                                "dataset-serialize",
+                                "file-read",
+                                "file-write",
+                                "recursive-get-file-info",
+                                "wide-dataframe",
+                            ]
+                        },
+                        "R": {
+                            "names": [
+                                "dataframe-to-table",
+                                "file-read",
+                                "file-write",
+                                "partitioned-dataset-filter",
+                                "wide-dataframe",
+                                "tpch",
+                            ]
+                        },
+                        "JavaScript": {"names": ["js-micro"]},
+                    },
+                },
+                "pyarrow-apache-wheel": {
+                    "langs": {
+                        "Python": {
+                            "names": [
+                                "csv-read",
+                                "dataframe-to-table",
+                                "dataset-filter",
+                                "dataset-read",
+                                "dataset-select",
+                                "dataset-selectivity",
+                                "dataset-serialize",
+                                "file-read",
+                                "file-write",
+                                "recursive-get-file-info",
+                                "wide-dataframe",
+                            ]
+                        }
+                    },
+                },
             },
             "supported_filters": ["lang", "name"],
             "offline_warning_enabled": False,
-            "publish_benchmark_results": False,
-            "max_builds": 1,
-            "build_timeout": 240,
+            "publish_benchmark_results": False,  # TODO: turn this on
+            "max_builds": 5,
+            "build_timeout": 240,  # TODO: revisit
         },
         "ursa-thinkcentre-m75q": {
             "info": "Supported benchmark langs: C++, Java",
@@ -273,7 +264,7 @@ class Config:
             "supported_filters": ["lang", "name"],
             "offline_warning_enabled": False,
             "publish_benchmark_results": True,
-            "max_builds": 2,
+            "max_builds": 5,
             "build_timeout": 210,
         },
     }
