@@ -151,6 +151,22 @@ class Config:
             "max_builds": 1,
             "build_timeout": 150,
         },
+        "ec2-c6a-4xlarge-us-east-2": {
+            "info": "Supported benchmark langs: C++, Java",
+            "default_filters": {
+                "arrow-commit": {
+                    "langs": {
+                        "C++": {"names": ["cpp-micro"]},
+                        "Java": {"names": ["java-micro"]},
+                    }
+                }
+            },
+            "supported_filters": ["lang", "command"],
+            "offline_warning_enabled": False,
+            "publish_benchmark_results": False,  # TODO: turn this on
+            "max_builds": 5,
+            "build_timeout": 150,  # TODO: revisit
+        },
         "ec2-t3-xlarge-us-east-2": {
             "info": "Supported benchmark langs: Python, R, JavaScript",
             "default_filters": {
@@ -174,7 +190,6 @@ class Config:
                             ]
                         },
                         "JavaScript": {"names": ["js-micro"]},
-                        "C++": {"names": ["cpp-micro"]},
                     }
                 },
                 "benchmarkable-repo-commit": {
@@ -257,7 +272,6 @@ class Config:
                             ]
                         },
                         "R": {"names": ["file-write"]},
-                        "Java": {"names": ["java-micro"]},
                     }
                 },
             },
