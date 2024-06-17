@@ -2,9 +2,9 @@
 
 ##### 1. Create Pull Request to add your machine to `Config.MACHINES`
 Adding new machine to `Config.MACHINES` and merging your pull request into `main` branch will automatically
-- create **"Arrow BCI Benchmark on ..."** Buildkite pipeline for your machine in 
+- create **"Arrow BCI Benchmark on ..."** Buildkite pipeline for your machine in
 [Apache Arrow CI Buildkite organization](https://buildkite.com/apache-arrow)
-- enable **"Arrow BCI Benchmark on ..."** Buildkite pipeline builds being created for all 
+- enable **"Arrow BCI Benchmark on ..."** Buildkite pipeline builds being created for all
 [Apache Arrow repo](https://github.com/apache/arrow) master commits and `@ursabot` benchmark requests on pull requests.
 
 Add your benchmark machine to `MACHINES` in [config.py](../config.py) and set `publish_benchmark_results` to `False` so
@@ -34,7 +34,6 @@ MACHINES = {
             }
         },
         "supported_filters": ["name", "lang"],
-        "offline_warning_enabled": False,
         "publish_benchmark_results": False,
     },
 }
@@ -43,7 +42,7 @@ MACHINES = {
 ##### 2. Get environment vars for Buildkite Agent on your benchmark machine
 - Add a comment to your Pull Request
 ```
-@ElenaHenderson Will you please provide environment vars for Buildkite Agent for our benchmark machine 
+@ElenaHenderson Will you please provide environment vars for Buildkite Agent for our benchmark machine
 with name = <your benchmark machine>:
 - ARROW_BCI_URL
 - ARROW_BCI_API_ACCESS_TOKEN
@@ -58,7 +57,7 @@ Please use <your email address> to share the environment vars with us.
 ```
 - Environment vars will be shared with you using LastPass
 
-- Create GITHUB_PAT 
+- Create GITHUB_PAT
     - Go to https://github.com/settings/tokens/new
     - enter Note
     - select `repo:status` and `public_repo` under Select scopes
@@ -131,7 +130,7 @@ journalctl -f -u buildkite-agent
 
 
 ##### 4. Get Pull Request reviewed and merged
-Suggested Reviewers: 
+Suggested Reviewers:
 - [Elena Henderson](https://github.com/elenahenderson)
 - [Jonathan Keane](https://github.com/jonkeane)
 
@@ -141,12 +140,12 @@ Suggested Reviewers:
 @ElenaHenderson Will you please make Buildkite pipeline for benchmark machine ... public?
 ```
 
-Once Pull Request is merged and pipeline is made public, you will be able 
+Once Pull Request is merged and pipeline is made public, you will be able
 to see Buildkite pipeline for your machine on https://buildkite.com/apache-arrow
 
 ##### 6. Verify benchmark builds on your machine are running as expected
 - Go to [Apache Arrow CI Buildkite organization](https://buildkite.com/apache-arrow)
-- Click on **"Arrow BCI Benchmark on ..."** Buildkite pipeline for your machine and 
+- Click on **"Arrow BCI Benchmark on ..."** Buildkite pipeline for your machine and
 verify benchmark builds are running as expected
 
 ##### 7. Verify benchmark results from your machine are logged into Conbench

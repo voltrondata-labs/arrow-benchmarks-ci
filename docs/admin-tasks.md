@@ -1,13 +1,13 @@
 ## Admin Tasks
 
-Admin Tasks can only performed by a contributor who has access to AWS account running Arrow Benchmarks CI and 
+Admin Tasks can only performed by a contributor who has access to AWS account running Arrow Benchmarks CI and
 [Apache Arrow Buildkite Org](https://buildkite.com/organizations/apache-arrow) user.
 
 ### Create ARROW_BCI_API_ACCESS_TOKEN for Benchmark Machine
 ```shell script
 kubectl exec -it deploy/arrow-bci-deployment bash
 root@arrow-bci-deployment-75f67db476-vcth8:/app# python
-Python 3.8.12 (default, Oct 13 2021, 09:15:35) 
+Python 3.8.12 (default, Oct 13 2021, 09:15:35)
 [GCC 10.2.1 20210110] on linux
 Type "help", "copyright", "credits" or "license" for more information.
 >>> from models.machine import Machine
@@ -33,7 +33,7 @@ mutation {
     }
   }
 }
-```  
+```
 - click Execute
 - Copy token from results
 ```
@@ -64,17 +64,3 @@ mutation {
 - Click Launch instance from template
 - Go to launched ec2 instance > click Connect > click Connect
 - Follow "Step 3. Setup your benchmark machine" in [How to Add New Benchmark Machine](how-to-add-new-benchmark-machine-for-running-apache-arrow-benchmarks.md)
-
-### Setup machine offline warnings
-```shell script
-root@arrow-bci-deployment-f9ff5d975-2nvpp:/app# python
-Python 3.8.12 (default, Dec  3 2021, 01:52:45) 
-[GCC 10.2.1 20210110] on linux
-Type "help", "copyright", "credits" or "license" for more information.
->>> from models.machine import Machine
->>> machine = Machine.get("ursa-i9-9960x")
->>> machine.hostname = "x"
->>> machine.ip_address = "x.x.x.x"
->>> machine.port = 1111
->>> machine.save()
-```

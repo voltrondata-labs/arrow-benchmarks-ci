@@ -121,7 +121,6 @@ class Config:
                 },
             },
             "supported_filters": ["lang", "name"],
-            "offline_warning_enabled": False,
             "publish_benchmark_results": False,  # TODO: turn this on
             "max_builds": 5,
             "build_timeout": 360,  # TODO: revisit
@@ -146,7 +145,6 @@ class Config:
                 }
             },
             "supported_filters": ["lang", "command"],
-            "offline_warning_enabled": False,
             "publish_benchmark_results": True,
             "max_builds": 1,
             "build_timeout": 150,
@@ -162,7 +160,6 @@ class Config:
                 }
             },
             "supported_filters": ["lang", "command"],
-            "offline_warning_enabled": False,
             "publish_benchmark_results": False,  # TODO: turn this on
             "max_builds": 5,
             "build_timeout": 150,  # TODO: revisit
@@ -204,7 +201,6 @@ class Config:
                 },
             },
             "supported_filters": ["lang", "name"],
-            "offline_warning_enabled": False,
             "publish_benchmark_results": True,
             "max_builds": 1,
             "build_timeout": 180,
@@ -220,7 +216,6 @@ class Config:
                 },
             },
             "supported_filters": ["lang", "name"],
-            "offline_warning_enabled": False,
             "publish_benchmark_results": True,
             "max_builds": 1,
             "build_timeout": 150,
@@ -237,7 +232,6 @@ class Config:
                 },
             },
             "supported_filters": ["lang", "name"],
-            "offline_warning_enabled": False,
             "publish_benchmark_results": True,
             "max_builds": 2,
             "build_timeout": 180,
@@ -253,7 +247,6 @@ class Config:
                 },
             },
             "supported_filters": ["lang", "name"],
-            "offline_warning_enabled": False,
             "publish_benchmark_results": True,
             "max_builds": 2,
             "build_timeout": 270,
@@ -278,7 +271,6 @@ class Config:
                 },
             },
             "supported_filters": ["lang", "name"],
-            "offline_warning_enabled": False,
             "publish_benchmark_results": True,
             "max_builds": 5,
             "build_timeout": 210,

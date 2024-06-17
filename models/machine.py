@@ -22,11 +22,7 @@ class Machine(Base, BaseMixin):
     info = Nullable(s.String)
     default_filters = NotNull(postgresql.JSONB)
     supported_filters = NotNull(postgresql.ARRAY(s.String))
-    offline_warning_enabled = NotNull(s.Boolean, server_default="false")
     publish_benchmark_results = NotNull(s.Boolean, server_default="false")
-    hostname = Nullable(s.String)
-    ip_address = Nullable(s.String)
-    port = Nullable(s.Integer)
     max_builds = NotNull(s.Integer, server_default="1")
     build_timeout = Nullable(s.Integer)
     runs = relationship("Run", backref=backref("machine", lazy="joined"))
@@ -154,26 +150,6 @@ class Machine(Base, BaseMixin):
 
     def scheduled_or_running_builds(self):
         return buildkite.get_scheduled_builds(self.buildkite_pipeline_name)
-
-    def is_reachable(self):
-        socket_timeout = 5
-
-        for address in [self.ip_address, self.hostname]:
-            if not address:
-                continue
-
-            socket.setdefaulttimeout(socket_timeout)
-            s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            try:
-                s.connect((address, self.port))
-                return True
-            except socket.error as e:
-                log.error(
-                    f"Could not connect to {address} on port {self.port} because of {e}"
-                )
-                return False
-            finally:
-                s.close()
 
     def create_api_access_token(self):
         header = {"alg": "HS256"}
