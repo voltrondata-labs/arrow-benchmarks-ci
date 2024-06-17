@@ -75,7 +75,6 @@ machine_configs = {
             },
         },
         "supported_filters": ["lang", "name"],
-        "offline_warning_enabled": True,
         "publish_benchmark_results": True,
         "max_builds": 1,
     },
@@ -90,7 +89,6 @@ machine_configs = {
             }
         },
         "supported_filters": ["lang", "command"],
-        "offline_warning_enabled": True,
         "publish_benchmark_results": True,
         "max_builds": 1,
     },
@@ -105,7 +103,6 @@ machine_configs = {
             }
         },
         "supported_filters": ["lang", "command"],
-        "offline_warning_enabled": False,
         "publish_benchmark_results": False,
         "max_builds": 3,
     },
@@ -202,9 +199,6 @@ def delete_data():
 
 def mock_offline_machine():
     machine = Machine.first(name="ursa-i9-9960x")
-    machine.ip_address = "192.184.132.52"
-    machine.hostname = "test"
-    machine.port = 27
     machine.save()
 
 

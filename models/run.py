@@ -80,13 +80,6 @@ class Run(Base, BaseMixin):
             )
 
     @property
-    def buildkite_build_run_time_until_now(self):
-        if self.buildkite_data.get("started_at"):
-            return datetime.utcnow() - datetime.strptime(
-                self.buildkite_data["started_at"], "%Y-%m-%dT%H:%M:%S.%fZ"
-            )
-
-    @property
     def buildkite_run_name(self):
         if self.reason.endswith("-commit"):
             return f"commit: {self.benchmarkable_id}"

@@ -11,10 +11,6 @@ from buildkite.schedule_and_publish.create_benchmark_builds import (
 from buildkite.schedule_and_publish.update_benchmark_builds_status import (
     update_benchmark_builds_status,
 )
-from buildkite.schedule_and_publish.publish_warnings_on_slack import (
-    publish_buildkite_build_warnings_on_slack,
-    publish_offline_machine_warnings_on_slack,
-)
 
 from models.benchmarkable import Benchmarkable
 from models.run import Run
@@ -55,15 +51,6 @@ print("\n-------Testing get_commits() and get_pyarrow_versions()\n")
 update_machine_configs()
 get_commits()
 get_pyarrow_versions()
-
-print("\n-------Testing publish_buildkite_build_warnings_on_slack()\n")
-mock_long_running_build()
-publish_buildkite_build_warnings_on_slack()
-cleanup_mock_long_running_build()
-
-print("\n-------Testing publish_offline_machine_warnings_on_slack()\n")
-mock_offline_machine()
-publish_offline_machine_warnings_on_slack()
 
 print(
     "\n-------Testing create_benchmark_builds() and update_benchmark_builds_status()\n"
