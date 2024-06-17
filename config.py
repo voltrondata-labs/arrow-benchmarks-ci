@@ -202,7 +202,7 @@ class Config:
             },
             "supported_filters": ["lang", "name"],
             "publish_benchmark_results": True,
-            "max_builds": 1,
+            "max_builds": 2,
             "build_timeout": 180,
         },
         "test-mac-arm": {
