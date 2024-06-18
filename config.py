@@ -203,7 +203,7 @@ class Config:
             "supported_filters": ["lang", "name"],
             "publish_benchmark_results": True,
             "max_builds": 2,
-            "build_timeout": 180,
+            "build_timeout": 360,
         },
         "test-mac-arm": {
             "info": "Supported benchmark langs: C++, Python, R",
