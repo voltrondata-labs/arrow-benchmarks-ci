@@ -7,8 +7,6 @@ steps:
         required: true
         multiple: true
         options:
-          - label: "ec2-t3-xlarge-us-east-2 (Fastest build but only has Python benchmarks)"
-            value: "ec2-t3-xlarge-us-east-2"
           - label: "ec2-m5-4xlarge-us-east-2"
             value: "ec2-m5-4xlarge-us-east-2"
           - label: "ec2-r5-4xlarge-us-east-2"

@@ -98,6 +98,8 @@ class Config:
                             ]
                         },
                         "JavaScript": {"names": ["js-micro"]},
+                        "C++": {"names": ["cpp-micro"]},
+                        "Java": {"names": ["java-micro"]},
                     },
                 },
                 "pyarrow-apache-wheel": {
@@ -123,7 +125,7 @@ class Config:
             "supported_filters": ["lang", "name"],
             "publish_benchmark_results": False,  # TODO: turn this on
             "max_builds": 5,
-            "build_timeout": 360,  # TODO: revisit
+            "build_timeout": 480,  # TODO: revisit
         },
         "ursa-thinkcentre-m75q": {
             "info": "Supported benchmark langs: C++, Java",
@@ -163,47 +165,6 @@ class Config:
             "publish_benchmark_results": False,  # TODO: turn this on
             "max_builds": 5,
             "build_timeout": 150,  # TODO: revisit
-        },
-        "ec2-t3-xlarge-us-east-2": {
-            "info": "Supported benchmark langs: Python, R, JavaScript",
-            "default_filters": {
-                "arrow-commit": {
-                    "langs": {
-                        "Python": {
-                            "names": [
-                                "dataset-filter",
-                                "dataset-read",
-                                "dataset-select",
-                                "file-read",
-                                "recursive-get-file-info",
-                                "wide-dataframe",
-                            ]
-                        },
-                        "R": {
-                            "names": [
-                                "dataframe-to-table",
-                                "file-read",
-                                "partitioned-dataset-filter",
-                            ]
-                        },
-                        "JavaScript": {"names": ["js-micro"]},
-                        "C++": {"names": ["cpp-micro"]},
-                    }
-                },
-                "benchmarkable-repo-commit": {
-                    "langs": {
-                        "Python": {
-                            "names": [
-                                "simple-benchmark",
-                            ]
-                        }
-                    }
-                },
-            },
-            "supported_filters": ["lang", "name"],
-            "publish_benchmark_results": True,
-            "max_builds": 2,
-            "build_timeout": 360,
         },
         "test-mac-arm": {
             "info": "Supported benchmark langs: C++, Python, R",
@@ -260,19 +221,36 @@ class Config:
                             "names": [
                                 "csv-read",
                                 "dataframe-to-table",
+                                "dataset-filter",
+                                "dataset-read",
+                                "dataset-select",
                                 "dataset-selectivity",
                                 "dataset-serialize",
+                                "file-read",
                                 "file-write",
+                                "recursive-get-file-info",
+                                "wide-dataframe",
                             ]
                         },
-                        "R": {"names": ["file-write"]},
+                        "R": {
+                            "names": [
+                                "dataframe-to-table",
+                                "file-read",
+                                "file-write",
+                                "partitioned-dataset-filter",
+                                "wide-dataframe",
+                                "tpch",
+                            ]
+                        },
+                        "JavaScript": {"names": ["js-micro"]},
+                        "C++": {"names": ["cpp-micro"]},
                         "Java": {"names": ["java-micro"]},
-                    }
+                    },
                 },
             },
             "supported_filters": ["lang", "name"],
             "publish_benchmark_results": True,
             "max_builds": 5,
-            "build_timeout": 210,
+            "build_timeout": 480,
         },
     }
