@@ -8,7 +8,7 @@ import requests
 import sqlalchemy as s
 from benchalerts import Alerter, AlertPipeline
 from benchalerts import pipeline_steps as steps
-from benchalerts.conbench_dataclasses import FullComparisonInfo
+from benchalerts.conbench_dataclasses import FullComparisonInfo, RunComparisonInfo
 from benchalerts.integrations.github import CheckStatus, GitHubRepoClient
 from benchalerts.message_formatting import _list_results
 from benchclients.conbench import ConbenchClient
@@ -247,24 +247,33 @@ class ArrowAlerter(Alerter):
         """Separate out certain benchmarks that are known to be unstable, so that we
         alert differently for them.
         """
-        stable_comparison = deepcopy(full_comparison)
-        unstable_comparison = deepcopy(full_comparison)
+        stable_comparison = FullComparisonInfo(run_comparisons=[])
+        unstable_comparison = FullComparisonInfo(run_comparisons=[])
 
-        for run in stable_comparison.run_comparisons:
+        for run in full_comparison.run_comparisons:
+            stable_run = RunComparisonInfo(
+                conbench_api_url=run.conbench_api_url,
+                contender_info=run.contender_info,
+                baseline_run_type=run.baseline_run_type,
+                compare_results=[],
+                benchmark_results=run.benchmark_results,
+            )
+            unstable_run = RunComparisonInfo(
+                conbench_api_url=run.conbench_api_url,
+                contender_info=run.contender_info,
+                baseline_run_type=run.baseline_run_type,
+                compare_results=[],
+                benchmark_results=run.benchmark_results,
+            )
             if run.compare_results:
-                run.compare_results = [
-                    result
-                    for result in run.compare_results
-                    if not self._is_known_unstable(result)
-                ]
+                for result in run.compare_results:
+                    if self._is_known_unstable(result):
+                        unstable_run.compare_results.append(result)
+                    else:
+                        stable_run.compare_results.append(result)
 
-        for run in unstable_comparison.run_comparisons:
-            if run.compare_results:
-                run.compare_results = [
-                    result
-                    for result in run.compare_results
-                    if self._is_known_unstable(result)
-                ]
+            stable_comparison.run_comparisons.append(stable_run)
+            unstable_comparison.run_comparisons.append(unstable_run)
 
         return stable_comparison, unstable_comparison
 
