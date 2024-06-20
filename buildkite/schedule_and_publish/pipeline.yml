@@ -62,8 +62,6 @@ steps:
             value: "arm64-t4g-linux-compute"
           - label: "ec2-m5-4xlarge-us-east-2"
             value: "ec2-m5-4xlarge-us-east-2"
-          - label: "ec2-t3-xlarge-us-east-2"
-            value: "ec2-t3-xlarge-us-east-2"
           - label: "ec2-r5-4xlarge-us-east-2"
             value: "ec2-r5-4xlarge-us-east-2"
           - label: "ec2-c6a-4xlarge-us-east-2"
