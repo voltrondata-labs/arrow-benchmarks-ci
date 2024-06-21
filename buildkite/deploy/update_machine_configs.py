@@ -1,6 +1,7 @@
 from config import Config
 from db import Session
 from models.machine import Machine
+from models.run import Run
 
 
 def update_machine_configs(machine_configs=None):
@@ -25,6 +26,6 @@ def update_machine_configs(machine_configs=None):
     for machine in Machine.all():
         if machine.name not in machine_configs:
             machine.delete_benchmark_pipeline()
-            for run in machine.runs:
-                run.delete()
+            Session.query(Run).filter(Run.machine_name == machine.name).delete()
+            Session.commit()
             machine.delete()
