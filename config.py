@@ -67,66 +67,6 @@ class Config:
     )
 
     MACHINES = {
-        "ec2-r5-4xlarge-us-east-2": {
-            "info": "Supported benchmark langs: Python, R, JavaScript",
-            "default_filters": {
-                "arrow-commit": {
-                    "langs": {
-                        "Python": {
-                            "names": [
-                                "csv-read",
-                                "dataframe-to-table",
-                                "dataset-filter",
-                                "dataset-read",
-                                "dataset-select",
-                                "dataset-selectivity",
-                                "dataset-serialize",
-                                "file-read",
-                                "file-write",
-                                "recursive-get-file-info",
-                                "wide-dataframe",
-                            ]
-                        },
-                        "R": {
-                            "names": [
-                                "dataframe-to-table",
-                                "file-read",
-                                "file-write",
-                                "partitioned-dataset-filter",
-                                "wide-dataframe",
-                                "tpch",
-                            ]
-                        },
-                        "JavaScript": {"names": ["js-micro"]},
-                        "C++": {"names": ["cpp-micro"]},
-                        "Java": {"names": ["java-micro"]},
-                    },
-                },
-                "pyarrow-apache-wheel": {
-                    "langs": {
-                        "Python": {
-                            "names": [
-                                "csv-read",
-                                "dataframe-to-table",
-                                "dataset-filter",
-                                "dataset-read",
-                                "dataset-select",
-                                "dataset-selectivity",
-                                "dataset-serialize",
-                                "file-read",
-                                "file-write",
-                                "recursive-get-file-info",
-                                "wide-dataframe",
-                            ]
-                        }
-                    },
-                },
-            },
-            "supported_filters": ["lang", "name"],
-            "publish_benchmark_results": False,  # TODO: turn this on
-            "max_builds": 5,
-            "build_timeout": 480,  # TODO: revisit
-        },
         "ursa-thinkcentre-m75q": {
             "info": "Supported benchmark langs: C++, Java",
             "default_filters": {
@@ -162,9 +102,9 @@ class Config:
                 }
             },
             "supported_filters": ["lang", "command"],
-            "publish_benchmark_results": False,  # TODO: turn this on
+            "publish_benchmark_results": True,
             "max_builds": 5,
-            "build_timeout": 150,  # TODO: revisit
+            "build_timeout": 120,
         },
         "test-mac-arm": {
             "info": "Supported benchmark langs: C++, Python, R",
@@ -196,21 +136,6 @@ class Config:
             "publish_benchmark_results": True,
             "max_builds": 2,
             "build_timeout": 180,
-        },
-        "arm64-m6g-linux-compute": {
-            "info": "Supported benchmark langs: C++, Python, R",
-            "default_filters": {
-                "arrow-commit": {
-                    "langs": {
-                        "Python": {"names": ["dataset-read", "dataset-select"]},
-                        "R": {"names": ["tpch"]},
-                    }
-                },
-            },
-            "supported_filters": ["lang", "name"],
-            "publish_benchmark_results": True,
-            "max_builds": 2,
-            "build_timeout": 270,
         },
         "ec2-m5-4xlarge-us-east-2": {
             "info": "Supported benchmark langs: Python, R, Java",
