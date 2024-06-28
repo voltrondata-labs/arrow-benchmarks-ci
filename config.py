@@ -67,30 +67,6 @@ class Config:
     )
 
     MACHINES = {
-        "ursa-thinkcentre-m75q": {
-            "info": "Supported benchmark langs: C++, Java",
-            "default_filters": {
-                "arrow-commit": {
-                    "langs": {
-                        "C++": {"names": ["cpp-micro"]},
-                        "Java": {"names": ["java-micro"]},
-                    },
-                    "commit_message_skip_strings": [
-                        "[C#]",
-                        "[CI]",
-                        "[Doc]",
-                        "[Docs]",
-                        "[Go]",
-                        "[JavaScript]",
-                        "[MATLAB]",
-                    ],
-                }
-            },
-            "supported_filters": ["lang", "command"],
-            "publish_benchmark_results": True,
-            "max_builds": 1,
-            "build_timeout": 150,
-        },
         "ec2-c6a-4xlarge-us-east-2": {
             "info": "Supported benchmark langs: C++, Java",
             "default_filters": {

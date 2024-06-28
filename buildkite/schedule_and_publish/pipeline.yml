@@ -64,8 +64,6 @@ steps:
             value: "ec2-c6a-4xlarge-us-east-2"
           - label: "test-mac-arm"
             value: "test-mac-arm"
-          - label: "ursa-thinkcentre-m75q"
-            value: "ursa-thinkcentre-m75q"
       - text: "Hours"
         key: "hours"
         required: true

@@ -13,8 +13,6 @@ steps:
             value: "ec2-c6a-4xlarge-us-east-2"
           - label: "arm64-t4g-linux-compute"
             value: "arm64-t4g-linux-compute"
-          - label: "ursa-thinkcentre-m75q (Please avoid using this machine for running test builds)"
-            value: "ursa-thinkcentre-m75q"
           - label: "test-mac-arm (Please avoid using this machine for running test builds)"
             value: "test-mac-arm"
 
