@@ -17,7 +17,6 @@ Arrow Benchmarks CI consists of
 
 #### Arrow Benchmarks CI Public Buildkite Pipelines
 - [Arrow BCI Test](https://buildkite.com/apache-arrow/arrow-bci-test) is used for testing Arrow BCI API service and CI scripts
-- [Arrow BCI Benchmark on ursa-thinkcentre-m75q](https://buildkite.com/apache-arrow/arrow-bci-benchmark-on-ursa-thinkcentre-m75q) is used for running C++ and Java benchmarks
 
 Note that you can view builds for these pipelines but you can not manually schedule new builds.
 

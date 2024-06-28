@@ -22,7 +22,7 @@ from logger import log
 from models.base import BaseMixin
 from utils import generate_uuid
 
-MACHINES_WITH_PUBLIC_BK_URLS = ["test-mac-arm", "ursa-thinkcentre-m75q"]
+MACHINES_WITH_PUBLIC_BK_URLS = ["test-mac-arm"]
 
 
 class BenchalertsRun(Base, BaseMixin):
