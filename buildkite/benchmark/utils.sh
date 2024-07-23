@@ -74,7 +74,7 @@ build_arrow_r() {
 }
 
 build_arrow_java() {
-  conda install -y --solver libmamba -c conda-forge 'maven=3.9.6'
+  conda install -y --solver libmamba -c conda-forge 'maven=3.9.6' 'openjdk=11'
   # arrow java gets built as part of archery
 }
 
@@ -91,6 +91,7 @@ install_arrowbench() {
 }
 
 install_java_script_project_dependencies() {
+  conda install -y --solver libmamba -c conda-forge 'nodejs>=12.20'
   npm install -g yarn
   pushd $REPO_DIR
   source dev/conbench_envs/hooks.sh install_java_script_project_dependencies
