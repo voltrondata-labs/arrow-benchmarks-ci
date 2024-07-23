@@ -91,7 +91,7 @@ install_arrowbench() {
 }
 
 install_java_script_project_dependencies() {
-  conda install --solver libmamba -c conda-forge 'nodejs>=12.20'
+  conda install -y --solver libmamba -c conda-forge 'nodejs>=12.20'
   npm install -g yarn
   pushd $REPO_DIR
   source dev/conbench_envs/hooks.sh install_java_script_project_dependencies
