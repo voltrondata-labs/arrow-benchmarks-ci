@@ -157,12 +157,12 @@ class Config:
         "amd64-c6a-4xlarge-linux": {
             "info": "Supported benchmark langs: C++, Java",
             "default_filters": {
-                "arrow-commit": {
-                    "langs": {
-                        "C++": {"names": ["cpp-micro"]},
-                        "Java": {"names": ["java-micro"]},
-                    }
-                }
+                # "arrow-commit": {
+                #     "langs": {
+                #         "C++": {"names": ["cpp-micro"]},
+                #         "Java": {"names": ["java-micro"]},
+                #     }
+                # }
             },
             "supported_filters": ["lang", "command"],
             "publish_benchmark_results": False,
@@ -172,13 +172,13 @@ class Config:
         "arm64-t4g-2xlarge-linux": {
             "info": "Supported benchmark langs: C++, Python, R",
             "default_filters": {
-                "arrow-commit": {
-                    "langs": {
-                        "Python": {"names": ["dataset-read", "dataset-select"]},
-                        "C++": {"names": ["cpp-micro"]},
-                        "R": {"names": ["tpch"]},
-                    }
-                },
+                # "arrow-commit": {
+                #     "langs": {
+                #         "Python": {"names": ["dataset-read", "dataset-select"]},
+                #         "C++": {"names": ["cpp-micro"]},
+                #         "R": {"names": ["tpch"]},
+                #     }
+                # },
             },
             "supported_filters": ["lang", "name", "command"],
             "publish_benchmark_results": False,
@@ -188,38 +188,38 @@ class Config:
         "amd64-m5-4xlarge-linux": {
             "info": "Supported benchmark langs: Python, R, Java, JavaScript, C++",
             "default_filters": {
-                "arrow-commit": {
-                    "langs": {
-                        "Python": {
-                            "names": [
-                                "csv-read",
-                                "dataframe-to-table",
-                                "dataset-filter",
-                                "dataset-read",
-                                "dataset-select",
-                                "dataset-selectivity",
-                                "dataset-serialize",
-                                "file-read",
-                                "file-write",
-                                "recursive-get-file-info",
-                                "wide-dataframe",
-                            ]
-                        },
-                        "R": {
-                            "names": [
-                                "dataframe-to-table",
-                                "file-read",
-                                "file-write",
-                                "partitioned-dataset-filter",
-                                "wide-dataframe",
-                                "tpch",
-                            ]
-                        },
-                        "JavaScript": {"names": ["js-micro"]},
-                        "C++": {"names": ["cpp-micro"]},
-                        "Java": {"names": ["java-micro"]},
-                    },
-                },
+                # "arrow-commit": {
+                #     "langs": {
+                #         "Python": {
+                #             "names": [
+                #                 "csv-read",
+                #                 "dataframe-to-table",
+                #                 "dataset-filter",
+                #                 "dataset-read",
+                #                 "dataset-select",
+                #                 "dataset-selectivity",
+                #                 "dataset-serialize",
+                #                 "file-read",
+                #                 "file-write",
+                #                 "recursive-get-file-info",
+                #                 "wide-dataframe",
+                #             ]
+                #         },
+                #         "R": {
+                #             "names": [
+                #                 "dataframe-to-table",
+                #                 "file-read",
+                #                 "file-write",
+                #                 "partitioned-dataset-filter",
+                #                 "wide-dataframe",
+                #                 "tpch",
+                #             ]
+                #         },
+                #         "JavaScript": {"names": ["js-micro"]},
+                #         "C++": {"names": ["cpp-micro"]},
+                #         "Java": {"names": ["java-micro"]},
+                #     },
+                # },
             },
             "supported_filters": ["lang", "name", "command"],
             "publish_benchmark_results": False,
