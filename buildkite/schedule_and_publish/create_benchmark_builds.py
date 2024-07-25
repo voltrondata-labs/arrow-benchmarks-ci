@@ -28,6 +28,13 @@ def create_benchmark_builds_for_pulls(machine):
 
 def create_benchmark_builds():
     for machine in Machine.all():
+        if machine.name in {
+            "arm64-t4g-2xlarge-linux",
+            "amd64-m5-4xlarge-linux",
+            "amd64-c6a-4xlarge-linux",
+        }:
+            continue
+
         create_benchmark_builds_for_pulls(machine.name)
 
         scheduled_builds_count = len(machine.scheduled_or_running_builds())
