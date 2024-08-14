@@ -67,6 +67,21 @@ class Config:
     )
 
     MACHINES = {
+        "ec2-c6a-4xlarge-us-east-2": {
+            "info": "Supported benchmark langs: C++, Java",
+            "default_filters": {
+                "arrow-commit": {
+                    "langs": {
+                        "C++": {"names": ["cpp-micro"]},
+                        "Java": {"names": ["java-micro"]},
+                    }
+                }
+            },
+            "supported_filters": ["lang", "command"],
+            "publish_benchmark_results": True,
+            "max_builds": 5,
+            "build_timeout": 180,
+        },
         "test-mac-arm": {
             "info": "Supported benchmark langs: C++, Python, R",
             "default_filters": {
@@ -81,6 +96,63 @@ class Config:
             "publish_benchmark_results": True,
             "max_builds": 1,
             "build_timeout": 150,
+        },
+        "arm64-t4g-linux-compute": {
+            "info": "Supported benchmark langs: C++, Python, R",
+            "default_filters": {
+                "arrow-commit": {
+                    "langs": {
+                        "Python": {"names": ["dataset-read", "dataset-select"]},
+                        "C++": {"names": ["cpp-micro"]},
+                        "R": {"names": ["tpch"]},
+                    }
+                },
+            },
+            "supported_filters": ["lang", "name"],
+            "publish_benchmark_results": True,
+            "max_builds": 2,
+            "build_timeout": 180,
+        },
+        "ec2-m5-4xlarge-us-east-2": {
+            "info": "Supported benchmark langs: Python, R, Java",
+            "default_filters": {
+                "arrow-commit": {
+                    "langs": {
+                        "Python": {
+                            "names": [
+                                "csv-read",
+                                "dataframe-to-table",
+                                "dataset-filter",
+                                "dataset-read",
+                                "dataset-select",
+                                "dataset-selectivity",
+                                "dataset-serialize",
+                                "file-read",
+                                "file-write",
+                                "recursive-get-file-info",
+                                "wide-dataframe",
+                            ]
+                        },
+                        "R": {
+                            "names": [
+                                "dataframe-to-table",
+                                "file-read",
+                                "file-write",
+                                "partitioned-dataset-filter",
+                                "wide-dataframe",
+                                "tpch",
+                            ]
+                        },
+                        "JavaScript": {"names": ["js-micro"]},
+                        "C++": {"names": ["cpp-micro"]},
+                        "Java": {"names": ["java-micro"]},
+                    },
+                },
+            },
+            "supported_filters": ["lang", "name"],
+            "publish_benchmark_results": True,
+            "max_builds": 5,
+            "build_timeout": 480,
         },
         "amd64-c6a-4xlarge-linux": {
             "info": "Supported benchmark langs: C++, Java",
