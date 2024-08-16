@@ -22,8 +22,6 @@ from logger import log
 from models.base import BaseMixin
 from utils import generate_uuid
 
-MACHINES_WITH_PUBLIC_BK_URLS = ["test-mac-arm"]
-
 
 class BenchalertsRun(Base, BaseMixin):
     __tablename__ = "benchalerts_run"
@@ -102,8 +100,7 @@ class BenchalertsRun(Base, BaseMixin):
         possible_build_urls = [
             run.buildkite_build_web_url
             for run in self.benchmarkable.runs
-            if run.machine_name in MACHINES_WITH_PUBLIC_BK_URLS
-            and run.buildkite_build_web_url
+            if run.buildkite_build_web_url
         ]
         log.info(
             f"Linking to the first in this list if it's nonempty: {possible_build_urls}"
