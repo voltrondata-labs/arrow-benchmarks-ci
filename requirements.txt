@@ -10,5 +10,6 @@ itsdangerous==2.0.1
 psutil
 psycopg2-binary
 requests
+setuptools
 SQLAlchemy>=1.4.0b1
 werkzeug==2.0.3

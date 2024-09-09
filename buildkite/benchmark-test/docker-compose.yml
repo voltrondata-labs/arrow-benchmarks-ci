@@ -13,6 +13,6 @@ services:
       CONBENCH_URL: "https://conbench.ursa.dev"
       FILTERS: "${FILTERS:-{}}"
       MACHINE: "docker-container-for-testing-benchmark-builds"
-      PYTHON_VERSION: ${PYTHON_VERSION:-3.8}
+      PYTHON_VERSION: ${PYTHON_VERSION:-3.12}
       RUN_ID: ${BUILDKITE_BUILD_ID}
       RUN_NAME: "benchmark build test: ${BUILDKITE_BUILD_ID}"

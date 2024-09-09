@@ -51,7 +51,7 @@ class Config:
     PIPY_API_BASE_URL = os.getenv("PIPY_API_BASE_URL")
     PIPY_PROJECT = os.getenv("PIPY_PROJECT")
 
-    PYTHON_VERSION_FOR_BENCHMARK_BUILDS = "3.8"
+    PYTHON_VERSION_FOR_BENCHMARK_BUILDS = "3.12"
 
     SECRET = os.getenv("SECRET")
 
