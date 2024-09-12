@@ -34,7 +34,7 @@ repos_with_benchmark_groups = [
         "benchmarkable_type": "arrow-commit",
         "repo": "https://github.com/voltrondata-labs/benchmarks.git",
         "root": "benchmarks",
-        "branch": "main",
+        "branch": "move-compiler-from-context",
         "setup_commands": ["pip install -e ."],
         "path_to_benchmark_groups_list_json": "benchmarks/benchmarks.json",
         "url_for_benchmark_groups_list_json": "https://raw.githubusercontent.com/voltrondata-labs/benchmarks/main/benchmarks.json",
