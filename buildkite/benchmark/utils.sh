@@ -143,7 +143,7 @@ create_conda_env_and_run_benchmarks() {
   esac
 
   # pypi doesn't have wheels for macos 13 and source build fails
-  conda install psycopg2-binary
+  conda install -y --solver libmamba -c conda-forge 'psycopg2-binary'
   pip install -r requirements.txt
   python -m buildkite.benchmark.run_benchmark_groups
 }
