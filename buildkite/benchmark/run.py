@@ -18,7 +18,7 @@ from .run_utils import post_logs_to_arrow_bci, run_context
 log = logging.getLogger(__name__)
 log.setLevel(logging.DEBUG)
 
-benchmark_langs = ["C++", "Java", "Python", "R", "JavaScript", "Rust"]
+benchmark_langs = ["C++", "Python", "R", "JavaScript", "Rust"]
 benchmarkable_id = os.getenv("BENCHMARKABLE")
 run_id = os.getenv("RUN_ID")
 run_name = os.getenv("RUN_NAME")
@@ -46,7 +46,7 @@ repos_with_benchmark_groups = [
                 "install_arrowbench",
                 "create_data_dir",
             ],
-            "Java": ["build_arrow_java"],
+            # "Java": ["build_arrow_java"],
             "JavaScript": ["install_java_script_project_dependencies"],
         },
         "env_vars": {
@@ -91,7 +91,7 @@ repos_with_benchmark_groups = [
                 "install_arrowbench",
                 "create_data_dir",
             ],
-            "Java": ["build_arrow_java"],
+            # "Java": ["build_arrow_java"],
             "JavaScript": ["install_java_script_project_dependencies"],
         },
         "env_vars": {
