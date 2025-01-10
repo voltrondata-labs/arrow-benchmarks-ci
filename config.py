@@ -88,7 +88,7 @@ class Config:
                 "arrow-commit": {
                     "langs": {
                         "C++": {"names": ["cpp-micro"]},
-                        "Java": {"names": ["java-micro"]},
+                        # "Java": {"names": ["java-micro"]},
                     }
                 }
             },
@@ -145,7 +145,7 @@ class Config:
                         },
                         "JavaScript": {"names": ["js-micro"]},
                         "C++": {"names": ["cpp-micro"]},
-                        "Java": {"names": ["java-micro"]},
+                        # "Java": {"names": ["java-micro"]},
                     },
                 },
             },
