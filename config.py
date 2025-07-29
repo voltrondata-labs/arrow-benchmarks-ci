@@ -65,6 +65,22 @@ class Config:
     SQLALCHEMY_DATABASE_URI = (
         f"postgresql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
     )
+    _SKIP_STRINGS = {
+        "commit_message_skip_strings": [
+            "[C#]",
+            "[CI]",
+            "[Dev]",
+            "[Doc]",
+            "[Docs]",
+            "[Glib]",
+            "[Go]",
+            "[Java]",
+            "[MATLAB]",
+            "MINOR:",
+            "[Release]",
+            "[Ruby]",
+        ]
+    }
 
     MACHINES = {
         "test-mac-arm": {
@@ -76,6 +92,7 @@ class Config:
                         "R": {"names": ["tpch"]},
                     }
                 },
+                **_SKIP_STRINGS,
             },
             "supported_filters": ["lang", "name"],
             "publish_benchmark_results": True,
@@ -90,7 +107,8 @@ class Config:
                         "C++": {"names": ["cpp-micro"]},
                         # "Java": {"names": ["java-micro"]},
                     }
-                }
+                },
+                **_SKIP_STRINGS,
             },
             "supported_filters": ["lang", "command"],
             "publish_benchmark_results": True,
@@ -107,6 +125,7 @@ class Config:
                         "R": {"names": ["tpch"]},
                     }
                 },
+                **_SKIP_STRINGS,
             },
             "supported_filters": ["lang", "name", "command"],
             "publish_benchmark_results": True,
@@ -148,6 +167,7 @@ class Config:
                         # "Java": {"names": ["java-micro"]},
                     },
                 },
+                **_SKIP_STRINGS,
             },
             "supported_filters": ["lang", "name", "command"],
             "publish_benchmark_results": True,
