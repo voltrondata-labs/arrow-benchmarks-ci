@@ -162,7 +162,7 @@ class Config:
                                 "tpch",
                             ]
                         },
-                        "JavaScript": {"names": ["js-micro"]},
+                        # "JavaScript": {"names": ["js-micro"]},
                         "C++": {"names": ["cpp-micro"]},
                         # "Java": {"names": ["java-micro"]},
                     },
