@@ -47,7 +47,7 @@ repos_with_benchmark_groups = [
                 "create_data_dir",
             ],
             # "Java": ["build_arrow_java"],
-            "JavaScript": ["install_java_script_project_dependencies"],
+            # "JavaScript": ["install_java_script_project_dependencies"],
         },
         "env_vars": {
             "PYTHONFAULTHANDLER": "1",  # makes it easy to debug segmentation faults
